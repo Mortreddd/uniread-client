@@ -8,13 +8,18 @@ export interface Book {
   image?: string;
   description?: string;
   matured: boolean;
+  completed: boolean;
   readCount?: number;
   createdAt: string;
   updatedAt: string;
   chapters?: Chapter[];
   tags?: Tag[];
-  bookComments: BookComment;
-  bookLikes: BookLike;
+  bookComments?: BookComment;
+  bookLikes?: BookLike;
+  totalChaptersCount?: number;
+  totalRatingsCount?: number;
+  totalReadsCount?: number;
+  totalLikesCount?: number;
 }
 
 export interface Genre {

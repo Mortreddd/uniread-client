@@ -1,4 +1,4 @@
-import Input from "../common/form/Input";
+import { Input } from "../common/form/Input";
 import useGetUserConversations, {
   GetUserConversationsProps,
 } from "@/api/messages/useGetUserConversations";

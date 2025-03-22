@@ -1,6 +1,6 @@
 import Modal, { ModalRef } from "../Modal";
 import { Button } from "../../form/Button";
-import Input from "../../form/Input";
+import {Input} from "../../form/Input";
 import { SocialIcon } from "react-social-icons";
 import { forwardRef, Ref } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import DangerAlert from "../../alert/DangerAlert";
+import {ErrorResponse} from "@/types/Error.ts";
 
 interface LoginModalProps {}
 
@@ -31,7 +32,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
       .then((response: AxiosResponse<LoginResponse>) => {
         login(response.data);
       })
-      .catch((error: AxiosError) => {
+      .catch((error: AxiosError<ErrorResponse>) => {
         console.log(error);
       });
   };

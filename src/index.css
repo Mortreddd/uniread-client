@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .ball-bounce {
+    transition: all 1s ease-in-out;
+    animation: bounce-ball 1s infinite;
+  }
+  .ball-bounce:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .ball-bounce:nth-child(2) {
+    animation-delay: 75ms;
+  }
+  .ball-bounce:nth-child(3) {
+    animation-delay: 150ms;
+  }
+  .ball-bounce:nth-child(4) {
+    animation-delay: 225ms;
+  }
+  .ball-bounce:nth-child(5) {
+    animation-delay: 300ms;
+  }
+
+  @keyframes bounce-ball {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2rem);
+    }
+  }
+}

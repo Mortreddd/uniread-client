@@ -8,15 +8,24 @@ import Banner from "../Banner";
 import { Book } from "@/types/Book";
 
 interface BookDetailProps {
-  book?: Book;
+  book: Book;
 }
 
 export default function BookDetail({ book }: BookDetailProps) {
+  const {
+    title,
+    totalReadsCount,
+    totalChaptersCount,
+    totalRatingsCount,
+    totalLikesCount,
+    matured,
+    completed,
+  } = book;
   return (
     <>
       <div className="w-full h-fit space-y-1">
         <h1 className="block truncate text-gray-700 text-3xl z-10 font-extrabold font-sans">
-          {book?.title ?? `The Curse of the Crying Baby`}
+          {title ?? `The Curse of the Crying Baby`}
         </h1>
         {/**
          * Book popularity details
@@ -29,7 +38,7 @@ export default function BookDetail({ book }: BookDetailProps) {
           <div className="flex items-center gap-1">
             <BookOpenIcon className="size-5" />
             <h6 className="font-sans font-medium text-gray-500 text-md">
-              5.3M
+              {totalReadsCount}
             </h6>
           </div>
           {/**
@@ -38,7 +47,7 @@ export default function BookDetail({ book }: BookDetailProps) {
           <div className="flex items-center gap-1">
             <StarIcon className="size-5" />
             <h6 className="font-sans font-medium text-gray-500 text-md">
-              500k
+              {totalRatingsCount}
             </h6>
           </div>
           {/**
@@ -47,7 +56,7 @@ export default function BookDetail({ book }: BookDetailProps) {
           <div className="flex items-center gap-1">
             <HandThumbUpIcon className="size-5" />
             <h6 className="font-sans font-medium text-gray-500 text-md">
-              1.5M
+              {totalLikesCount}
             </h6>
           </div>
           {/**
@@ -56,7 +65,7 @@ export default function BookDetail({ book }: BookDetailProps) {
           <div className="flex items-center gap-1">
             <Bars3BottomLeftIcon className="size-5" />
             <h6 className="font-sans font-medium text-gray-500 text-md">
-              12 parts
+              {totalChaptersCount ?? "No"} parts
             </h6>
           </div>
         </div>
@@ -71,16 +80,19 @@ export default function BookDetail({ book }: BookDetailProps) {
           {/**
            * Book status
            */}
-          <Banner
-            className="text-white font-sans text-sm"
-            variant={"completed"}
-          >
-            Completed
-          </Banner>
+          {completed ? (
+            <Banner className={"text-sm"} variant={"completed"}>
+              Completed
+            </Banner>
+          ) : (
+            <Banner className={"text-sm"} variant={"onGoing"}>
+              OnGoing
+            </Banner>
+          )}
           {/**
            * Book maturity
            */}
-          {book?.matured ? (
+          {matured ? (
             <Banner className="text-white font-sans text-sm" variant={"mature"}>
               Mature
             </Banner>

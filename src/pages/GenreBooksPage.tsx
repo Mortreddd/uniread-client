@@ -3,6 +3,8 @@ import Navbar from "@/components/common/navbar/Navbar";
 import { Link, useParams } from "react-router-dom";
 import BookInfo from "@/components/book/BookInfo";
 import withHover from "@/components/withHover";
+import useGetBooksByGenreId from "@/api/books/useGetBooksByGenreId";
+import LoadingCircle from "@/components/LoadingCirlce";
 type GenreBooksProps = {
   genreId: string;
 };
@@ -12,6 +14,8 @@ export default function GenreBooksPage() {
   const genre = genres.find(({ id }) => {
     return id === Number(params.genreId);
   });
+
+  const { data, loading } = useGetBooksByGenreId(Number(params.genreId));
 
   const BookInfoWithHover = withHover(BookInfo);
   return (
@@ -33,17 +37,21 @@ export default function GenreBooksPage() {
             </div>
           </div>
         </div>
-        <div className="w-full h-full md:px-20 md:py-14 px-10 py-6 grid grid-flow-row grid-cols-2">
-          <Link to={"/books/1"}>
-            <BookInfoWithHover />
-          </Link>
-          <Link to={"/books/2"}>
-            <BookInfoWithHover />
-          </Link>
-          <Link to={`/books/3}`}>
-            <BookInfoWithHover />
-          </Link>
-        </div>
+
+        {loading && (
+          <div className="w-full h-fit min-h-52 flex justify-center items-center">
+            <LoadingCircle size={"xl"} />
+          </div>
+        )}
+        {data?.content && (
+          <div className="w-full h-full md:px-20 md:py-14 px-10 py-6 grid grid-flow-row grid-cols-2">
+            {data.content.map((book) => (
+              <Link to={`/books/${book.id}`} key={book.id}>
+                <BookInfoWithHover book={book} />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );

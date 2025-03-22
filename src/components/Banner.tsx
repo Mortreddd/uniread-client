@@ -2,22 +2,28 @@ import { cn } from "@/utils/ClassNames";
 import { cva, VariantProps } from "class-variance-authority";
 import { HTMLAttributes } from "react";
 
-interface BannerProps
+export interface BannerProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof bannerVariant> {}
-const bannerVariant = cva("rounded-full py-1 px-3", {
-  variants: {
-    variant: {
-      primary: "bg-primary text-white",
-      completed: "bg-green-600 text-white",
-      mature: "bg-amber-600 text-white",
+const bannerVariant = cva(
+  "rounded-full font-sans py-1 px-3 whitespace-nowrap",
+  {
+    variants: {
+      variant: {
+        primary: "bg-primary text-white",
+        completed: "bg-green-600 text-white",
+        mature: "bg-red-600 text-white",
+        onGoing: "bg-amber-600 text-white",
+        transparent: "bg-transparent",
+        custom: "",
+      },
     },
-  },
 
-  defaultVariants: {
-    variant: "primary",
-  },
-});
+    defaultVariants: {
+      variant: "primary",
+    },
+  }
+);
 export default function Banner({
   className,
   variant,

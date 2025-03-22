@@ -24,6 +24,7 @@ const buttonVariants = cva(
         ghost: "bg-transparent hover:bg-gray-100 text-white",
         dark: "bg-gray-800 hover:bg-gray-900 text-white",
         transparent: "bg-transparent hover:bg-gray-100",
+        custom: "",
       },
       size: {
         default: "py-2 px-4",

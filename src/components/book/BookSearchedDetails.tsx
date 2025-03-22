@@ -2,7 +2,7 @@ import { Book } from "@/types/Book";
 import BookDetail from "./BookDetail";
 
 interface SearchBookDetailsProps {
-  book?: Book;
+  book: Book;
 }
 
 export default function BookSearchedDetails({ book }: SearchBookDetailsProps) {

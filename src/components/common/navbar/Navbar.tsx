@@ -1,35 +1,16 @@
-import { ChangeEvent, FormEvent, Fragment, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ApplicationLogo from "@/components/ApplicationLogo";
-import { Button } from "@/components/common/form/Button";
 import GuestNavbar from "@/components/common/navbar/GuestNavbar";
-import Input from "@/components/common/form/Input";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar";
-import useDebounce from "@/hooks/useDebounce";
 import DiscoverDropdown from "@/components/common/dropdown/DiscoverDropdown.tsx";
 import { useAuth } from "@/contexts/AuthContext.tsx";
+import SearchQuery from "@/components/search/SearchQuery.tsx";
 
 function Navbar() {
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  // TODO: remove the @ts-ignore comment before deploying the application
-  // @ts-ignore
-  const debounceSearch = useDebounce(searchQuery);
   const { user } = useAuth();
-  const navigate = useNavigate();
-
-  function handleSearchQueryChange(e: ChangeEvent<HTMLInputElement>) {
-    setSearchQuery(e.target.value);
-  }
-
-  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    navigate(`/search/all?query=${searchQuery}`);
-  }
 
   return (
-    <Fragment>
+    <>
       {/* background color with padding vertical to make the primary color visible */}
       <nav className="pt-3 z-30 bg-primary w-full shadow-lg border-b-2 sticky top-0">
         {/* adjust the padding horizontal based on screen size */}
@@ -41,28 +22,9 @@ function Navbar() {
                 <ApplicationLogo />
               </Link>
 
-              <form
-                onSubmit={handleSearchSubmit}
-                className="inline-flex items-center border-2 h-fit rounded-lg border-primary "
-              >
-                {/*
-                 * Add the form for search input
-                 *
-                 */}
-                <Input
-                  ref={searchInputRef}
-                  onChange={handleSearchQueryChange}
-                  type="search"
-                  value={searchQuery}
-                  className={"border-0 ring-0"}
-                  variant={"none"}
-                  placeholder="Example: genre, book"
-                />
-
-                <Button variant={"primary"} type={"submit"} className="p-2">
-                  <MagnifyingGlassIcon className="text-white size-4" />
-                </Button>
-              </form>
+              <div className={"relative"}>
+                <SearchQuery />
+              </div>
               <div>
                 <DiscoverDropdown />
               </div>
@@ -81,7 +43,7 @@ function Navbar() {
           )}
         </div>
       </nav>
-    </Fragment>
+    </>
   );
 }
 

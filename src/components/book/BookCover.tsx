@@ -4,9 +4,7 @@ import { FC, forwardRef, ImgHTMLAttributes } from "react";
 import defaultCover from "@/assets/cover6.jpg";
 interface BookCoverProps
   extends ImgHTMLAttributes<HTMLImageElement>,
-    VariantProps<typeof bookCoverVariants> {
-  src?: string;
-}
+    VariantProps<typeof bookCoverVariants> {}
 
 const bookCoverVariants = cva("rounded object-cover object-center shadow-md", {
   variants: {

@@ -37,7 +37,7 @@ export default function NotificationDropdown() {
       >
         <BellIcon className={"size-5"} />
         <Popover position={"top"}>
-          <h3 className="text-xs font-sans text-black">Notifcations</h3>
+          <h3 className="text-xs font-sans text-black">Notifications</h3>
         </Popover>
       </ButtonWithBadge>
       <NotificationContainer ref={notificationContentRef} />

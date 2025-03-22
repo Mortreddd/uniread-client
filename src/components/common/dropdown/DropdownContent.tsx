@@ -1,6 +1,5 @@
 import {
   forwardRef,
-  Fragment,
   HTMLAttributes,
   Ref,
   useImperativeHandle,
@@ -56,17 +55,15 @@ function DropdownContent(
     []
   );
   return (
-    <Fragment>
-      <div className={"relative"}>
-        <div
-          ref={dropdownContentRef}
-          className={cn(dropdownContentVariant({ className, size }))}
-          {...props}
-        >
-          {children}
-        </div>
+    <div className={"relative"}>
+      <div
+        ref={dropdownContentRef}
+        className={cn(dropdownContentVariant({ className, size }))}
+        {...props}
+      >
+        {children}
       </div>
-    </Fragment>
+    </div>
   );
 }
 

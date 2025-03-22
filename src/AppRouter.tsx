@@ -18,6 +18,8 @@ import SearchAuthor from "@/components/search/SearchAuthor";
 import AuthorProfilePage from "@/pages/AuthorProfilePage";
 import AuthorWorks from "@/components/author/AuthorWorks";
 import AuthorAbout from "@/components/author/AuthorAbout";
+import { BooksPage } from "@/pages/BooksPage.tsx";
+import LoadingScreen from "./pages/LoadingScreen";
 
 /**
  *
@@ -26,6 +28,10 @@ import AuthorAbout from "@/components/author/AuthorAbout";
  *
  */
 export const router = createBrowserRouter([
+  {
+    path: "/loading",
+    element: <LoadingScreen />,
+  },
   // Default Page or Landing Page
   {
     path: "/",
@@ -40,6 +46,10 @@ export const router = createBrowserRouter([
   {
     path: "/genres/:genreId/books",
     element: <GenreBooksPage />,
+  },
+  {
+    path: "/books",
+    element: <BooksPage />,
   },
   // Book Info Page
   {

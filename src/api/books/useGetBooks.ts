@@ -1,7 +1,7 @@
 import api from "@/services/ApiService";
 import { Book } from "@/types/Book";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
-import { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
@@ -12,6 +12,9 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
   });
 
   useEffect(() => {
+    const controller = new AbortController();
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
     const fetchBooks = async () => {
       api
         .get("/books", {
@@ -20,6 +23,8 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
             pageSize,
             query,
           },
+          signal: controller.signal,
+          cancelToken: source.token
         })
         .then((response: AxiosResponse<Paginate<Book[]>>) => {
           setState({
@@ -35,10 +40,15 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
             error: error.message,
             loading: false,
           });
+          console.log(error)
         });
     };
 
     fetchBooks();
+    return () => {
+      controller.abort();
+      source.cancel("Request cancelled");
+    };
   }, [pageNo, pageSize, query]);
 
   return state;

@@ -3,7 +3,7 @@ import { BookCover } from "./BookCover";
 import BookSearchedDetails from "./BookSearchedDetails";
 
 interface BookSearchedProps {
-  book?: Book;
+  book: Book;
 }
 
 /**
