@@ -1,6 +1,6 @@
 import Modal, { ModalRef } from "../Modal";
 import { Button } from "../../form/Button";
-import {Input} from "../../form/Input";
+import { Input } from "../../form/Input";
 import { SocialIcon } from "react-social-icons";
 import { forwardRef, Ref } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,7 +9,9 @@ import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import DangerAlert from "../../alert/DangerAlert";
-import {ErrorResponse} from "@/types/Error.ts";
+import { ErrorResponse } from "@/types/Error.ts";
+import GoogleAuthProvider from "@/provider/google/GoogleAuthProvider";
+import GoogleAuthButton from "../../form/GoogleAuthButton";
 
 interface LoginModalProps {}
 
@@ -102,18 +104,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
               style={{ height: "2rem", width: "2rem" }}
             />
           </Button>
-          <Button
-            type="button"
-            size={"custom"}
-            variant={"transparent"}
-            className="rounded-full"
-          >
-            <SocialIcon
-              network="google"
-              className="transition-colors duration-200 ease-in-out"
-              style={{ height: "2rem", width: "2rem" }}
-            />
-          </Button>
+          <GoogleAuthButton />
         </div>
       </div>
     </Modal>
