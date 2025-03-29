@@ -3,7 +3,7 @@ import { cn } from "@/utils/ClassNames";
 import { HTMLAttributes } from "react";
 import { BookCover } from "./BookCover";
 import bookCover from "@/assets/cover6.jpg";
-import { BookOpenIcon } from "@heroicons/react/24/outline";
+import { BookOpenIcon, HandThumbUpIcon } from "@heroicons/react/24/outline";
 import Banner from "../Banner";
 
 interface BookInfoProps extends HTMLAttributes<HTMLElement> {
@@ -11,6 +11,7 @@ interface BookInfoProps extends HTMLAttributes<HTMLElement> {
 }
 
 export default function BookInfo({ book, className, ...rest }: BookInfoProps) {
+  const genres = book?.genres.map((genre) => genre.name).join(", ");
   return (
     <article
       className={cn("w-full h-fit flex items-center", className)}
@@ -23,21 +24,33 @@ export default function BookInfo({ book, className, ...rest }: BookInfoProps) {
       />
       <div className="p-2 md:p-4 flex-1 flex flex-col justify-between">
         <div className="w-full h-full space-y-2">
-          <h3 className="text-lg font-sans font-bold text-ellipsis line-clamp-2 w-full">
+          <a
+            href={`/books/${book?.id}`}
+            className="text-lg font-sans font-bold text-ellipsis line-clamp-2 w-full hover:underline transition-all duration-200 ease-in-out"
+          >
             {book?.title}
-          </h3>
+          </a>
+          <p className="text-sm font-bold font-sans w-full">{genres}</p>
           <p className="text-sm font-sans mb-0.5 text-semibold">
             by <strong>Luna Sol</strong>
           </p>
-          <p className="text sm font-sans text-ellipsis line-clamp-3 w-full">
+          <p className="text-sm font-sans text-ellipsis line-clamp-2 w-full">
             {book?.description}
           </p>
           <div className="w-full flex justify-between items-center">
-            <div className="flex items-center gap-1">
-              <BookOpenIcon className="size-5" />
-              <h6 className="font-sans font-medium text-gray-500 text-md">
-                5.3M
-              </h6>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                <BookOpenIcon className="size-5" />
+                <h6 className="font-sans font-medium text-gray-500 text-md">
+                  {book?.readCount}
+                </h6>
+              </div>
+              <div className="flex items-center gap-0.5">
+                <HandThumbUpIcon className="size-5" />
+                <h6 className="font-sans font-medium text-gray-500 text-md">
+                  {book?.totalLikesCount}
+                </h6>
+              </div>
             </div>
             <div className="flex justify-end gap-2 items-center">
               {book?.completed ? (

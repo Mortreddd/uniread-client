@@ -10,7 +10,6 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
 import DangerAlert from "../../alert/DangerAlert";
 import { ErrorResponse } from "@/types/Error.ts";
-import GoogleAuthProvider from "@/provider/google/GoogleAuthProvider";
 import GoogleAuthButton from "../../form/GoogleAuthButton";
 
 interface LoginModalProps {}

@@ -6,6 +6,7 @@ export interface Book {
   authorId: number;
   title: string;
   image?: string;
+  genres: Genre[];
   description?: string;
   matured: boolean;
   completed: boolean;

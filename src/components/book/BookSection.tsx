@@ -1,80 +1,88 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import LoadingCircle from "../LoadingCirlce";
 import withHover from "../withHover";
 import BookInfo from "./BookInfo";
-import api from "@/services/ApiService";
 import { Book } from "@/types/Book";
-import { RequestState, Paginate, PaginateParams } from "@/types/Pagination";
-import { AxiosResponse, AxiosError } from "axios";
-import { useState, useEffect } from "react";
-import { ErrorResponse } from "@/types/Error";
+import { PaginateParams } from "@/types/Pagination";
+import { useState, useEffect, useMemo, useRef } from "react";
+import useGetBooksByGenreIds from "@/api/books/useGetBooksByGenreIds";
 
 export default function BookSection() {
   // @ts-ignore
   const [params, setParams] = useSearchParams();
-  const genreIds: number[] = params.getAll("genres").map(Number);
+  const observerRef = useRef<HTMLDivElement>(null);
+  const [books, setBooks] = useState<Book[]>([]);
+  const memoizedIds: number[] = useMemo(
+    () => params.getAll("genres").map(Number),
+    [params]
+  );
   const BookInfoWithHover = withHover(BookInfo);
   // @ts-ignore
-  const [state, setState] = useState<PaginateParams>({
+  const [{ pageNo, pageSize }, setState] = useState<PaginateParams>({
     pageNo: 0,
-    pageSize: 10,
-  });
-  const [result, setResult] = useState<RequestState<Paginate<Book[]>>>({
-    data: null,
-    loading: false,
-    error: null,
+    pageSize: 5,
   });
 
-  const { data: books, loading } = result;
+  const { data, loading } = useGetBooksByGenreIds(
+    memoizedIds,
+    pageNo,
+    pageSize
+  );
 
+  const onBottomReach = () => {
+    if (!data || data.last) return;
+    setState((prev) => ({ ...prev, pageNo: (prev.pageNo ?? 0) + 1 }));
+  };
+
+  /**
+   * This effect is used to reset the page number and page size when the genre ids change.
+   */
   useEffect(() => {
-    const controller = new AbortController();
+    setState({ pageNo: 0, pageSize: 5 });
+  }, [memoizedIds]);
 
-    async function getBooksByMultipleGenre() {
-      setResult((prev) => ({ ...prev, loading: true }));
+  /**
+   * This effect is used to update the books state when the data changes.
+   * It filters out duplicate books based on their ids.
+   */
+  useEffect(() => {
+    if (!data) return;
 
-      api
-        .get(`/genres/options`, {
-          params: {
-            pageNo: state.pageNo,
-            pageSize: state.pageSize,
-            genres: genreIds,
-          },
-          signal: controller.signal,
-        })
-        .then((response: AxiosResponse<Paginate<Book[]>>) => {
-          setResult({ error: null, data: response.data, loading: false });
-          console.log(response);
-        })
-        .catch((error: AxiosError<ErrorResponse>) => {
-          setResult({
-            error: error?.response?.data.message ?? "Unable to get books",
-            data: null,
-            loading: false,
-          });
-        });
-    }
+    setBooks((prevBooks) => {
+      if (pageNo === 0) return data.content;
+      return [
+        ...prevBooks,
+        ...data.content.filter((b) => !prevBooks.some((pb) => pb.id === b.id)),
+      ];
+    });
+  }, [pageNo, data, memoizedIds]);
 
-    getBooksByMultipleGenre();
+  /**
+   * * This effect is used to observe the bottom of the book section and load more books when it is reached.
+   */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) onBottomReach();
+      },
+      { threshold: 1.0 }
+    );
 
-    return () => {
-      controller.abort("Canceled Request");
-    };
-  }, []);
+    if (observerRef.current) observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [data]);
 
   return (
     <section className="w-full h-fit px-10 py-5 grid grid-cols-2 grid-flow-row gap-5">
-      {loading && (
+      {loading && books.length === 0 && (
         <div className="cols-span-2 row-span-1 w-full h-full flex justify-center items-center">
           <LoadingCircle size={"md"} />
         </div>
       )}
-      {books?.content &&
-        books.content.map((book) => (
-          <Link to={`/books/${book.id}`} key={book.id}>
-            <BookInfoWithHover book={book} />
-          </Link>
-        ))}
+      {books.map((book) => (
+        <BookInfoWithHover key={book.id} book={book} />
+      ))}
+      <div ref={observerRef}></div>
     </section>
   );
 }

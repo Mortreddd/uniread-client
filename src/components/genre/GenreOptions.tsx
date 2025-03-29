@@ -59,6 +59,7 @@ function GenreOptions() {
             <GenreOption
               className={"w-fit h-fit"}
               genre={genre}
+              key={genre.id}
               onClick={() => addGenre(genre.id)}
             />
           ))}

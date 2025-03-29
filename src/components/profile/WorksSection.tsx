@@ -19,16 +19,26 @@ export default function WorksSection() {
   return (
     <>
       <div className="w-full h-full grid grid-cols-6 gap-4 grid-flow-row px-16 py-6">
-        {data?.content.map((book) => (
-          <Link to={`/books/${book.id}`} key={book.id} className={"col-span-1"}>
-            <BookWithHover
-              book={book}
-              className="rounded"
-              size={"default"}
-              variant={"custom"}
-            />
-          </Link>
-        ))}
+        {data?.content.length ? (
+          data?.content.map((book) => (
+            <Link
+              to={`/books/${book.id}`}
+              key={book.id}
+              className={"col-span-1"}
+            >
+              <BookWithHover
+                book={book}
+                className="rounded"
+                size={"default"}
+                variant={"custom"}
+              />
+            </Link>
+          ))
+        ) : (
+          <div className="col-span-6 row-span-1 w-full h-full flex justify-center items-center text-primary font-serif font-medium text-xl">
+            No books available
+          </div>
+        )}
       </div>
     </>
   );
