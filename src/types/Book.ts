@@ -3,10 +3,11 @@ import { User } from "@/types/User.ts";
 
 export interface Book {
   id: string;
-  authorId: number;
+  user: User;
   title: string;
   image?: string;
   genres: Genre[];
+  coverPhoto: string;
   description?: string;
   matured: boolean;
   completed: boolean;

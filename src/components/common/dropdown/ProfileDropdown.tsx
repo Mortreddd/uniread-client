@@ -1,8 +1,6 @@
 import Icon from "@/components/Icon";
 import { Link, useNavigate } from "react-router-dom";
-import DropdownButton from "./DropdownButton";
-import DropdownContent, { DropdownContentRef } from "./DropdownContent";
-import DropdownItem from "./DropdownItem";
+import Dropdown, { DropdownContentRef } from "./Dropdown.tsx";
 import { useRef, useState } from "react";
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,18 +27,18 @@ export default function ProfileDropdown() {
 
   return (
     <>
-      <DropdownButton onClick={handleProfileClick}>
-        {user?.firstName}
+      <Dropdown onClick={handleProfileClick}>
+        {user?.username}
         <Icon src={defaultProfile} />
-      </DropdownButton>
-      <DropdownContent ref={profileContentRef}>
-        <DropdownItem>
-          <Link to="/settings">Settings</Link>
-        </DropdownItem>
-        <DropdownItem>
-          <Link to={`/profile/works`}>Profile</Link>
-        </DropdownItem>
-        <DropdownItem
+      </Dropdown>
+      <Dropdown.Content ref={profileContentRef}>
+        <Dropdown.Item>
+          <a href="/settings">Settings</a>
+        </Dropdown.Item>
+        <Dropdown.Item>
+          <a href={`/profile/works`}>Profile</a>
+        </Dropdown.Item>
+        <Dropdown.Item
           className={
             "ease-in-out duratio-200 transition-colors hover:bg-red-600 w-full hover:text-white text-black rounded"
           }
@@ -48,8 +46,8 @@ export default function ProfileDropdown() {
           <Link to={"/"} replace onClick={handleLogout}>
             Logout
           </Link>
-        </DropdownItem>
-      </DropdownContent>
+        </Dropdown.Item>
+      </Dropdown.Content>
     </>
   );
 }

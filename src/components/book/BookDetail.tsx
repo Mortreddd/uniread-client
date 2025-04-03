@@ -1,6 +1,6 @@
 import {
   Bars3BottomLeftIcon,
-  BookOpenIcon,
+  EyeIcon,
   HandThumbUpIcon,
   StarIcon,
 } from "@heroicons/react/24/outline";
@@ -36,7 +36,7 @@ export default function BookDetail({ book }: BookDetailProps) {
            * Total Read of the book icon
            */}
           <div className="flex items-center gap-1">
-            <BookOpenIcon className="size-5" />
+            <EyeIcon className="size-5" />
             <h6 className="font-sans font-medium text-gray-500 text-md">
               {totalReadsCount}
             </h6>

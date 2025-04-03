@@ -9,17 +9,17 @@ import { AlertProvider } from "./contexts/AlertContext.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <AlertProvider>
-        <GoogleAuthProvider>
-          <NotificationProvider>
-            <MessageProvider>
-              <RouterProvider router={router} />
-            </MessageProvider>
-          </NotificationProvider>
-        </GoogleAuthProvider>
-      </AlertProvider>
-    </AuthProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AuthProvider>
+    <AlertProvider>
+      <GoogleAuthProvider>
+        <NotificationProvider>
+          <MessageProvider>
+            <RouterProvider router={router}></RouterProvider>
+          </MessageProvider>
+        </NotificationProvider>
+      </GoogleAuthProvider>
+    </AlertProvider>
+  </AuthProvider>
+  // </React.StrictMode>
 );

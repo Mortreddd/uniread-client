@@ -1,21 +1,26 @@
 import Popover from "@/components/Popover";
 import NotificationContainer from "../../notification/NotificationContainer";
 import { useRef, useState } from "react";
-import { DropdownContentRef } from "./DropdownContent";
 import withBadge from "@/components/withBadge";
 import { Button } from "../form/Button";
 import { BellIcon } from "@heroicons/react/24/outline";
+import { DropdownContentRef } from "@/components/common/dropdown/Dropdown.tsx";
+import { useNotification } from "@/contexts/NotificationContext";
 
 export default function NotificationDropdown() {
   const [open, setOpen] = useState<boolean>(false);
 
   const notificationContentRef = useRef<DropdownContentRef>(null);
+  const { unreadNotifications } = useNotification();
 
-  const ButtonWithBadge = withBadge(Button, {
-    variant: "danger",
-    position: "topRight",
-    badgeClassName: "rounded-full text-sm",
-  });
+  const ButtonWithBadge =
+    unreadNotifications.length === 0
+      ? Button
+      : withBadge(Button, {
+          variant: "danger",
+          position: "topRight",
+          badgeClassName: "rounded-full text-sm",
+        });
 
   function handleNotificationClick() {
     if (open) {

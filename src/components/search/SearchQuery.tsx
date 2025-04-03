@@ -1,9 +1,6 @@
 import { Input } from "@/components/common/form/Input.tsx";
 import { Button } from "@/components/common/form/Button.tsx";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import DropdownContent, {
-  DropdownContentRef,
-} from "@/components/common/dropdown/DropdownContent.tsx";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import useDebounce from "@/hooks/useDebounce.ts";
@@ -12,6 +9,9 @@ import api from "@/services/ApiService.ts";
 import { Paginate, RequestState } from "@/types/Pagination.ts";
 import { Book } from "@/types/Book.ts";
 import SearchResult from "./SearchResult";
+import Dropdown, {
+  DropdownContentRef,
+} from "@/components/common/dropdown/Dropdown.tsx";
 
 /**
  * The component for search bar in home page
@@ -24,20 +24,31 @@ function SearchQuery() {
   const query = params.get("query") ?? "";
   const navigate = useNavigate();
   const debounceSearch = useDebounce(query, 500);
-
   const [result, setResult] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
     loading: false,
     error: null,
   });
 
+  /**
+   * Prevents the default form submit action and handles the search query.
+   * If the query is empty, it focuses on the search input field.
+   * If the query is valid, it closes the dropdown and navigates to the search results page.
+   * @param event - The event object for the form submit event
+   * @description - This function handles the form submit event for the search bar.
+   * @returns
+   */
   function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     if (query.trim().length <= 0) {
       searchInputRef.current?.focus();
       return;
     }
+
+    setResult({ data: null, loading: false, error: null });
     navigate(`/search/all?query=${query}`);
+    dropdownContentRef.current?.close();
   }
 
   function handleSearchQueryChange(e: ChangeEvent<HTMLInputElement>) {
@@ -121,7 +132,7 @@ function SearchQuery() {
           <MagnifyingGlassIcon className="text-white size-4" />
         </Button>
       </form>
-      <DropdownContent
+      <Dropdown.Content
         ref={dropdownContentRef}
         className={`w-72 ${result?.data?.content.length ? "block" : "hidden"}`}
       >
@@ -130,7 +141,7 @@ function SearchQuery() {
             <SearchResult book={book} className={"w-full h-fit"} />
           </Link>
         ))}
-      </DropdownContent>
+      </Dropdown.Content>
     </div>
   );
 }

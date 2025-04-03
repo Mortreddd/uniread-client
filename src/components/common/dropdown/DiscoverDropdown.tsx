@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import DropdownButton from "./DropdownButton";
-import DropdownContent, { DropdownContentRef } from "./DropdownContent";
-import DropdownItem from "./DropdownItem";
+import Dropdown, { DropdownContentRef } from "./Dropdown.tsx";
 
 export default function DiscoverDropdown() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -18,7 +16,7 @@ export default function DiscoverDropdown() {
 
   return (
     <>
-      <DropdownButton
+      <Dropdown
         className={
           "hover:bg-gray-200 bg-transparent transition-colors duration-200 ease-in-out"
         }
@@ -26,18 +24,18 @@ export default function DiscoverDropdown() {
       >
         Discover
         {/* Discover dropdown */}
-      </DropdownButton>
-      <DropdownContent ref={dropdownContentRef}>
-        <DropdownItem>
+      </Dropdown>
+      <Dropdown.Content ref={dropdownContentRef}>
+        <Dropdown.Item>
           <Link to="/books">Books</Link>
-        </DropdownItem>
-        <DropdownItem>
+        </Dropdown.Item>
+        <Dropdown.Item>
           <Link to="/authors">Authors</Link>
-        </DropdownItem>
-        <DropdownItem>
+        </Dropdown.Item>
+        <Dropdown.Item>
           <Link to="/genres">Genres</Link>
-        </DropdownItem>
-      </DropdownContent>
+        </Dropdown.Item>
+      </Dropdown.Content>
     </>
   );
 }

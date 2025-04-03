@@ -24,6 +24,8 @@ const buttonVariants = cva(
         ghost: "bg-transparent hover:bg-gray-100 text-white",
         dark: "bg-gray-800 hover:bg-gray-900 text-white",
         transparent: "bg-transparent hover:bg-gray-100",
+        inactivePrimary:
+          "border border-primary text-primary bg-transparent hover:bg-primary/10",
         custom: "",
       },
       size: {
@@ -50,7 +52,7 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {loading ? <LoadingCirlce /> : children}
+        {loading ? <LoadingCirlce variant={"light"} /> : children}
       </button>
     );
   }

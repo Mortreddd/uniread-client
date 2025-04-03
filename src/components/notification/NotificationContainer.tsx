@@ -1,22 +1,20 @@
 import { Notification } from "@/types/Notification";
-import DropdownContent, {
-  DropdownContentProps,
-  DropdownContentRef,
-} from "../common/dropdown/DropdownContent";
+
 import { forwardRef, Ref } from "react";
 import { cn } from "@/utils/ClassNames";
 import NotificationRow from "./NotificationRow";
+import Dropdown, {DropdownContentProps, DropdownContentRef} from "@/components/common/dropdown/Dropdown.tsx";
 
 interface NotificationContainerProps extends DropdownContentProps {
   notifications?: Notification[];
 }
 
 function NotificationContainer(
-  { className, notifications, ...rest }: NotificationContainerProps,
+  { notifications, className, ...rest }: NotificationContainerProps,
   ref: Ref<DropdownContentRef>
 ) {
   return (
-    <DropdownContent
+    <Dropdown.Content
       ref={ref}
       className={cn("bg-white rounded min-h-44", className)}
       {...rest}
@@ -31,7 +29,7 @@ function NotificationContainer(
       ) : (
         <div>No notification</div>
       )}
-    </DropdownContent>
+    </Dropdown.Content>
   );
 }
 

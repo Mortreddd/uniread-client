@@ -20,6 +20,8 @@ import AuthorWorks from "@/components/author/AuthorWorks";
 import AuthorAbout from "@/components/author/AuthorAbout";
 import { BooksPage } from "@/pages/BooksPage.tsx";
 import LoadingScreen from "./pages/LoadingScreen";
+import AuthorPage from "./pages/AuthorPage";
+import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 
 /**
  *
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "/auth/setup-username",
+    element: <SetupUsernamePage />,
   },
   // Genres Page
   {
@@ -55,6 +61,11 @@ export const router = createBrowserRouter([
   {
     path: "/books/:bookId",
     element: <BookDescriptionPage />,
+  },
+  // Author Page
+  {
+    path: "/authors",
+    element: <AuthorPage />,
   },
   {
     path: "/search",
@@ -122,15 +133,15 @@ export const router = createBrowserRouter([
 
   // Author Profile Page
   {
-    path: "/authors/:username/profile",
+    path: "/authors/:userId/profile",
     element: <AuthorProfilePage />,
     children: [
       {
-        path: "/authors/:username/profile/works",
+        path: "/authors/:userId/profile/works",
         element: <AuthorWorks />,
       },
       {
-        path: "/authors/:username/profile/about",
+        path: "/authors/:userId/profile/about",
         element: <AuthorAbout />,
       },
     ],

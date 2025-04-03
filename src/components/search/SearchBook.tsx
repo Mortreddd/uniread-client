@@ -16,13 +16,14 @@ export default function SearchBook() {
   const query = searchParams.get("query");
   // TODO: remove the @ts-ignore comment before deploying the application
   // @ts-ignore
-  const [params, setParams] = useState<PaginateParams>({
-    pageNo: 0,
-    pageSize: 20,
-    query: query || "",
-  });
+  const [{ pageNo, pageSize, query: search }, setParams] =
+    useState<PaginateParams>({
+      pageNo: 0,
+      pageSize: 20,
+      query: query || "",
+    });
 
-  const { data } = useGetBooks(params);
+  const { data } = useGetBooks({ pageNo, pageSize, query: search });
 
   console.log(data);
   return (

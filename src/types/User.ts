@@ -16,19 +16,15 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   books?: Book[];
-
   admin: boolean;
   superAdmin: boolean;
-  user: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
   isUser: boolean;
-
+  fullName: string;
   followings: Follow[];
   followers: Follow[];
+  followersCount: number;
+  followingsCount: number;
+  storiesCount: number;
 }
-
-export interface Author
-  extends Pick<User, "id" | "username" | "firstName" | "lastName"> {}
-
-export interface SearchedUser extends Pick<User, "id" | "username" | "image"> {}

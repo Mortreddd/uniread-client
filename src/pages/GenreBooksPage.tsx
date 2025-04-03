@@ -5,17 +5,29 @@ import BookInfo from "@/components/book/BookInfo";
 import withHover from "@/components/withHover";
 import useGetBooksByGenreId from "@/api/books/useGetBooksByGenreId";
 import LoadingCircle from "@/components/LoadingCirlce";
+import { useState } from "react";
+import { PaginateParams } from "@/types/Pagination";
+
 type GenreBooksProps = {
   genreId: string;
 };
 
 export default function GenreBooksPage() {
-  const params = useParams<GenreBooksProps>();
+  const { genreId } = useParams<GenreBooksProps>();
   const genre = genres.find(({ id }) => {
-    return id === Number(params.genreId);
+    return id === Number(genreId);
   });
-
-  const { data, loading } = useGetBooksByGenreId(Number(params.genreId));
+  const [{ pageNo, pageSize, query }, setState] = useState<PaginateParams>({
+    pageNo: 0,
+    pageSize: 10,
+    query: "",
+  });
+  const { data, loading } = useGetBooksByGenreId({
+    genreId: Number(genreId),
+    pageNo,
+    pageSize,
+    query,
+  });
 
   const BookInfoWithHover = withHover(BookInfo);
   return (

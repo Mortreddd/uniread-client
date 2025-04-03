@@ -10,6 +10,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { ErrorResponse } from "@/types/Error.ts";
 
 interface AuthProviderProps extends PropsWithChildren {}
 
@@ -40,27 +41,37 @@ function AuthProvider({ children }: AuthProviderProps) {
   );
   const [user, setUser] = useState<User | null>(null);
 
-  const isAdmin = user !== null && user.admin;
-  const isSuperAdmin = user !== null && user.superAdmin;
-  const isUser = user !== null && user.user;
-
-  useEffect(() => {
-    if (accessToken === null) return;
-    getUser();
-  }, [accessToken]);
+  const isAdmin = user !== null && user.isAdmin;
+  const isSuperAdmin = user !== null && user.isSuperAdmin;
+  const isUser = user !== null && user.isUser;
 
   async function getUser(): Promise<void> {
     await api
       .get<User>("/users/current")
       .then((response: AxiosResponse<User>) => {
+        console.log(response);
         setUser(response.data);
       })
-      .catch((error: AxiosError) => {
+      .catch((error: AxiosError<ErrorResponse>) => {
         console.error(error);
         setUser(null);
         logout();
       });
   }
+
+  useEffect(() => {
+    if (accessToken) {
+      getUser();
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (user && user.username === null) {
+      if (window.location.pathname !== "/auth/setup-username") {
+        window.location.replace("/auth/setup-username");
+      }
+    }
+  }, [user]);
 
   function logout() {
     localStorage.removeItem("exp");
@@ -68,6 +79,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem("accessToken");
     setUser(null);
     setAccessToken(null);
+    delete api.defaults.headers.common["Authorization"];
   }
 
   function login(response: LoginResponse) {

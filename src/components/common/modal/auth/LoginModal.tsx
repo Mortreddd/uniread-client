@@ -40,7 +40,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
 
   return (
     <Modal ref={ref}>
-      <div className="rounded p-6 space-y-1 bg-white w-96">
+      <div className="rounded p-3 space-y-1 bg-white w-96">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className="text-primary text-3xl text-center font-serif font-medium block">
             Login
@@ -87,8 +87,10 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
           </Button>
         </form>
 
-        <div className="w-full text-center">
-          <p className="text-sm font-sans text-black font-medium">OR</p>
+        <div className="w-full flex items-center text-center">
+          <div className={'flex-1 border border-solid border-primary'}></div>
+          <p className="text-sm font-sans text-black font-medium mx-3">OR</p>
+          <div className={'flex-1 border border-solid border-primary'}></div>
         </div>
         <div className="w-full flex justify-center gap-3 items-center h-fit">
           <Button

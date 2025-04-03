@@ -16,6 +16,7 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
     const fetchBooks = async () => {
+      setState({ ...state, loading: true });
       api
         .get("/books", {
           params: {
@@ -24,7 +25,7 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
             query,
           },
           signal: controller.signal,
-          cancelToken: source.token
+          cancelToken: source.token,
         })
         .then((response: AxiosResponse<Paginate<Book[]>>) => {
           setState({
@@ -40,7 +41,7 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
             error: error.message,
             loading: false,
           });
-          console.log(error)
+          console.log(error);
         });
     };
 

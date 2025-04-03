@@ -5,6 +5,7 @@ export interface Notification {
   user: User;
   title: string;
   description: string;
+  isRead: boolean;
   createdAt: string;
   updatedAt: string;
 }
