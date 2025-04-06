@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
 import AboutPage from "@/pages/AboutPage";
-import BookDescriptionPage from "@/pages/BookDescriptionPage";
+import BookDescriptionPage from "@/pages/books/BookDescriptionPage.tsx";
 import ProfilePage from "@/pages/ProfilePage";
 import WorksSection from "@/components/profile/WorksSection";
 import AboutSection from "@/components/profile/AboutSection";
@@ -18,10 +18,11 @@ import SearchAuthor from "@/components/search/SearchAuthor";
 import AuthorProfilePage from "@/pages/AuthorProfilePage";
 import AuthorWorks from "@/components/author/AuthorWorks";
 import AuthorAbout from "@/components/author/AuthorAbout";
-import { BooksPage } from "@/pages/BooksPage.tsx";
+import { BooksPage } from "@/pages/books/BooksPage.tsx";
 import LoadingScreen from "./pages/LoadingScreen";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
+import CreateBookPage from "@/pages/books/CreateBookPage..tsx";
 
 /**
  *
@@ -61,6 +62,11 @@ export const router = createBrowserRouter([
   {
     path: "/books/:bookId",
     element: <BookDescriptionPage />,
+  },
+  // Create Book Page
+  {
+    path: "/books/new",
+    element: <CreateBookPage />
   },
   // Author Page
   {

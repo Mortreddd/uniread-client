@@ -86,7 +86,7 @@ export default function BookDetail({ book }: BookDetailProps) {
             </Banner>
           ) : (
             <Banner className={"text-sm"} variant={"onGoing"}>
-              OnGoing
+              Ongoing
             </Banner>
           )}
           {/**

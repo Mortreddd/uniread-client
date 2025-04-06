@@ -9,7 +9,7 @@ import { AlertProvider } from "./contexts/AlertContext.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
+  <React.StrictMode>
   <AuthProvider>
     <AlertProvider>
       <GoogleAuthProvider>

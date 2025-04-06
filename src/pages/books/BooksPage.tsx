@@ -1,4 +1,4 @@
-import BookSection from "@/components/book/BookSection";
+import BookSection from "@/components/book/BookSection.tsx";
 import Navbar from "@/components/common/navbar/Navbar.tsx";
 import GenreOptions from "@/components/genre/GenreOptions.tsx";
 

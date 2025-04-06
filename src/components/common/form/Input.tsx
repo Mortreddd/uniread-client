@@ -10,7 +10,7 @@ interface InputProps
  * The input styles with differnt variants
  */
 const inputVariant = cva(
-  "inline-flex outline-0 justify-start py-1 px-2 items-center transition-colors rounded font-medium duration-200 ease-in-out placeholder:text-gray-500",
+  "inline-flex outline-0 justify-start items-center transition-colors rounded font-medium duration-200 ease-in-out placeholder:text-gray-500",
   {
     variants: {
       variant: {
@@ -20,9 +20,15 @@ const inputVariant = cva(
           "text-gray-800 ring-gray-500 ring-gray-500 ring-0 border-2 border-gray-500 focus:ring-2 focus:border-0 focus:ring-gray-500",
         none: "",
       },
+      inputSize: {
+          sm: "px-2 py-1",
+          md: "px-3 py-2",
+          lg: "px-4 py-3"
+      }
     },
     defaultVariants: {
       variant: "default",
+        inputSize: "sm"
     },
   }
 );

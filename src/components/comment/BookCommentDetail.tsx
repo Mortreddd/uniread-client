@@ -1,9 +1,13 @@
 import { Fragment } from "react/jsx-runtime";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import {BookComment} from "@/types/Book.ts";
 
-export default function CommentDetail() {
-  const stars: number[] = [1, 2, 3, 4, 5];
+interface BookCommentDetailProps {
+  comment?: undefined | BookComment;
+}
+export default function BookCommentDetail({ comment } : BookCommentDetailProps) {
+  const stars: number[] = [1, 2, 3, 4, 5]
   return (
     <Fragment>
       <div className="w-full h-fit">
