@@ -27,9 +27,9 @@ export default function FeaturedBooks() {
         MOST READ BOOKS
       </h3>
       <div className="w-full h-fit flex items-start gap-3 flex-wrap">
-        {loading && !data?.content && <LoadingCircle />}
-        {!loading &&
-          memoizedBooks.length !== 0 &&
+        {loading && !data?.content ? (
+          <LoadingCircle />
+        ) : !loading && memoizedBooks.length !== 0 ? (
           memoizedBooks.map((book) => (
             <Link to={`/books/${book.id}`} key={book.id}>
               <BookWithHover
@@ -38,11 +38,14 @@ export default function FeaturedBooks() {
                 className="rounded"
               />
             </Link>
-          ))}
-        {!loading && memoizedBooks.length === 0 && (
-          <h1 className="text-2xl text-primary font-sans">
-            No available books
-          </h1>
+          ))
+        ) : (
+          !loading &&
+          memoizedBooks.length === 0 && (
+            <h1 className="text-2xl text-primary font-sans">
+              No available books
+            </h1>
+          )
         )}
       </div>
     </div>

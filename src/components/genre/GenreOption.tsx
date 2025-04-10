@@ -5,16 +5,19 @@ import { memo } from "react";
 import { useSearchParams } from "react-router-dom";
 
 interface GenreOptionProps extends BannerProps {
+  genreIds: number[] | undefined;
   genre: Genre;
 }
 
-function GenreOption({ genre, className, ...props }: GenreOptionProps) {
+function GenreOption({
+  genre,
+  genreIds,
+  className,
+  ...props
+}: GenreOptionProps) {
   const { id, name } = genre;
-  const [params, setParams] = useSearchParams();
-  const genreIds: number[] = params
-    .getAll("genres")
-    .map((genreId) => Number(genreId));
-  const isActive = genreIds.includes(id);
+
+  const isActive = genreIds?.includes(id);
 
   return (
     <Banner

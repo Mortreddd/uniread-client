@@ -14,6 +14,14 @@ export interface Chapter {
   chapterLikes?: ChapterLike[];
 }
 
+export interface Paragraph {
+  id: string;
+  chapter: Chapter;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ChapterLike {
   id: string;
   users: User[];

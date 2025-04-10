@@ -22,7 +22,7 @@ import { BooksPage } from "@/pages/books/BooksPage.tsx";
 import LoadingScreen from "./pages/LoadingScreen";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
-import CreateBookPage from "@/pages/books/CreateBookPage..tsx";
+import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
 
 /**
  *
@@ -40,6 +40,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <HomePage />,
   },
+  // Setting up username
   {
     path: "/auth/setup-username",
     element: <SetupUsernamePage />,

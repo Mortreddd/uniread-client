@@ -4,10 +4,8 @@ import BookDetails from "@/components/book/BookDetails.tsx";
 import Navbar from "@/components/common/navbar/Navbar.tsx";
 import FeaturedBooks from "@/components/featured/FeaturedBooks.tsx";
 import Footer from "@/components/Footer.tsx";
-import {Link, useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import defaultBookCover from "@/assets/cover6.jpg";
-import { Suspense } from "react";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import BookCommentsSection from "@/components/book/BookCommentsSection.tsx";
 import ChapterSection from "@/components/chapter/ChapterSection.tsx";
 
@@ -15,15 +13,6 @@ export default function BookDescription() {
   const { bookId } = useParams<{ bookId: string }>();
   const { data: book } = useGetBookById(bookId);
   return (
-    <Suspense
-      fallback={
-        <div
-          className={"w-full h-fit min-h-52 flex justify-center items-center"}
-        >
-          <LoadingCircle />
-        </div>
-      }
-    >
       <main className="w-full h-full antialiased font-sans scroll-m-10 scroll-smooth">
         <Navbar />
         <div className="w-full p-10 h-full">
@@ -49,6 +38,5 @@ export default function BookDescription() {
         </div>
         <Footer />
       </main>
-    </Suspense>
   );
 }

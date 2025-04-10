@@ -12,6 +12,9 @@ import { Button } from "../common/form/Button";
 function GenreOptions() {
   const { data: genres, loading, error } = useGetGenres();
   const [params, setParams] = useSearchParams();
+  const genreIds: number[] = params
+    .getAll("genres")
+    .map((genreId) => Number(genreId));
 
   /**
    * Add or remove genre from query params
@@ -59,6 +62,7 @@ function GenreOptions() {
             <GenreOption
               className={"w-fit h-fit"}
               genre={genre}
+              genreIds={genreIds}
               key={genre.id}
               onClick={() => addGenre(genre.id)}
             />

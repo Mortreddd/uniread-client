@@ -21,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </GoogleAuthProvider>
     </AlertProvider>
   </AuthProvider>
-  // </React.StrictMode>
+  </React.StrictMode>
 );
