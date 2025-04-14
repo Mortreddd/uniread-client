@@ -1,5 +1,6 @@
 import { Chapter } from "./Chapter";
 import { User } from "@/types/User.ts";
+import {BookStatus, Reaction} from "./Enums";
 
 export interface Book {
   id: string;
@@ -7,6 +8,7 @@ export interface Book {
   title: string;
   image?: string;
   genres: Genre[];
+  status: BookStatus;
   coverPhoto: string;
   description?: string;
   matured: boolean;
@@ -16,8 +18,10 @@ export interface Book {
   updatedAt: string;
   chapters?: Chapter[];
   tags?: Tag[];
-  bookComments?: BookComment;
-  bookLikes?: BookLike;
+  bookComments?: BookComment[];
+  bookLikes?: BookLike[];
+  totalChapterPublishedCount?: number;
+  totalChapterDraftsCount?: number;
   totalChaptersCount?: number;
   totalRatingsCount?: number;
   totalReadsCount?: number;
@@ -55,7 +59,8 @@ export interface BookComment {
 export interface BookLike {
   id: string;
   book: Book;
-  users: User[];
+  user: User;
+  reaction: Reaction;
   createdAt: string;
   updatedAt: string;
 }
@@ -63,7 +68,14 @@ export interface BookLike {
 export interface BookCommentLike {
   id: string;
   bookComment: BookComment;
-  users: User[];
+  user: User;
   createdAt: string;
   updatedAt: string;
+}
+
+type MutableFieldType = "title" | "description" | "matured";
+export interface CreateBookFormProps extends Pick<Book, MutableFieldType> {
+  authorId: string | null;
+  photo: File | null;
+  genreIds: number[];
 }

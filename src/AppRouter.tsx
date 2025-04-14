@@ -23,6 +23,9 @@ import LoadingScreen from "./pages/LoadingScreen";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
+import MyStoriesPage from "./pages/MyStoriesPage";
+import PublishedBookList from "@/components/write/PublishedBookList.tsx";
+import DraftsBookList from "@/components/write/DraftsBookList.tsx";
 
 /**
  *
@@ -67,7 +70,7 @@ export const router = createBrowserRouter([
   // Create Book Page
   {
     path: "/books/new",
-    element: <CreateBookPage />
+    element: <CreateBookPage />,
   },
   // Author Page
   {
@@ -120,6 +123,22 @@ export const router = createBrowserRouter([
         element: <div>Bookmarks</div>,
       },
     ],
+  },
+
+  // My Stories Page
+  {
+    path: "/stories",
+    element: <MyStoriesPage />,
+    children: [
+      {
+        path: "/stories/published",
+        element: <PublishedBookList />
+      },
+      {
+        path: "/stories/drafts",
+        element: <DraftsBookList />
+      }
+    ]
   },
 
   // Profile Page

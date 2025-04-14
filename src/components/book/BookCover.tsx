@@ -10,8 +10,8 @@ const bookCoverVariants = cva("rounded object-cover object-center shadow-md", {
   variants: {
     size: {
       default: "h-56 w-40",
-      sm: "h-36 w-20",
-      md: "h-44 w-28",
+      sm: "h-36 w-24",
+      md: "h-44 w-32",
       jumbotron: "h-96 w-64",
       custom: "",
     },

@@ -54,12 +54,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
               </Button>
             </div>
             <p className="w-full mt-3 line-clamp-5 h-full text-gray-500">
-              After a heartbreaking experience of miscarriage after years of
-              trying to get pregnant brings Kathleen to devastation. At a
-              auction Kathleen feels a deep connection to one of the painting of
-              little boy crying, urging her to buy it right away. At home things
-              start to slowly feel normal again but the evil energy attached to
-              the sad painting only progresses as her connection deepens.
+              {book.description ?? "The synopsis is empty"}
             </p>
           </div>
         </>

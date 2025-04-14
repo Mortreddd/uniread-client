@@ -45,7 +45,7 @@ export interface DropdownContentProps
         VariantProps<typeof dropdownContentVariant> {}
 
 const dropdownContentVariant = cva(
-    "absolute right-0 top-0 bg-gray-100 rounded p-3 hidden",
+    "absolute right-0 bg-gray-100 rounded p-3 hidden",
     {
         variants: {
             size: {
@@ -109,7 +109,8 @@ const dropdownItemVariant = cva(
     {
         variants: {
             variant: {
-                default: "bg-transparent hover:bg-gray-200 text-md ",
+                default: "bg-transparent hover:bg-gray-200",
+                danger: "bg-transparent hover:bg-red-600 text-black hover:text-white"
             },
         },
         defaultVariants: {

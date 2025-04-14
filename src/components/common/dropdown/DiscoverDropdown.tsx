@@ -26,17 +26,17 @@ export default function DiscoverDropdown() {
         {/* Discover dropdown */}
       </Dropdown>
       <Dropdown.Content ref={dropdownContentRef}>
-        <Dropdown.Item>
+        <Dropdown.Item className={"w-full"}>
           <Link className="w-full" to="/books">
             Books
           </Link>
         </Dropdown.Item>
-        <Dropdown.Item>
+        <Dropdown.Item className={"w-full"}>
           <Link className="w-full" to="/authors">
             Authors
           </Link>
         </Dropdown.Item>
-        <Dropdown.Item>
+        <Dropdown.Item className={"w-full"}>
           <Link className="w-full" to="/genres">
             Genres
           </Link>

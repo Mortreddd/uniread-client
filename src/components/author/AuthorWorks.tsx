@@ -16,7 +16,7 @@ export default function AuthorWorks() {
     query: "",
   });
 
-  const { data, loading } = useGetUserBooks(userId, pageNo, pageSize, query);
+  const { data, loading } = useGetUserBooks({userId, pageNo, pageSize, query});
   const [books, setBooks] = useState<BookType[]>([]);
   useEffect(() => {
     if (data?.content) {

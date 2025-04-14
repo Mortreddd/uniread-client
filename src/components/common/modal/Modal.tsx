@@ -45,7 +45,7 @@ function Modal({ children }: ModalProps, ref: Ref<ModalRef>) {
     <>
       <div
         ref={modalRef}
-        className={`fixed inset-0 flex justify-center rounded items-center transition-all ${
+        className={`fixed inset-0 flex justify-center z-50 rounded items-center transition-all ${
           isOpen
             ? "bg-black/50 visible duration-75 ease-out"
             : "invisible duration-300 ease-in"

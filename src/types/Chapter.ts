@@ -1,5 +1,6 @@
 import { Book } from "@/types//Book.ts";
 import { User } from "@/types/User.ts";
+import { Reaction } from "./Enums";
 
 export interface Chapter {
   id: string;
@@ -25,6 +26,7 @@ export interface Paragraph {
 export interface ChapterLike {
   id: string;
   users: User[];
+  reacttion: Reaction;
   chapter: Chapter;
   createdAt: string;
   updatedAt: string;
@@ -39,7 +41,6 @@ export interface ChapterComment {
   rating: number;
   createdAt: string;
   updatedAt: string;
-
   chapterCommentLikes: ChapterCommentLike[];
 }
 
@@ -47,6 +48,7 @@ export interface ChapterCommentLike {
   id: string;
   chapterComment: ChapterComment;
   user: User;
+  reaction: Reaction;
   createdAt: string;
   updatedAt: string;
 }
