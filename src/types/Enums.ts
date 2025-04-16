@@ -5,7 +5,7 @@ export enum ParagraphStatus {
 
 export enum BookStatus {
   DRAFT = "DRAFT",
-  PUBLISHED = "PUBLISHED",
+  PUBLISHED = "PUBLISHED"
 }
 
 export enum Reaction {

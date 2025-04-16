@@ -50,7 +50,7 @@ export default function AuthorPage() {
   // Unfollow function for making delete request when delete follow to authorId
   const unfollowUser = useCallback(
     async (authorId: string) => {
-      if (isLoggedIn()) {
+      if (!isLoggedIn()) {
         loginModalRef.current?.open();
         return;
       }
@@ -75,7 +75,7 @@ export default function AuthorPage() {
   // Follow function for making post request creating new follow for authorId
   const followUser = useCallback(
     async (authorId: string) => {
-      if (isLoggedIn()) {
+      if (!isLoggedIn()) {
         loginModalRef.current?.open();
         return;
       }

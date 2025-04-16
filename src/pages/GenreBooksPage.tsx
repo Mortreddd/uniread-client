@@ -1,12 +1,13 @@
-import { genres } from "@/components/genre/MockGenre";
+import {genres} from "@/components/genre/MockGenre";
 import Navbar from "@/components/common/navbar/Navbar";
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import BookInfo from "@/components/book/BookInfo";
 import withHover from "@/components/withHover";
 import useGetBooksByGenreId from "@/api/books/useGetBooksByGenreId";
 import LoadingCircle from "@/components/LoadingCirlce";
-import { useState } from "react";
-import { PaginateParams } from "@/types/Pagination";
+import {useState} from "react";
+import {BookParams} from "@/types/Book.ts";
+import {BookStatus} from "@/types/Enums.ts";
 
 type GenreBooksProps = {
   genreId: string;
@@ -17,16 +18,18 @@ export default function GenreBooksPage() {
   const genre = genres.find(({ id }) => {
     return id === Number(genreId);
   });
-  const [{ pageNo, pageSize, query }, setState] = useState<PaginateParams>({
+  const [{ pageNo, pageSize, query, status }] = useState<BookParams>({
     pageNo: 0,
     pageSize: 10,
     query: "",
+    status: BookStatus.PUBLISHED
   });
   const { data, loading } = useGetBooksByGenreId({
     genreId: Number(genreId),
     pageNo,
     pageSize,
     query,
+    status
   });
 
   const BookInfoWithHover = withHover(BookInfo);

@@ -1,17 +1,18 @@
-import { useGetBookById } from "@/api/books/useGetBookById.ts";
-import { BookCover } from "@/components/book/BookCover.tsx";
+import {useGetBookById} from "@/api/books/useGetBookById.ts";
+import {BookCover} from "@/components/book/BookCover.tsx";
 import BookDetails from "@/components/book/BookDetails.tsx";
 import Navbar from "@/components/common/navbar/Navbar.tsx";
 import FeaturedBooks from "@/components/featured/FeaturedBooks.tsx";
 import Footer from "@/components/Footer.tsx";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import defaultBookCover from "@/assets/cover6.jpg";
 import BookCommentsSection from "@/components/book/BookCommentsSection.tsx";
 import ChapterSection from "@/components/chapter/ChapterSection.tsx";
+import {BookStatus} from "@/types/Enums.ts";
 
 export default function BookDescription() {
   const { bookId } = useParams<{ bookId: string }>();
-  const { data: book } = useGetBookById(bookId);
+  const { data: book } = useGetBookById({ id: bookId, status: BookStatus.PUBLISHED });
   return (
       <main className="w-full h-full antialiased font-sans scroll-m-10 scroll-smooth">
         <Navbar />

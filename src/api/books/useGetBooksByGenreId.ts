@@ -1,11 +1,11 @@
 import api from "@/services/ApiService";
-import { Book } from "@/types/Book";
+import {Book, BookParams} from "@/types/Book";
 import { ErrorResponse } from "@/types/Error";
-import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
+import { Paginate, RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-interface GetBooksByGenreProps extends PaginateParams {
+interface GetBooksByGenreProps extends BookParams {
   genreId: number;
 }
 export default function useGetBooksByGenreId({
@@ -13,6 +13,7 @@ export default function useGetBooksByGenreId({
   pageNo,
   pageSize,
   query,
+  status
 }: GetBooksByGenreProps) {
   const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
@@ -24,7 +25,7 @@ export default function useGetBooksByGenreId({
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
-    async function useGetBooksByGenreId() {
+    async function getBooksByGenreId() {
       setState({ ...state, loading: true });
       api
         .get(`/genres/${genreId}/books`, {
@@ -32,6 +33,7 @@ export default function useGetBooksByGenreId({
             pageNo,
             pageSize,
             query,
+            status
           },
           cancelToken: source.token,
         })
@@ -48,10 +50,10 @@ export default function useGetBooksByGenreId({
         });
     }
 
-    useGetBooksByGenreId();
+    getBooksByGenreId();
 
     return () => source.cancel("Cancelled Request");
-  }, [genreId, pageNo, pageSize, query]);
+  }, [genreId, pageNo, pageSize, query, status]);
 
   return state;
 }

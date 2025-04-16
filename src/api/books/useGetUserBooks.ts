@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import {Paginate, PaginateParams, RequestState} from "@/types/Pagination.ts";
-import { Book } from "@/types/Book.ts";
+import {Paginate, RequestState} from "@/types/Pagination.ts";
+import {Book, BookParams} from "@/types/Book.ts";
 import api from "@/services/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@/types/Error.ts";
 
-interface GetUserBooksProps extends PaginateParams {
+interface GetUserBooksProps extends BookParams {
   userId: undefined | string,
 }
 
-export default function useGetUserBooks({ userId, pageNo, pageSize, query} : GetUserBooksProps) {
+export default function useGetUserBooks({ userId, pageNo, pageSize, query, status} : GetUserBooksProps) {
   const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
     error: null,
@@ -27,6 +27,7 @@ export default function useGetUserBooks({ userId, pageNo, pageSize, query} : Get
             pageNo,
             pageSize,
             query,
+            status
           },
           signal: controller.signal,
         })
@@ -47,7 +48,7 @@ export default function useGetUserBooks({ userId, pageNo, pageSize, query} : Get
     return () => {
       controller.abort("Cancelled");
     };
-  }, [pageNo, pageSize, query, userId]);
+  }, [pageNo, pageSize, query, userId, status]);
 
   return state;
 }

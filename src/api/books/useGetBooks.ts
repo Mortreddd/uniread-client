@@ -1,10 +1,10 @@
 import api from "@/services/ApiService";
-import { Book } from "@/types/Book";
-import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
+import {Book, BookParams} from "@/types/Book";
+import { Paginate, RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
+export function useGetBooks({ pageNo, pageSize, query, status }: BookParams) {
   const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
     error: null,
@@ -23,6 +23,7 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
             pageNo,
             pageSize,
             query,
+            status
           },
           signal: controller.signal,
           cancelToken: source.token,
@@ -50,7 +51,7 @@ export function useGetBooks({ pageNo, pageSize, query }: PaginateParams) {
       controller.abort();
       source.cancel("Request cancelled");
     };
-  }, [pageNo, pageSize, query]);
+  }, [pageNo, pageSize, query, status]);
 
   return state;
 }

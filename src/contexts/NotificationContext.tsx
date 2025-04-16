@@ -41,7 +41,7 @@ function NotificationProvider({ children }: NotificationProviderProps) {
   const socket = SockJS(`${baseUrl}/notifications`);
   const stompClient = over(socket);
   const { showAlert } = useAlert();
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, isLoggedIn } = useAuth();
   const { data } = useGetUserNotifications({
     userId: currentUser?.id,
     pageNo: 0,
@@ -55,6 +55,7 @@ function NotificationProvider({ children }: NotificationProviderProps) {
 
   console.log(unreadNotifications);
   useEffect(() => {
+    if(!isLoggedIn()) return;
     stompClient.connect({}, () => {
       stompClient.subscribe("/topic/notifications", (message: Message) => {
         const notif: Notification = JSON.parse(message.body);

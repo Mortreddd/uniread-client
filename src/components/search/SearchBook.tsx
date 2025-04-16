@@ -1,8 +1,9 @@
-import { Link, useSearchParams } from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import BookSearched from "../book/BookSearched";
-import { useGetBooks } from "@/api/books/useGetBooks";
-import { useState } from "react";
-import { PaginateParams } from "@/types/Pagination";
+import {useGetBooks} from "@/api/books/useGetBooks";
+import {useState} from "react";
+import {BookParams} from "@/types/Book.ts";
+import {BookStatus} from "@/types/Enums.ts";
 
 /**
  * The book tab in search page
@@ -16,14 +17,15 @@ export default function SearchBook() {
   const query = searchParams.get("query");
   // TODO: remove the @ts-ignore comment before deploying the application
   // @ts-ignore
-  const [{ pageNo, pageSize, query: search }, setParams] =
-    useState<PaginateParams>({
+  const [{ pageNo, pageSize, query: search, status }] =
+    useState<BookParams>({
       pageNo: 0,
       pageSize: 20,
       query: query || "",
+      status: BookStatus.PUBLISHED
     });
 
-  const { data } = useGetBooks({ pageNo, pageSize, query: search });
+  const { data } = useGetBooks({ pageNo, pageSize, query: search, status });
 
   console.log(data);
   return (

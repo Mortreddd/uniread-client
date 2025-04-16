@@ -4,8 +4,13 @@ import { ErrorResponse } from "@/types/Error";
 import { RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import {BookStatus} from "@/types/Enums.ts";
 
-export function useGetBookById(id?: string) {
+interface GetBookById {
+  id?: string;
+  status?: BookStatus;
+}
+export function useGetBookById({ id , status }: GetBookById) {
   const [state, setState] = useState<RequestState<Book>>({
     data: null,
     loading: false,
@@ -20,6 +25,9 @@ export function useGetBookById(id?: string) {
 
       api
         .get(`/books/${id}`, {
+          params: {
+            status
+          },
           cancelToken: source.token,
         })
         .then((response: AxiosResponse<Book>) => {

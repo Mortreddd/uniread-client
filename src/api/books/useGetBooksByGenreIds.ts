@@ -1,19 +1,19 @@
 import api from "@/services/ApiService";
-import { Book } from "@/types/Book";
+import {Book, BookParams} from "@/types/Book";
 import { ErrorResponse } from "@/types/Error";
 import { RequestState, Paginate } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
+
 /**
  * * This effect is used to fetch books by multiple genres when the component mounts or when the genres change.
  * * It uses the AbortController to cancel the request if the component unmounts before the request is completed.
  */
-export default function useGetBooksByGenreIds(
-  genreIds: number[],
-  pageNo?: number,
-  pageSize?: number
-) {
+interface GetBooksByGenreIds extends BookParams{
+    genreIds: number[]
+}
+export default function useGetBooksByGenreIds({ genreIds, pageNo,pageSize, query, status } : GetBooksByGenreIds) {
   const [result, setResult] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
     loading: false,
@@ -29,9 +29,7 @@ export default function useGetBooksByGenreIds(
       api
         .get(`/genres/options`, {
           params: {
-            pageNo: pageNo,
-            pageSize: pageSize,
-            genres: genreIds,
+            pageNo, pageSize, genres: genreIds, query, status: status !== undefined ? status : null
           },
           signal: controller.signal,
           paramsSerializer: (params) => {
@@ -55,7 +53,6 @@ export default function useGetBooksByGenreIds(
         })
         .then((response: AxiosResponse<Paginate<Book[]>>) => {
           setResult({ error: null, data: response.data, loading: false });
-          console.log(response);
         })
         .catch((error: AxiosError<ErrorResponse>) => {
           setResult({
@@ -71,7 +68,7 @@ export default function useGetBooksByGenreIds(
     return () => {
       controller.abort("Canceled Request");
     };
-  }, [genreIds, pageSize, pageNo]);
+  }, [genreIds, pageSize, pageNo, query, status]);
 
   return result;
 }

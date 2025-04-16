@@ -1,22 +1,23 @@
-import { Link, useParams } from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import useGetUserBooks from "@/api/books/useGetUserBooks.ts";
-import { useEffect, useState } from "react";
-import { PaginateParams } from "@/types/Pagination.ts";
+import {useEffect, useState} from "react";
 import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import Book from "@/components/book/Book.tsx";
 import withHover from "@/components/withHover.tsx";
-import { Book as BookType } from "@/types/Book";
+import {Book as BookType, BookParams} from "@/types/Book";
+import {BookStatus} from "@/types/Enums.ts";
 
 export default function AuthorWorks() {
   const { userId } = useParams<"userId">();
   const BookWithHover = withHover(Book);
-  const [{ pageNo, pageSize, query }, setState] = useState<PaginateParams>({
+  const [{ pageNo, pageSize, query, status }] = useState<BookParams>({
     pageNo: 0,
     pageSize: 10,
     query: "",
+    status: BookStatus.PUBLISHED
   });
 
-  const { data, loading } = useGetUserBooks({userId, pageNo, pageSize, query});
+  const { data, loading } = useGetUserBooks({userId, pageNo, pageSize, query, status});
   const [books, setBooks] = useState<BookType[]>([]);
   useEffect(() => {
     if (data?.content) {

@@ -1,19 +1,20 @@
-import { useMemo, useState } from "react";
+import {useMemo, useState} from "react";
 import Book from "../book/Book";
 import withHover from "../withHover";
-import { PaginateParams } from "@/types/Pagination";
-import { useGetBooks } from "@/api/books/useGetBooks";
+import {useGetBooks} from "@/api/books/useGetBooks";
 import LoadingCircle from "../LoadingCirlce";
-import { Book as BookType } from "@/types/Book";
-import { Link } from "react-router-dom";
+import {Book as BookType, BookParams} from "@/types/Book";
+import {Link} from "react-router-dom";
+import {BookStatus} from "@/types/Enums.ts";
 
 export default function FeaturedBooks() {
-  const [{ pageNo, pageSize, query }, setParams] = useState<PaginateParams>({
+  const [{ pageNo, pageSize, query, status }] = useState<BookParams>({
     pageNo: 0,
     pageSize: 10,
     query: "",
+    status: BookStatus.PUBLISHED
   });
-  const { data, loading } = useGetBooks({ pageNo, pageSize, query });
+  const { data, loading } = useGetBooks({ pageNo, pageSize, query, status });
 
   const memoizedBooks: BookType[] = useMemo(() => {
     if (!data?.content) return [];

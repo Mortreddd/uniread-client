@@ -1,6 +1,7 @@
 import { Chapter } from "./Chapter";
 import { User } from "@/types/User.ts";
 import {BookStatus, Reaction} from "./Enums";
+import {PaginateParams} from "@/types/Pagination.ts";
 
 export interface Book {
   id: string;
@@ -73,9 +74,15 @@ export interface BookCommentLike {
   updatedAt: string;
 }
 
+export interface BookParams extends PaginateParams {
+  status?: BookStatus;
+}
+
 type MutableFieldType = "title" | "description" | "matured";
 export interface CreateBookFormProps extends Pick<Book, MutableFieldType> {
   authorId: string | null;
   photo: File | null;
   genreIds: number[];
 }
+
+

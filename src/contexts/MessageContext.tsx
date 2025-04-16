@@ -10,6 +10,7 @@ import {
 import SockJS from "sockjs-client";
 
 import { Message, over } from "stompjs";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 interface MessageContextProps {
   messages: MessageType[] | string[];
@@ -38,6 +39,7 @@ interface MessageProviderProps extends PropsWithChildren {}
 
 function MessageProvider({ children }: MessageProviderProps) {
   const baseUrl = import.meta.env.VITE_WEBSOCKET_URL as string;
+  const { isLoggedIn } = useAuth();
   const socket = new SockJS(`${baseUrl}/messages`);
   const stompClient = over(socket);
   const [messages, setMessages] = useState<string[]>([
@@ -48,6 +50,7 @@ function MessageProvider({ children }: MessageProviderProps) {
     "Kamusta na ang buhay mo?",
   ]);
   useEffect(() => {
+    if(!isLoggedIn()) return;
     stompClient.connect({}, () => {
       stompClient.subscribe("/topic/messages", (message: Message) => {
         setMessages((prevMessages) => [...prevMessages, message.body]);

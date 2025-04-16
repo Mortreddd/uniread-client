@@ -92,7 +92,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function isLoggedIn(): boolean {
-    return user !== null;
+    return user !== null && accessToken !== null;
   }
 
   const memoizedContext = useMemo(() => {
