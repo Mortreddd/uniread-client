@@ -4,24 +4,25 @@ import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
+import {User} from "@/types/User.ts";
 
 interface AuthorProfileDescriptionProps {
-  userId?: string;
+  user?: User | null;
 }
 
 export default function AuthorProfileDescription({
-  userId,
+  user,
 }: AuthorProfileDescriptionProps) {
   const { user: currentUser } = useAuth();
   const isFollowed = currentUser?.followings?.some(
-    (f) => f.following.id === userId
+    (f) => f.following.id === user?.id
   );
   return (
     <div className="w-full h-full">
       <div className="w-full h-fit shadow-lg px-10 bg-white flex justify-between items-center">
         <div className="h-fit flex items-center justify-start gap-10">
           <NavLink
-            to={`/authors/${userId}/profile/works`}
+            to={`/authors/${user?.id}/profile/works`}
             className={({ isActive }) =>
               `${
                 isActive ? "border-b-2 border-solid border-primary" : ""
@@ -32,7 +33,7 @@ export default function AuthorProfileDescription({
           </NavLink>
           <NavLink
             // Replace with the actual usernmae
-            to={`/authors/${userId}/profile/about`}
+            to={`/authors/${user?.id}/profile/about`}
             className={({ isActive }) =>
               `${
                 isActive ? "border-b-2 border-solid border-primary" : ""

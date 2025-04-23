@@ -5,9 +5,9 @@ export interface LoginForm {
 
 export interface LoginResponse {
   iss: string;
-  exp: number;
   iat: number;
   accessToken: string;
+  refreshToken: string;
 }
 
 export interface InvalidAccessToken {

@@ -58,12 +58,12 @@ export const AlertProvider: FC<AlertProviderProps> = ({ children }) => {
 
   return (
     <AlertContext.Provider value={contextValue}>
-      <main className="antialiased bg-transparent w-full">
+      <main className="antialiased isolate bg-transparent w-full">
         {children}
         {alertMessages.map(({ type, message }, index) => (
           <div
             key={index}
-            className="fixed right-10 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out"
+            className="fixed right-10 z-50 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out"
           >
             {type === "info" && <InfoAlert>{message}</InfoAlert>}
             {type === "error" && <DangerAlert>{message}</DangerAlert>}

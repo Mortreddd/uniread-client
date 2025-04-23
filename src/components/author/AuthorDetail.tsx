@@ -5,6 +5,7 @@ import { User } from "@/types/User";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
 import { memo } from "react";
+import {Link} from "react-router-dom";
 interface AuthorDetailProps {
   user: User;
   onUnfollow: (authorId: string) => Promise<void>;
@@ -23,12 +24,14 @@ function AuthorDetail({
       <div className="flex w-full flex-col">
         <div className="items-center flex flex-col w-full">
           <Icon src={gojoProfile} size={"xl"} className={"mx-auto"} />
-          <h2 className="text-xl font-sans font-semibold text-black">
-            {user.fullName}
-          </h2>
-          <h2 className="text-md font-sans font-semibold text-gray-500">
-            @{user.username}
-          </h2>
+          <Link to={`/authors/${user.id}/profile/works`}>
+            <h2 className="text-xl font-sans font-semibold text-black">
+              {user.fullName}
+            </h2>
+            <h2 className="text-md font-sans font-semibold text-gray-500">
+              @{user.username}
+            </h2>
+          </Link>
           <div className="w-full px-5 mt-2 flex justify-center">
             {isFollowing ? (
               <Button

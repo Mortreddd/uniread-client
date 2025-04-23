@@ -24,7 +24,7 @@ export default function useGetUserFollowers({
     setState({ data: null, error: null, loading: true });
     async function getUserFollowers() {
       api
-        .get(`/follow/${userId}/followers`, {
+        .get(`/users/${userId}/follow/followers`, {
           params: { pageNo, pageSize, query },
         })
         .then((response: AxiosResponse<Paginate<Follow[]>>) => {

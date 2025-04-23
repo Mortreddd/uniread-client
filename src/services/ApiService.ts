@@ -7,6 +7,7 @@ const unauthorizedUrl: string[] = [
   "/books/:bookId",
   "/auth/login",
   "/auth/register",
+  "/users",
   "/auth/forgot-password",
 ];
 
@@ -16,6 +17,7 @@ const authInterceptor = (config: InternalAxiosRequestConfig) => {
   }
 
   const accessToken: string | null = localStorage.getItem("accessToken");
+  console.log("Access Token: ", accessToken);
   if (accessToken) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }

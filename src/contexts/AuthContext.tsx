@@ -39,6 +39,9 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [accessToken, setAccessToken] = useState<string | null>(
     localStorage.getItem("accessToken") || null
   );
+  const [refreshToken, setRefreshToken] = useState<string | null>(
+    localStorage.getItem("refreshToken") || null
+  );
   const [user, setUser] = useState<User | null>(null);
 
   const isAdmin = user !== null && user.isAdmin;
@@ -47,13 +50,18 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   async function getUser(): Promise<void> {
     await api
-      .get<User>("/users/current")
+      .get("/users/current")
       .then((response: AxiosResponse<User>) => {
         console.log(response);
         setUser(response.data);
       })
       .catch((error: AxiosError<ErrorResponse>) => {
+        if (error.response?.status === 401) {
+          tryRefreshToken();
+          return;
+        }
         console.error(error);
+        window.location.href="/"
         setUser(null);
         logout();
       });
@@ -73,26 +81,45 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [user]);
 
+  async function tryRefreshToken() {
+    await api
+      .post("/auth/refresh-token", {
+        refreshToken,
+      })
+      .then((response: AxiosResponse<LoginResponse>) => {
+        login(response.data);
+        console.log(response);
+      })
+      .catch((error: AxiosError<ErrorResponse>) => {
+        console.log(error);
+        logout();
+      });
+  }
+
   function logout() {
-    localStorage.removeItem("exp");
     localStorage.removeItem("iat");
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     setUser(null);
+    setRefreshToken(null);
     setAccessToken(null);
     delete api.defaults.headers.common["Authorization"];
   }
 
   function login(response: LoginResponse) {
-    const { exp, iat, accessToken } = response;
-    localStorage.setItem("exp", exp.toString());
+    console.log(response);
+    const { refreshToken, iat, accessToken } = response;
+    localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("iat", iat.toString());
     localStorage.setItem("accessToken", accessToken);
     setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
     getUser();
+    window.location.href="/"
   }
 
   function isLoggedIn(): boolean {
-    return user !== null && accessToken !== null;
+    return user !== null && accessToken !== null && user !== undefined;
   }
 
   const memoizedContext = useMemo(() => {

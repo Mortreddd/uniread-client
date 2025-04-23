@@ -19,13 +19,13 @@ import AuthorProfilePage from "@/pages/AuthorProfilePage";
 import AuthorWorks from "@/components/author/AuthorWorks";
 import AuthorAbout from "@/components/author/AuthorAbout";
 import { BooksPage } from "@/pages/books/BooksPage.tsx";
-import LoadingScreen from "./pages/LoadingScreen";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
 import MyStoriesPage from "./pages/MyStoriesPage";
 import PublishedBookList from "@/components/write/PublishedBookList.tsx";
 import DraftsBookList from "@/components/write/DraftsBookList.tsx";
+import LoadingScreen from "@/components/LoadingScreen..tsx";
 
 /**
  *

@@ -1,11 +1,11 @@
-import {useSearchParams} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import LoadingCircle from "../LoadingCirlce";
 import withHover from "../withHover";
 import BookInfo from "./BookInfo";
-import {Book, BookParams} from "@/types/Book";
-import {useEffect, useMemo, useRef, useState} from "react";
+import { Book, BookParams } from "@/types/Book";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useGetBooksByGenreIds from "@/api/books/useGetBooksByGenreIds";
-import {BookStatus} from "@/types/Enums.ts";
+import { BookStatus } from "@/types/Enums.ts";
 
 export default function BookSection() {
   // @ts-ignore
@@ -18,14 +18,20 @@ export default function BookSection() {
   );
   const BookInfoWithHover = withHover(BookInfo);
   // @ts-ignore
-  const [ { pageNo, pageSize, query, status }, setState] = useState<BookParams>({
+  const [{ pageNo, pageSize, query, status }, setState] = useState<BookParams>({
     pageNo: 0,
     pageSize: 5,
     query: "",
-    status: BookStatus.PUBLISHED
+    status: BookStatus.PUBLISHED,
   });
 
-  const { data, loading } = useGetBooksByGenreIds({ genreIds: memoizedIds, pageNo, pageSize, query, status });
+  const { data, loading } = useGetBooksByGenreIds({
+    genreIds: memoizedIds,
+    pageNo,
+    pageSize,
+    query,
+    status,
+  });
 
   const onBottomReach = () => {
     if (!data || data.last) return;
@@ -36,7 +42,12 @@ export default function BookSection() {
    * This effect is used to reset the page number and page size when the genre ids change.
    */
   useEffect(() => {
-    setState({ pageNo: 0, pageSize: 5, query: "", status: BookStatus.PUBLISHED });
+    setState({
+      pageNo: 0,
+      pageSize: 5,
+      query: "",
+      status: BookStatus.PUBLISHED,
+    });
   }, [memoizedIds]);
 
   /**
