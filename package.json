@@ -24,6 +24,7 @@
     "react-router-dom": "^6.25.1",
     "react-social-icons": "^6.17.0",
     "slate": "^0.112.0",
+    "slate-dom": "^0.112.2",
     "slate-react": "^0.112.1",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",

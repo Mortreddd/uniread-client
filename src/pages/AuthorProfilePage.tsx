@@ -13,21 +13,20 @@ export default function AuthorProfilePage() {
   return (
     <>
       {loading ? (
-          <LoadingScreen />
-      ): (
-
-      <div className="w-full h-[100dvh] min-h-52">
-        <Navbar />
-        <div className="h-fit w-full">
-          <AuthorProfileContainer user={user} />
+        <LoadingScreen />
+      ) : (
+        <div className="w-full h-[100dvh] min-h-52">
+          <Navbar />
+          <div className="h-fit w-full">
+            <AuthorProfileContainer user={user} />
+          </div>
+          <div className="w-full h-full">
+            <AuthorProfileDescription user={user} />
+          </div>
+          <div className="w-full h-fit">
+            <Footer />
+          </div>
         </div>
-        <div className="w-full h-full">
-          <AuthorProfileDescription user={user} />
-        </div>
-        <div className="w-full h-fit">
-          <Footer />
-        </div>
-      </div>
       )}
     </>
   );

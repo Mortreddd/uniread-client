@@ -7,6 +7,7 @@ import Dropdown, {DropdownContentRef} from "@/components/common/dropdown/Dropdow
 import {useRef, useState} from "react";
 import DeleteBookModal from "@/components/common/modal/book/DeleteBookModal.tsx";
 import {ModalRef} from "@/components/common/modal/Modal.tsx";
+import {Link} from "react-router-dom";
 
 interface DraftBookItem {
     book: Book
@@ -54,21 +55,24 @@ export default function DraftBookItem({ book, onDelete, ...rest } : DraftBookIte
             </div>
             <div className={"w-fit h-full flex items-center gap-2"}>
                 <Button variant={'transparent'} size={'custom'} className={'rounded-full flex items-center justify-center p-4'}>
-                    <PencilSquareIcon className={'size-7'} />
+                    <Link to={`/stories/edit/${book.id}`}>
+                        <PencilSquareIcon className={'size-7'} />
+                    </Link>
                 </Button>
                 <div className={"relative"}>
-
-                <Button onClick={onClick} variant={'transparent'} size={'custom'} className={'rounded-full flex items-center justify-center px-3 py-2'}>
-                    <EllipsisHorizontalIcon className={'size-8'}/>
-                </Button>
-                <Dropdown.Content ref={dropdownContentRef} className={"top-0 right-0 absolute"}>
-                    <Dropdown.Item variant={'danger'} onClick={() => handleClickDelete()}>
-                        Delete Story
-                    </Dropdown.Item>
-                    <Dropdown.Item>
-                        Publish Book
-                    </Dropdown.Item>
-                </Dropdown.Content>
+                    <Button onClick={onClick} variant={'transparent'} size={'custom'} className={'rounded-full flex items-center justify-center px-3 py-2'}>
+                        <Link to={`/stories/edit/${book.id}`}>
+                            <EllipsisHorizontalIcon className={'size-8'}/>
+                        </Link>
+                    </Button>
+                    <Dropdown.Content ref={dropdownContentRef} className={"top-0 right-0 absolute"}>
+                        <Dropdown.Item variant={'danger'} onClick={() => handleClickDelete()}>
+                            Delete Story
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                            Publish Book
+                        </Dropdown.Item>
+                    </Dropdown.Content>
                 </div>
             </div>
 

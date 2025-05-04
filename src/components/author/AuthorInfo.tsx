@@ -39,7 +39,7 @@ function AuthorInfo({
         />
         <div className="flex flex-1 flex-col gap-2 justify-center md:gap-3">
           <div className="w-full items-center gap-3 md:gap-5">
-            <Link to={`/authors/${author.id}/profile/works`}>
+            <Link to={`/authors/${author.id}/profile`}>
               <h2 className="text-xl font-bold font-sans hover:underline">
                 {fullName}
               </h2>

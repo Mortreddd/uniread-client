@@ -13,7 +13,6 @@ import { useAlert } from "@/contexts/AlertContext";
 import { ErrorResponse } from "@/types/Error";
 import LoginModal from "../common/modal/auth/LoginModal";
 import { SuccessResponse } from "@/types/Success";
-import { isFollowing } from "@/utils/Folllow";
 
 /**
  * The component of Authors in /search/authors

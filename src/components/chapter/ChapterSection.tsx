@@ -24,6 +24,8 @@ export default function ChapterSection({ bookId }: ChapterSectionProps) {
     }
   }, [data]);
 
+  console.log(data);
+
   return (
     <div className="flex flex-col h-full w-full rounded-lg border">
       <h1 className="text-2xl font-bold text-gray-800 my-4 ml-4">

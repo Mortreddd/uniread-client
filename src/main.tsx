@@ -8,18 +8,21 @@ import { MessageProvider } from "./contexts/MessageContext.tsx";
 import { AlertProvider } from "./contexts/AlertContext.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
+import LoadingProvider from "./contexts/LoadingScreenContext.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AlertProvider>
-      <AuthProvider>
-        <GoogleAuthProvider>
-          <NotificationProvider>
-            <MessageProvider>
-              <RouterProvider router={router}></RouterProvider>
-            </MessageProvider>
-          </NotificationProvider>
-        </GoogleAuthProvider>
-      </AuthProvider>
+      <LoadingProvider>
+        <AuthProvider>
+          <GoogleAuthProvider>
+            <NotificationProvider>
+              <MessageProvider>
+                <RouterProvider router={router}></RouterProvider>
+              </MessageProvider>
+            </NotificationProvider>
+          </GoogleAuthProvider>
+        </AuthProvider>
+      </LoadingProvider>
     </AlertProvider>
   </React.StrictMode>
 );

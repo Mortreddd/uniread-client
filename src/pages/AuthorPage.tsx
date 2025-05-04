@@ -4,17 +4,11 @@ import LoginModal from "@/components/common/modal/auth/LoginModal";
 import { ModalRef } from "@/components/common/modal/Modal";
 import Navbar from "@/components/common/navbar/Navbar";
 import LoadingCircle from "@/components/LoadingCirlce";
-import { useAlert } from "@/contexts/AlertContext";
 import { useAuth } from "@/contexts/AuthContext";
-import api from "@/services/ApiService";
-import { ErrorResponse } from "@/types/Error";
-import { Follow } from "@/types/Follow";
 import { PaginateParams } from "@/types/Pagination";
-import { SuccessResponse } from "@/types/Success";
 import { User } from "@/types/User";
-import { isFollowing } from "@/utils/Folllow";
-import { AxiosError, AxiosResponse } from "axios";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import useFollow from "@/hooks/useFollow.ts";
 
 /**
  * Page for displaying authors
@@ -23,7 +17,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
  */
 export default function AuthorPage() {
   const { user: currentUser, isLoggedIn } = useAuth();
-  const { showAlert } = useAlert();
   // Pagination params for requesting user
   const [{ pageNo, pageSize, query }] = useState<PaginateParams>({
     pageNo: 0,
@@ -34,6 +27,7 @@ export default function AuthorPage() {
 
   // Get the authors
   const { data, loading } = useGetUsers({ pageNo, pageSize, query });
+  const { isMutualFollowing, followUser, unfollowUser } = useFollow();
 
   /**
    * Memoized authors to avoid unnecessary re-renders
@@ -45,64 +39,24 @@ export default function AuthorPage() {
     return data.content.filter((author) => author.id !== currentUser?.id);
   }, [data?.content, currentUser?.id]);
 
-  const [followingAuthors, setFollowingAuthors] = useState<Follow[]>([]);
-
-  // Unfollow function for making delete request when delete follow to authorId
-  const unfollowUser = useCallback(
-    async (authorId: string) => {
+  function handleFollow(followingUserId: string) {
       if (!isLoggedIn()) {
-        loginModalRef.current?.open();
-        return;
+          loginModalRef.current?.open();
+          return;
       }
-      await api
-        .delete(`/users/${currentUser?.id}/follow/${authorId}/delete`)
-        .then((response: AxiosResponse<SuccessResponse>) => {
-          setFollowingAuthors((prev) => {
-            return prev.filter((follow) => follow.following.id !== authorId);
-          });
-          showAlert(response?.data.message, "info");
-        })
-        .catch((error: AxiosError<ErrorResponse>) => {
-          showAlert(
-            error.response?.data.message ?? "An unexpected error occurred",
-            "error"
-          );
-        });
-    },
-    [currentUser?.id, showAlert]
-  );
 
-  // Follow function for making post request creating new follow for authorId
-  const followUser = useCallback(
-    async (authorId: string) => {
+      followUser(followingUserId)
+
+  }
+
+  function handleUnfollow(followingUserId: string) {
       if (!isLoggedIn()) {
-        loginModalRef.current?.open();
-        return;
+          loginModalRef.current?.open();
+          return;
       }
-      await api
-        .post(`/users/${currentUser?.id}/follow/${authorId}`)
-        .then((response: AxiosResponse<Follow>) => {
-          setFollowingAuthors((prev) => {
-            return [...prev, response.data];
-          });
-          showAlert(`Followed ${response.data.following.username}`, "success");
-        })
-        .catch((error: AxiosError<ErrorResponse>) => {
-          showAlert(
-            error.response?.data.message ?? "An unexpected error occurred",
-            "error"
-          );
-        });
-    },
-    [currentUser?.id, showAlert]
-  );
 
-  // Set the followings of users when loaded
-  useEffect(() => {
-    if (currentUser) {
-      setFollowingAuthors(currentUser.followings);
-    }
-  }, [currentUser]);
+      unfollowUser(followingUserId);
+  }
 
   return (
     <main className="w-full antialiased h-screen">
@@ -119,9 +73,9 @@ export default function AuthorPage() {
               <div className="col-span-1" key={author.id}>
                 <AuthorDetail
                   user={author}
-                  onUnfollow={() => unfollowUser(author.id)}
-                  onFollow={() => followUser(author.id)}
-                  isFollowing={isFollowing(followingAuthors, author.id)}
+                  onUnfollow={() => handleUnfollow(author.id)}
+                  onFollow={() => handleFollow(author.id)}
+                  isFollowing={isMutualFollowing(author.id)}
                 />
               </div>
             ))

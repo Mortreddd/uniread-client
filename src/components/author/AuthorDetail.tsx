@@ -2,14 +2,13 @@ import gojoProfile from "@/assets/profiles/gojo.jpg";
 import Icon from "../Icon";
 import { Button } from "../common/form/Button";
 import { User } from "@/types/User";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { UserMinusIcon } from "@heroicons/react/24/outline";
+import { UserPlusIcon, UserMinusIcon } from "@heroicons/react/24/outline";
 import { memo } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 interface AuthorDetailProps {
   user: User;
-  onUnfollow: (authorId: string) => Promise<void>;
-  onFollow: (authorId: string) => Promise<void>;
+  onUnfollow: (authorId: string) => void;
+  onFollow: (authorId: string) => void
   isFollowing: boolean;
 }
 

@@ -1,63 +1,37 @@
-import LoadingScreen from "@/pages/LoadingScreen";
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import LoadingScreen from "@/components/LoadingScreen.";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 
 interface LoadingContextProps {
-  loading: boolean;
-  showLoadingScreen: () => void;
-  hideLoadingScreen: () => void;
+  showLoading: (state: boolean) => void;
 }
 
-const LoadingScreenContext = createContext<LoadingContextProps | undefined>(
+const LoadingContext = createContext<LoadingContextProps | undefined>(
   undefined
 );
 
-interface LoadingScreenProviderProps extends PropsWithChildren {}
+interface LoadingProviderProps extends PropsWithChildren {}
 
-function useLoadingScreen() {
-  const context = useContext(LoadingScreenContext);
-  if (context === undefined) {
-    throw new Error(
-      "useLoadingScreen must be used within a LoadingScreenProvider"
-    );
+export function useLoading() {
+  const context = useContext(LoadingContext);
+  if (!context) {
+    throw new Error("useLoading must be used within a LoadingProvider");
   }
 
   return context;
 }
 
-function LoadingScreenProvider({ children }: LoadingScreenProviderProps) {
-  const [loading, setLoading] = useState<boolean>(true);
+function LoadingProvider({ children }: LoadingProviderProps) {
+  const [loading, setLoading] = useState<boolean>(false);
 
-  function showLoadingScreen() {
-    setLoading(true);
+  function showLoading(state: boolean) {
+    setLoading(state);
   }
-
-  function hideLoadingScreen() {
-    setLoading(false);
-  }
-
-  useEffect(() => {
-    setTimeout(function () {
-      hideLoadingScreen();
-    }, 2000);
-  }, []);
-
-  const memoizedValue = useMemo(
-    () => ({ showLoadingScreen, loading, hideLoadingScreen }),
-    [loading]
-  );
 
   return (
-    <LoadingScreenContext.Provider value={memoizedValue}>
+    <LoadingContext.Provider value={{ showLoading }}>
       {loading ? <LoadingScreen /> : children}
-    </LoadingScreenContext.Provider>
+    </LoadingContext.Provider>
   );
 }
 
-export { LoadingScreenProvider, useLoadingScreen };
+export default LoadingProvider;

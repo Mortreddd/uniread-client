@@ -1,32 +1,27 @@
 import { Book } from "@/types//Book.ts";
 import { User } from "@/types/User.ts";
-import { Reaction } from "./Enums";
+import { ChapterStatus, Reaction } from "./Enums";
+import { Paragraph } from "./Paragraph";
 
 export interface Chapter {
   id: string;
   book: Book;
   title: string;
-  content: string;
   chapterNumber: number;
-  readCount?: number;
+  status: ChapterStatus;
+  readCount: number;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   chapterComments?: ChapterComment[];
   chapterLikes?: ChapterLike[];
-}
-
-export interface Paragraph {
-  id: string;
-  chapter: Chapter;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
+  paragraphs?: Paragraph[];
 }
 
 export interface ChapterLike {
   id: string;
   users: User[];
-  reacttion: Reaction;
+  reaction: Reaction;
   chapter: Chapter;
   createdAt: string;
   updatedAt: string;
@@ -51,4 +46,12 @@ export interface ChapterCommentLike {
   reaction: Reaction;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ChapterCreationRequest {
+  bookId: string;
+  title: string;
+  content: string;
+  status: ChapterStatus;
+  paragraphs: Paragraph[];
 }

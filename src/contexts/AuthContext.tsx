@@ -61,7 +61,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           return;
         }
         console.error(error);
-        window.location.href="/"
+        window.location.href = "/";
         setUser(null);
         logout();
       });
@@ -115,7 +115,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
     getUser();
-    window.location.href="/"
+    window.location.href = "/";
   }
 
   function isLoggedIn(): boolean {

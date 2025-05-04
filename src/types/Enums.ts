@@ -1,11 +1,11 @@
-export enum ParagraphStatus {
+export enum ChapterStatus {
   DRAFT = "DRAFT",
   PUBLISHED = "PUBLISHED",
 }
 
 export enum BookStatus {
   DRAFT = "DRAFT",
-  PUBLISHED = "PUBLISHED"
+  PUBLISHED = "PUBLISHED",
 }
 
 export enum Reaction {

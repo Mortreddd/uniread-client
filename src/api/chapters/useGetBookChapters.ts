@@ -35,6 +35,7 @@ export default function useGetBookChapters({
           signal: signal,
         })
         .then((response: AxiosResponse<Paginate<Chapter[]>>) => {
+          console.log(response.data)
           setState({
             ...state,
             data: response.data,

@@ -26,6 +26,8 @@ import MyStoriesPage from "./pages/MyStoriesPage";
 import PublishedBookList from "@/components/write/PublishedBookList.tsx";
 import DraftsBookList from "@/components/write/DraftsBookList.tsx";
 import LoadingScreen from "@/components/LoadingScreen..tsx";
+import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
+import EditChapter from "./components/chapter/partial/EditChapter.tsx";
 
 /**
  *
@@ -131,14 +133,25 @@ export const router = createBrowserRouter([
     element: <MyStoriesPage />,
     children: [
       {
+        index: true,
         path: "/stories/published",
-        element: <PublishedBookList />
+        element: <PublishedBookList />,
       },
       {
         path: "/stories/drafts",
-        element: <DraftsBookList />
-      }
-    ]
+        element: <DraftsBookList />,
+      },
+    ],
+  },
+  {
+    path: "/stories/edit/:bookId",
+    element: <WriteChapterPage />,
+    children: [
+      {
+        path: "/stories/edit/:bookId/chapters/:chapterId",
+        element: <EditChapter />,
+      },
+    ],
   },
 
   // Profile Page
@@ -153,6 +166,7 @@ export const router = createBrowserRouter([
       {
         path: "/profile/about",
         element: <AboutSection />,
+        index: true,
       },
     ],
   },
@@ -169,6 +183,7 @@ export const router = createBrowserRouter([
       {
         path: "/authors/:userId/profile/about",
         element: <AuthorAbout />,
+        index: true,
       },
     ],
   },
