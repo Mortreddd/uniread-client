@@ -42,7 +42,7 @@ export default function AuthorWorks() {
             >
               <BookWithHover
                 book={book}
-                className="rounded"
+                className="rounded-xs"
                 size={"default"}
                 variant={"custom"}
               />

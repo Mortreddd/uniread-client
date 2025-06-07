@@ -63,7 +63,7 @@ function AuthorInfo({
             <Button
               variant={"inactivePrimary"}
               onClick={() => onUnfollow(author.id)}
-              className="rounded flex items-center gap-1 md:gap-2"
+              className="rounded-xs flex items-center gap-1 md:gap-2"
             >
               <UserMinusIcon className={"size-4 md:size-6"} />
               Unfollow
@@ -72,7 +72,7 @@ function AuthorInfo({
             <Button
               variant={"primary"}
               onClick={() => onFollow(author.id)}
-              className="rounded flex items-center gap-1 md:gap-2"
+              className="rounded-xs flex items-center gap-1 md:gap-2"
             >
               <UserPlusIcon className={"size-4 md:size-6"} />
               Follow

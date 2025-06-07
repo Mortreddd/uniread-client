@@ -1,28 +1,49 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer utilities {
-  .ball-bounce {
-    transition: all 1s ease-in-out;
-    animation: bounce-ball 1s infinite;
+@theme {
+  --color-primary: #491232;
+  --font-salsa: "Salsa", "cursive";
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
-  .ball-bounce:nth-child(1) {
+}
+
+@utility ball-bounce {
+  transition: all 1s ease-in-out;
+  animation: bounce-ball 1s infinite;
+  &:nth-child(1) {
     animation-delay: 0s;
   }
-  .ball-bounce:nth-child(2) {
+  &:nth-child(2) {
     animation-delay: 75ms;
   }
-  .ball-bounce:nth-child(3) {
+  &:nth-child(3) {
     animation-delay: 150ms;
   }
-  .ball-bounce:nth-child(4) {
+  &:nth-child(4) {
     animation-delay: 225ms;
   }
-  .ball-bounce:nth-child(5) {
+  &:nth-child(5) {
     animation-delay: 300ms;
   }
+}
 
+@layer utilities {
   @keyframes bounce-ball {
     0%,
     100% {

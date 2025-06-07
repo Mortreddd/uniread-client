@@ -5,7 +5,6 @@ import Label from "@/components/common/form/Label";
 import TextArea from "@/components/common/form/TextArea";
 import Toggle from "@/components/common/form/Toggle";
 import GenreOption from "@/components/genre/GenreOption";
-import { useAlert } from "@/contexts/AlertContext";
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/ApiService";
 import { Genre, CreateBookFormProps, Book } from "@/types/Book";
@@ -14,10 +13,11 @@ import { RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 export default function CreateBookForm() {
   const { user } = useAuth();
-  const { showAlert } = useAlert();
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const authorId = user?.id || null;
   const { data } = useGetGenres();
@@ -67,7 +67,6 @@ export default function CreateBookForm() {
     const file = event.target.files?.[0];
 
     if (file) {
-      // setValue("photo", file);
       setFormValues({ ...formValues, photo: file });
       setSelectedImage(URL.createObjectURL(file));
     }
@@ -76,7 +75,6 @@ export default function CreateBookForm() {
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     setRequestState((prev) => ({ ...prev, loading: true }));
-    console.log(formValues);
     const formData = new FormData();
     formData.append("title", formValues.title);
     formData.append("description", formValues.description);
@@ -85,7 +83,6 @@ export default function CreateBookForm() {
     formValues.genreIds.forEach((genreId) => {
       formData.append("genreIds", genreId.toString());
     });
-    // formData.append("photo", formValues.photo as Blob);
     if (formValues.photo) {
       formData.append("photo", formValues.photo as Blob, formValues.photo.name);
     }
@@ -119,7 +116,7 @@ export default function CreateBookForm() {
           loading: false,
           error: error.response?.data.message || "An error occurred",
         }));
-        showAlert(
+        showToast(
           error.response?.data.message ||
             "Failed to create book. Please try again.",
           "error"
@@ -209,7 +206,7 @@ export default function CreateBookForm() {
             Cover
           </Label>
           <div className="flex w-full h-fit">
-            <div className="h-52 w-40 rounded overflow-hidden relative bg-gray-200">
+            <div className="h-52 w-40 rounded-sm overflow-hidden relative bg-gray-200">
               <input
                 id="file-upload"
                 type="file"
@@ -269,7 +266,7 @@ export default function CreateBookForm() {
               type={"submit"}
               loading={loading}
               variant={"primary"}
-              className={"rounded"}
+              className={"rounded-sm"}
             >
               Create Book
             </Button>

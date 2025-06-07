@@ -16,7 +16,7 @@ export default function MessageButton() {
   const MessageButton = unreadMessages.length > 0 ? ButtonWithBadge : Button;
 
   function handleMessageButtonClick() {
-    navigate("/messages");
+    navigate("/conversations");
   }
   return (
     <MessageButton

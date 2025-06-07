@@ -1,6 +1,6 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
-const API_URL: string = import.meta.env.VITE_API_URL as string;
+const API_URL: string = `${import.meta.env.VITE_API_URL as string}/api/v1`;
 
 const unauthorizedUrl: string[] = [
   "/books",

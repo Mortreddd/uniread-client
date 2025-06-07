@@ -16,7 +16,7 @@ interface SelectProps
  * @returns {JSX.Element} Select component
  */
 
-const selectVariant = cva("border focus:ring-1 outline-0 rounded", {
+const selectVariant = cva("border focus:ring-1 outline-0 rounded-sm", {
   variants: {
     variant: {
       primary: "text-primary border border-primary focus:ring-primary",

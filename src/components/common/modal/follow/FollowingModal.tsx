@@ -1,15 +1,11 @@
-import {
-  forwardRef,
-  Ref,
-  useMemo,
-  useState,
-} from "react";
+import { forwardRef, Ref, useMemo, useState } from "react";
 import Modal, { ModalRef } from "../Modal.tsx";
 import { PaginateParams } from "@/types/Pagination.ts";
 import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import AuthorFollowInfo from "@/components/author/AuthorFollowerInfo.tsx";
 import useGetUserFollows from "@/api/follow/useGetUserFollows.ts";
 import useFollow from "@/hooks/useFollow.ts";
+import { useAuth } from "@/contexts/AuthContext.tsx";
 
 /**
  * Following modal component
@@ -47,15 +43,14 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
     if (!data?.content) return [];
 
     return data.content.filter((follow) => follow.follower.id !== authorId);
-  }, [data]);
-
+  }, [data, authorId]);
 
   return (
     <Modal ref={ref} className="max-h-96">
       <div className="min-w-96 w-fit h-fit">
         <h1 className="text-2xl text-center my-4">Followings</h1>
         <div className="flex flex-col items-start w-full divide-y-2 overflow-y-auto">
-          <div className="bg-gray-100 rounded px-4 py-2 w-full">
+          <div className="bg-gray-100 rounded-sm px-4 py-2 w-full">
             {loading && !data?.content ? (
               <div className="flex justify-center">
                 <LoadingCircle />
@@ -65,9 +60,9 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
                 <AuthorFollowInfo
                   key={index}
                   follow={follow}
-                  isMutualFollowing={isMutualFollowing(follow.following.id)}
-                  onFollow={() => followUser(follow.following.id)}
-                  onUnfollow={() => unfollowUser(follow.following.id)}
+                  isMutualFollowing={isMutualFollowing(follow.follower.id)}
+                  onFollow={() => followUser(follow.follower.id)}
+                  onUnfollow={() => unfollowUser(follow.follower.id)}
                 />
               ))
             ) : (

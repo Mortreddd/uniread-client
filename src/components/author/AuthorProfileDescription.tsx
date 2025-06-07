@@ -74,7 +74,7 @@ export default function AuthorProfileDescription({
                 variant={"inactivePrimary"}
                 size={"md"}
                 onClick={() => onUnfollow()}
-                className="flex items-center gap-2 px-3 rounded py-2"
+                className="flex items-center gap-2 px-3 rounded-sm py-2"
               >
                 <UserMinusIcon className="size-6" />
                 <span>Unfollow</span>
@@ -84,7 +84,7 @@ export default function AuthorProfileDescription({
                 variant={"primary"}
                 size={"md"}
                 onClick={() => onFollow()}
-                className="flex items-center gap-2 px-3 rounded py-2"
+                className="flex items-center gap-2 px-3 rounded-sm py-2"
               >
                 <UserPlusIcon className="size-6" />
                 Follow
@@ -94,7 +94,7 @@ export default function AuthorProfileDescription({
               <Button
                 variant={"primary"}
                 size={"md"}
-                className="flex items-center gap-2 px-3 rounded py-2"
+                className="flex items-center gap-2 px-3 rounded-sm py-2"
               >
                 <EnvelopeIcon className="size-6" />
                 <span>Message</span>

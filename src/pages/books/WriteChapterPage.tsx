@@ -1,4 +1,3 @@
-import Navbar from "@/components/common/navbar/Navbar.tsx";
 import Footer from "@/components/Footer.tsx";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/common/form/Button";
@@ -14,8 +13,9 @@ import api from "@/services/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { SuccessResponse } from "@/types/Success.ts";
 import { ErrorResponse } from "@/types/Error.ts";
-import { useAlert } from "@/contexts/AlertContext.tsx";
 import WarningPublishedChapterModal from "@/components/common/modal/chapter/WarningPublishedChapterModal.tsx";
+import { useToast } from "@/contexts/ToastContext.tsx";
+import Navbar from "@/components/common/navbar/Navbar.tsx";
 
 export default function WriteChapterPage() {
   const { bookId, chapterId } = useParams<{
@@ -25,7 +25,7 @@ export default function WriteChapterPage() {
   const newChapterModalRef = useRef<ModalRef>(null);
   const navigate = useNavigate();
   const deleteChapterModalRef = useRef<ModalRef>(null);
-  const { showAlert } = useAlert();
+  const { showToast } = useToast();
   const [{ pageNo, pageSize }] = useState<PaginateParams>({
     pageNo: 0,
     pageSize: 10,
@@ -62,7 +62,7 @@ export default function WriteChapterPage() {
     await api
       .delete(`/books/${chapter?.book.id}/chapters/${chapter?.id}/delete`)
       .then((response: AxiosResponse<SuccessResponse>) => {
-        showAlert(response.data.message ?? "Successfully deleted!", "success");
+        showToast(response.data.message ?? "Successfully deleted!", "success");
         setChapters((prev) => {
           return prev.filter((c) => c.id !== chapter?.id);
         });
@@ -72,7 +72,7 @@ export default function WriteChapterPage() {
         }
       })
       .catch((error: AxiosError<ErrorResponse>) => {
-        showAlert(
+        showToast(
           error?.response?.data.message ??
             "Something went wrong deleting the chapter",
           "error"
@@ -93,11 +93,13 @@ export default function WriteChapterPage() {
   }, [selectedChapter]);
 
   return (
-    <main className="w-full antialiased">
+      <>
+        <header className={'w-full relative'}>
+          <Navbar />
+        </header>
       <section className="w-full h-fit min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
         <div className="w-full flex flex-1 overflow-hidden ">
-          <aside className="w-96 px-5 border border-solid rounded relative">
+          <aside className="w-96 px-5 border border-solid rounded-sm relative">
             <div className="w-full h-full my-7">
               <h3 className="text-2xl font-sans text-center w-full">
                 Chapters
@@ -110,7 +112,7 @@ export default function WriteChapterPage() {
                 ) : chapters.length !== 0 ? (
                   chapters.map((chapter) => (
                     <article key={chapter.id} className="w-full h-fit">
-                      <h3 className="text-nowrap text-gray-800 bg-gray-50 rounded truncate font-sans text-lg mb-4">
+                      <h3 className="text-nowrap text-gray-800 bg-gray-50 rounded-sm truncate font-sans text-lg mb-4">
                         {chapter.title}
                       </h3>
                       <div className="flex items-end justify-end w-full h-fit">
@@ -163,7 +165,7 @@ export default function WriteChapterPage() {
               <Button
                 variant={"primary"}
                 onClick={() => handleOpen()}
-                className="rounded w-full flex items-center"
+                className="rounded-xs w-full flex items-center"
               >
                 Add Chapter
                 <PlusIcon className="size-6 ml-3" />
@@ -184,6 +186,6 @@ export default function WriteChapterPage() {
         </div>
       </section>
       <Footer />
-    </main>
+    </>
   );
 }

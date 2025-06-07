@@ -1,13 +1,14 @@
 import CreateBookForm from "@/components/book/partials/CreateBookForm";
-import Navbar from "@/components/common/navbar/Navbar.tsx";
 import Footer from "@/components/Footer";
+import Navbar from "@/components/common/navbar/Navbar.tsx";
 
 export default function CreateBookPage() {
   return (
-    <main className={"w-full h-screen antialiased"}>
-      <div className={"w-full"}>
-        <Navbar />
-      </div>
+      <>
+          <header className={"w-full relative"}>
+              <Navbar />
+          </header>
+    <div className="h-full w-full">
 
       <div
         className={"w-full max-h-fit flex justify-center items-center py-10"}
@@ -17,6 +18,7 @@ export default function CreateBookPage() {
       <div className="w-full ">
         <Footer />
       </div>
-    </main>
+    </div>
+          </>
   );
 }

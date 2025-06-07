@@ -8,7 +8,7 @@ export default function Bold({ className, ...rest }: BoldProps) {
   return (
     <Button
       variant={"transparent"}
-      className={`p-2 hover:bg-gray-200 rounded ${className}`}
+      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
       <BoldIcon className={"h-5 w-5 text-gray-800"} />

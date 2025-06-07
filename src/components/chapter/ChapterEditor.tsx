@@ -3,12 +3,12 @@ import {useCallback, useEffect, useState} from "react";
 import {Button} from "@/components/common/form/Button.tsx";
 import {Input} from "@/components/common/form/Input.tsx";
 import TextEditor from "@/components/toolbar/TextEditor.tsx";
-import {useAlert} from "@/contexts/AlertContext.tsx";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {descendantsToParagraphs, Paragraph, paragraphsToDescendants} from "@/types/Paragraph.ts";
 import {Descendant} from "slate";
 import api from "@/services/ApiService.ts";
 import {AxiosResponse} from "axios";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 interface ChapterEditorProps {
     chapter: Chapter;
@@ -25,7 +25,7 @@ export default function ChapterEditor({ chapter } : ChapterEditorProps) {
      * Get the chapter data from the API using the bookId and chapterId.
      * The data is used to populate the form fields and the text editor.
      */
-    const { showAlert } = useAlert();
+    const { showToast } = useToast();
     const defaultValue: Descendant[] = [
         {
             type: "paragraph",
@@ -78,13 +78,13 @@ export default function ChapterEditor({ chapter } : ChapterEditorProps) {
                     paragraphs: response.data?.paragraphs && response.data?.paragraphs.length > 0
                         ? paragraphsToDescendants(response.data.paragraphs) : defaultValue
                 })
-                showAlert("Successfully saved the chapter", "success");
+                showToast("Successfully saved the chapter", "success");
             })
     };
 
     const onPublish: SubmitHandler<EditChapterProps> = async (data) => {
         console.log(data);
-        showAlert("Publish not implemented yet", "info");
+        showToast("Publish not implemented yet", "info");
     };
 
     

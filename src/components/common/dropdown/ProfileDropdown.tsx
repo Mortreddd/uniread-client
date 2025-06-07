@@ -44,7 +44,7 @@ export default function ProfileDropdown() {
         </Dropdown.Item>
         <Dropdown.Item
           className={
-            "ease-in-out duratio-200 transition-colors hover:bg-red-600 w-full hover:text-white text-black rounded"
+            "ease-in-out duratio-200 transition-colors hover:bg-red-600 w-full hover:text-white text-black rounded-sm"
           }
         >
           <Link to={"/"} replace className="w-full" onClick={handleLogout}>

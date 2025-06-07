@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import { ErrorResponse } from "@/types/Error.ts";
+import Layout from "@/components/Layout.tsx";
 
 interface AuthProviderProps extends PropsWithChildren {}
 
@@ -119,7 +120,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function isLoggedIn(): boolean {
-    return user !== null && accessToken !== null && user !== undefined;
+    return user !== null || accessToken !== null;
   }
 
   const memoizedContext = useMemo(() => {
@@ -133,11 +134,11 @@ function AuthProvider({ children }: AuthProviderProps) {
       login,
       isLoggedIn,
     };
-  }, [user, accessToken]);
+  }, [accessToken, isAdmin, isSuperAdmin, isUser, user, login, isLoggedIn]);
 
   return (
     <AuthContext.Provider value={memoizedContext}>
-      {children}
+      <Layout>{children}</Layout>
     </AuthContext.Provider>
   );
 }

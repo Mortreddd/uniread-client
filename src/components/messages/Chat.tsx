@@ -1,31 +1,39 @@
-import { Fragment, memo } from "react";
+import { memo } from "react";
 import Icon from "../Icon";
-import { Message } from "@/types/Message";
+import {Conversation} from "@/types/Message";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 interface ChatProps {
-  latestMessage: Message | undefined;
+  conversation: Conversation;
 }
 
-function Chat({ latestMessage, ...props }: ChatProps) {
-  const fullName = `${latestMessage?.sender?.firstName} ${latestMessage?.sender?.lastName}`;
+function Chat({ conversation, ...props }: ChatProps) {
+  const { user: currentUser } = useAuth();
+  const participant = conversation.participants?.find((participant) => participant.id !== currentUser?.id);
+  const fullName = participant?.user.fullName;
+  const conversationName = conversation.name !== null ? conversation.name : conversation.isGroup ? conversation
+      .participants?.map(
+          (participant) =>
+              participant.user.username)
+      .join(", ") : fullName;
+
+  const message = conversation.messages?.at(-1)
   return (
-    <Fragment>
       <div
         {...props}
-        className="bg-gray-50 rounded p-4 flex items-center transition-all duration-200 ease-in-out hover:bg-gray-100 cursor-pointer"
+        className="bg-gray-50 rounded-sm p-4 flex items-center transition-all duration-200 ease-in-out hover:bg-gray-100 cursor-pointer"
       >
         <Icon />
         <div className="flex flex-col ml-4 min-w-48">
           <h3 className="text-lg font-bold text-black ">
-            {fullName ?? "Unknown"}
+            {conversationName}
           </h3>
           <p className="text-sm text-gray-500 line-clamp-1 truncate mr-3">
-            {latestMessage?.message}
+            {message?.message ?? "Start a conversation"}
           </p>
         </div>
         <p className="text-xs font-bold text-black">2:00 PM</p>
       </div>
-    </Fragment>
   );
 }
 

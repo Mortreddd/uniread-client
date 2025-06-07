@@ -40,27 +40,28 @@ export default function AuthorPage() {
   }, [data?.content, currentUser?.id]);
 
   function handleFollow(followingUserId: string) {
-      if (!isLoggedIn()) {
-          loginModalRef.current?.open();
-          return;
-      }
+    if (!isLoggedIn()) {
+      loginModalRef.current?.open();
+      return;
+    }
 
-      followUser(followingUserId)
-
+    followUser(followingUserId);
   }
 
   function handleUnfollow(followingUserId: string) {
-      if (!isLoggedIn()) {
-          loginModalRef.current?.open();
-          return;
-      }
+    if (!isLoggedIn()) {
+      loginModalRef.current?.open();
+      return;
+    }
 
-      unfollowUser(followingUserId);
+    unfollowUser(followingUserId);
   }
 
   return (
-    <main className="w-full antialiased h-screen">
-      <Navbar />
+    <>
+      <header className={"w-full relative"}>
+        <Navbar />
+      </header>
       <div className="px-20 py-6 w-full h-full">
         <LoginModal ref={loginModalRef} />
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -88,6 +89,6 @@ export default function AuthorPage() {
           )}
         </section>
       </div>
-    </main>
+    </>
   );
 }

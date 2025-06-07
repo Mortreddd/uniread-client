@@ -19,7 +19,7 @@ export default function SearchResult({
       }
       {...props}
     >
-      <img src={bookCoverImage} className={"h-10 w-7 rounded mr-3"} />
+      <img src={bookCoverImage} className={"h-10 w-7 rounded-sm mr-3"} />
       <div className={"flex-1 flex"}>
         <p className={"text-md font-semibold font-sans"}>{title}</p>
       </div>

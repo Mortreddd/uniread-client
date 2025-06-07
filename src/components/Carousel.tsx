@@ -28,7 +28,7 @@ export default function Carousel() {
   return (
     <Fragment>
       <section
-        className="relative h-[28rem] overflow-x-hidden"
+        className="relative h-112 overflow-x-hidden"
         style={{ width: SLIDE_IMAGE_WIDTH }}
       >
         <div
@@ -37,7 +37,7 @@ export default function Carousel() {
           style={{ width: SLIDE_IMAGE_WIDTH * 4 }}
         >
           <div
-            className="h-[28rem] bg-center bg-cover bg-no-repeat blur-sm flex items-center justify-center"
+            className="h-112 bg-center bg-cover bg-no-repeat blur-xs flex items-center justify-center"
             style={{
               backgroundImage: `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(${romanceBackground})`,
               width: SLIDE_IMAGE_WIDTH,
@@ -51,7 +51,7 @@ export default function Carousel() {
             </h1>
           </div>
           <div
-            className="h-[28rem] bg-center bg-cover bg-no-repeat flex items-center justify-center"
+            className="h-112 bg-center bg-cover bg-no-repeat flex items-center justify-center"
             style={{
               backgroundImage: `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(${horrorBackground})`,
               width: SLIDE_IMAGE_WIDTH,
@@ -65,7 +65,7 @@ export default function Carousel() {
             </h1>
           </div>
           <div
-            className="h-[28rem] bg-center bg-cover bg-no-repeat flex items-center justify-center"
+            className="h-112 bg-center bg-cover bg-no-repeat flex items-center justify-center"
             style={{
               backgroundImage: `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(${scienceFictionBackground})`,
               width: SLIDE_IMAGE_WIDTH,
@@ -79,7 +79,7 @@ export default function Carousel() {
             </h1>
           </div>
           <div
-            className="h-[28rem] bg-center bg-cover bg-no-repeat flex items-center justify-center"
+            className="h-112 bg-center bg-cover bg-no-repeat flex items-center justify-center"
             style={{
               backgroundImage: `linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(${historicalFictionBackground})`,
               width: SLIDE_IMAGE_WIDTH,

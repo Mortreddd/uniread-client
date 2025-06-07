@@ -2,7 +2,7 @@ import Modal, { ModalRef } from "../Modal";
 import { Button } from "../../form/Button";
 import { Input } from "../../form/Input";
 import { SocialIcon } from "react-social-icons";
-import { forwardRef, Ref } from "react";
+import { forwardRef, Ref, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, LoginResponse } from "@/types/Auth";
 import api from "@/services/ApiService";
@@ -16,10 +16,11 @@ interface LoginModalProps {}
 
 function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
   const { login } = useAuth();
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
       email: "",
@@ -28,24 +29,28 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
   });
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    api
+    setLoading(true);
+    await api
       .post("/auth/login", data)
       .then((response: AxiosResponse<LoginResponse>) => {
         login(response.data);
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   return (
     <Modal ref={ref}>
-      <div className="rounded p-3 space-y-1 bg-white w-96">
+      <div className="rounded-xs p-3 space-y-1 bg-white w-96">
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1 className="text-primary text-3xl text-center font-serif font-medium block">
             Login
           </h1>
-          <div className="border-primary p-3 flex flex-col items-start gap-3">
+          <div className="border-primary py-3 flex flex-col items-start gap-3">
             {errors?.root && (
               <DangerAlert iconSize="sm">Invalid email or password</DangerAlert>
             )}
@@ -71,16 +76,15 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
                 className="w-full text-lg"
               />
             </div>
-            <div className="w-full flex justify-between">
-              <p className="text-black text-sm">Remember Me</p>
+            <div className="w-full flex justify-end">
               <p className="text-primary text-sm">Forgot password?</p>
             </div>
           </div>
 
           <Button
-            loading={isLoading}
+            loading={loading}
             type="submit"
-            className="rounded w-full disabled:bg-priamry/50 font-medium text-white"
+            className="rounded-xs w-full disabled:bg-priamry/50 font-medium text-white"
             variant={"primary"}
           >
             Login
@@ -88,9 +92,9 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
         </form>
 
         <div className="w-full flex items-center text-center">
-          <div className={'flex-1 border border-solid border-primary'}></div>
+          <div className={"flex-1 border border-solid border-primary"}></div>
           <p className="text-sm font-sans text-black font-medium mx-3">OR</p>
-          <div className={'flex-1 border border-solid border-primary'}></div>
+          <div className={"flex-1 border border-solid border-primary"}></div>
         </div>
         <div className="w-full flex justify-center gap-3 items-center h-fit">
           <Button

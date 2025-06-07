@@ -1,32 +1,43 @@
 import { Input } from "../common/form/Input";
-import useGetUserConversations, {
-  GetUserConversationsProps,
-} from "@/api/messages/useGetUserConversations";
+import useGetUserConversations from "@/api/messages/useGetUserConversations";
 import { useAuth } from "@/contexts/AuthContext";
-import { ChangeEvent, useCallback, useState } from "react";
+import {ChangeEvent, useCallback, useEffect, useState} from "react";
 import Chats from "./Chats";
+import { PaginateParams } from "@/types/Pagination";
+import { Conversation as ConversationType } from "@/types/Message.ts";
 
 export default function Inbox() {
-  const { user } = useAuth();
-  const [paginateParams, setPaginateParams] =
-    useState<GetUserConversationsProps>({
-      pageNo: 0,
-      pageSize: 10,
-      userId: user?.id || null,
-      name: "",
-    });
+  const { user: currentUser } = useAuth();
+  const [{ pageNo, pageSize }, setParams] = useState<PaginateParams>({
+    pageNo: 0,
+    pageSize: 10,
+    query: "",
+  });
+  const { data } = useGetUserConversations({
+    userId: currentUser?.id,
+    pageNo,
+    pageSize,
+  });
 
-  const memoizedSearch = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) =>
-      setPaginateParams({ ...paginateParams, name: e.target.value }),
-    [paginateParams.name]
-  );
+  const [chats, setChats] = useState<ConversationType[]>([])
 
-  const result = useGetUserConversations(paginateParams);
-  const chats = result.data?.content;
+  const memoizedSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setParams((prev) => ({ ...prev, query: event.target.value }));
+  }, []);
+  console.log(data);
+  useEffect(() => {
+    if (data?.content) {
+      const filteredChats = data.content.filter((conversation) =>
+          !conversation.isGroup &&
+          conversation?.participants?.some((participant) => participant.user.id !== currentUser?.id)
+      );
+
+      setChats(filteredChats);
+    }
+  }, [data, currentUser?.id]);
 
   return (
-    <aside className="w-96 h-full bg-white min-h-[100%]">
+    <aside className="w-96 h-full bg-white min-h-full">
       <div className="p-6 w-full h-full">
         <h3 className="text-2xl text-black font-sans font-semibold text-left">
           Inbox

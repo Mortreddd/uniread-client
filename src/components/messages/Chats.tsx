@@ -2,9 +2,10 @@ import { Conversation } from "@/types/Message";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import Chat from "./Chat";
+import { useMessage } from "@/contexts/MessageContext";
 
 interface ChatsProps {
-  chats: Conversation[] | undefined;
+  chats: Conversation[];
 }
 function Chats({ chats }: ChatsProps) {
   if (!chats || chats.length === 0) {
@@ -13,13 +14,11 @@ function Chats({ chats }: ChatsProps) {
 
   return (
     <>
-      {chats
-        .filter((chat) => chat?.messages?.length)
-        .map((chat) => (
-          <Link to={`/messages/conversations/${chat.id}`} key={chat.id}>
-            <Chat latestMessage={chat?.messages?.at(-1)} />
-          </Link>
-        ))}
+      {chats.map((chat) => (
+        <Link to={`/conversations/${chat.id}/messages`} key={chat.id}>
+          <Chat conversation={chat} />
+        </Link>
+      ))}
     </>
   );
 }

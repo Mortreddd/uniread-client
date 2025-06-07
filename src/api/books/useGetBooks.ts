@@ -1,10 +1,22 @@
 import api from "@/services/ApiService";
-import {Book, BookParams} from "@/types/Book";
+import { Book, BookParams } from "@/types/Book";
+import { BookStatus } from "@/types/Enums";
 import { Paginate, RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-export function useGetBooks({ pageNo, pageSize, query, status }: BookParams) {
+export function useGetBooks({
+  pageNo,
+  pageSize,
+  query,
+  genres = [],
+  status = BookStatus.PUBLISHED,
+  sortBy = "asc",
+  orderBy = "createdAt",
+  startDate = "",
+  endDate = "",
+  deletedAt = "",
+}: BookParams) {
   const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
     data: null,
     error: null,
@@ -23,10 +35,35 @@ export function useGetBooks({ pageNo, pageSize, query, status }: BookParams) {
             pageNo,
             pageSize,
             query,
-            status
+            genres,
+            status: status !== undefined ? status : undefined,
+            sortBy,
+            orderBy,
+            startDate,
+            endDate,
+            deletedAt,
           },
           signal: controller.signal,
           cancelToken: source.token,
+          paramsSerializer: (params) => {
+            return Object.keys(params)
+              .filter((key) => params[key] !== undefined && params[key] !== "")
+              .map((key) =>
+                Array.isArray(params[key])
+                  ? params[key]
+                      .map(
+                        (val) =>
+                          `${encodeURIComponent(key)}=${encodeURIComponent(
+                            val
+                          )}`
+                      )
+                      .join("&")
+                  : `${encodeURIComponent(key)}=${encodeURIComponent(
+                      params[key]
+                    )}`
+              )
+              .join("&");
+          },
         })
         .then((response: AxiosResponse<Paginate<Book[]>>) => {
           setState({
@@ -51,7 +88,18 @@ export function useGetBooks({ pageNo, pageSize, query, status }: BookParams) {
       controller.abort();
       source.cancel("Request cancelled");
     };
-  }, [pageNo, pageSize, query, status]);
+  }, [
+    pageNo,
+    pageSize,
+    query,
+    status,
+    genres,
+    sortBy,
+    orderBy,
+    startDate,
+    endDate,
+    deletedAt,
+  ]);
 
   return state;
 }

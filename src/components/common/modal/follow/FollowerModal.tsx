@@ -66,7 +66,7 @@ function FollowerModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
       <div className="min-w-96 w-fit h-fit">
         <h1 className="text-2xl text-center my-4">Followers</h1>
         <div className="flex flex-col items-start w-full space-y-2 overflow-y-auto">
-          <div className="bg-gray-100 rounded px-4 py-2 w-full">
+          <div className="bg-gray-100 rounded-sm px-4 py-2 w-full">
             {loading && !data?.content ? (
               <div className="flex justify-center">
                 <LoadingCircle />

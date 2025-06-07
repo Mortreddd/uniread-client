@@ -4,12 +4,11 @@ import withHover from "../withHover";
 import BookInfo from "./BookInfo";
 import { Book, BookParams } from "@/types/Book";
 import { useEffect, useMemo, useRef, useState } from "react";
-import useGetBooksByGenreIds from "@/api/books/useGetBooksByGenreIds";
 import { BookStatus } from "@/types/Enums.ts";
+import { useGetBooks } from "@/api/books/useGetBooks.ts";
 
 export default function BookSection() {
-  // @ts-ignore
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const observerRef = useRef<HTMLDivElement>(null);
   const [books, setBooks] = useState<Book[]>([]);
   const memoizedIds: number[] = useMemo(
@@ -17,7 +16,6 @@ export default function BookSection() {
     [params]
   );
   const BookInfoWithHover = withHover(BookInfo);
-  // @ts-ignore
   const [{ pageNo, pageSize, query, status }, setState] = useState<BookParams>({
     pageNo: 0,
     pageSize: 5,
@@ -25,13 +23,15 @@ export default function BookSection() {
     status: BookStatus.PUBLISHED,
   });
 
-  const { data, loading } = useGetBooksByGenreIds({
-    genreIds: memoizedIds,
+  const { data, loading } = useGetBooks({
+    genres: memoizedIds,
     pageNo,
     pageSize,
     query,
     status,
   });
+
+  console.log(data);
 
   const onBottomReach = () => {
     if (!data || data.last) return;
@@ -46,6 +46,7 @@ export default function BookSection() {
       pageNo: 0,
       pageSize: 5,
       query: "",
+      genres: memoizedIds,
       status: BookStatus.PUBLISHED,
     });
   }, [memoizedIds]);
@@ -83,14 +84,17 @@ export default function BookSection() {
 
   return (
     <section className="w-full h-fit px-10 py-5 grid grid-cols-2 grid-flow-row gap-5">
-      {loading && books.length === 0 && (
-        <div className="cols-span-2 row-span-1 w-full h-full flex justify-center items-center">
+      {loading && !data?.content ? (
+        <div className="cols-span-2 row-span-1 flex justify-center items-center">
           <LoadingCircle size={"md"} />
         </div>
+      ) : !loading && books.length > 0 ? (
+        books.map((book) => <BookInfoWithHover key={book.id} book={book} />)
+      ) : (
+        <div className="col-span-2 row-span-1 flex justify-center items-center">
+          <h2 className="text-2xl font-serif font-medium">No books found</h2>
+        </div>
       )}
-      {books.map((book) => (
-        <BookInfoWithHover key={book.id} book={book} />
-      ))}
       <div ref={observerRef}></div>
     </section>
   );

@@ -15,7 +15,7 @@ export default function Strikethrough({
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded ${className}`}
+      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
       <StrikethroughIcon className="h-5 w-5 text-gray-800" />

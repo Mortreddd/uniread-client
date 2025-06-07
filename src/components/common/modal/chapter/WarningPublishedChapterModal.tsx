@@ -25,10 +25,10 @@ function WarningPublishedChapterModal({ chapter, onCancel, onDelete }: WarningPu
                 </p>
 
                 <div className={'flex justify-around items-center mt-8 w-full'}>
-                    <Button type={"button"} variant={'light'} className={"rounded"} onClick={() => onCancel()}>
+                    <Button type={"button"} variant={'light'} className={"rounded-sm"} onClick={() => onCancel()}>
                         Cancel
                     </Button>
-                    <Button type={"button"} variant={'danger'} className={"rounded"} onClick={() => onDelete(chapter)}>
+                    <Button type={"button"} variant={'danger'} className={"rounded-sm"} onClick={() => onDelete(chapter)}>
                         Confirm Deletion
                     </Button>
                 </div>

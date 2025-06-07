@@ -6,7 +6,7 @@ interface BookCoverProps
   extends ImgHTMLAttributes<HTMLImageElement>,
     VariantProps<typeof bookCoverVariants> {}
 
-const bookCoverVariants = cva("rounded object-cover object-center shadow-md", {
+const bookCoverVariants = cva("rounded-sm object-cover object-center shadow-md", {
   variants: {
     size: {
       default: "h-56 w-40",

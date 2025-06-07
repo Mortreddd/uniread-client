@@ -16,7 +16,7 @@ function NotificationContainer(
   return (
     <Dropdown.Content
       ref={ref}
-      className={cn("bg-white rounded min-h-44", className)}
+      className={cn("bg-white rounded-sm min-h-44", className)}
       {...rest}
     >
       {notifications ? (

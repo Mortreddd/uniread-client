@@ -7,7 +7,7 @@ export interface WithPopoverProps
     VariantProps<typeof withPopoverVariant> {}
 
 const withPopoverVariant = cva(
-  "py-2 px-4 rounded bg-gray-200 shadow-md w-full h-full hidden transition-all duration-300 ease-in-out translate-y-0",
+  "py-2 px-4 rounded-sm bg-gray-200 shadow-md w-full h-full hidden transition-all duration-300 ease-in-out translate-y-0",
   {
     variants: {
       variant: {
@@ -58,7 +58,7 @@ export default function Popover({
 
   return (
     <div
-      className="min-w-12 min-h-8 rounded absolute"
+      className="min-w-12 min-h-8 rounded-sm absolute"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

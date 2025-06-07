@@ -1,28 +1,7 @@
-import {NavLink, Outlet, useOutletContext} from "react-router-dom";
-import useGetUserBooks from "@/api/books/useGetUserBooks.ts";
-import {useAuth} from "@/contexts/AuthContext.tsx";
-import {useMemo, useState} from "react";
-import {PaginateParams} from "@/types/Pagination.ts";
-import {Book} from "@/types/Book.ts";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
+import {NavLink, Outlet} from "react-router-dom";
 
-interface UserStories {
-    books: Book[];
-}
 
 export default function MyStoriesSection() {
-    const { user: currentUser } = useAuth();
-    const [{ pageNo, pageSize, query }] = useState<PaginateParams>({
-        pageNo: 0,
-        pageSize: 10,
-        query: ""
-    })
-    const { data, loading } = useGetUserBooks({ userId: currentUser?.id, pageNo, pageSize, query })
-    const memoizedBooks : Book[] = useMemo(() => {
-        if(!data?.content) return []
-
-        return data.content
-    }, [data])
 
   return (
     <div className="h-fit w-2/4">
@@ -57,27 +36,12 @@ export default function MyStoriesSection() {
                 </NavLink>
             </div>
         </div>
-        <div className="relative block w-full border shadow border-primary h-96 overflow-y-auto">
+        <div className="relative block w-full border shadow-sm border-primary h-96 overflow-y-auto">
 
             <div className="relative w-full h-full p-3">
-                {loading && !data?.content ? (
-                    <div className={'w-full h-full flex items-center justify-center'}>
-                        <LoadingCircle size={'md'}/>
-                    </div>
-                ) : (
-                    <Outlet context={{books: memoizedBooks} satisfies UserStories}/>
-                )}
+                    <Outlet/>
             </div>
         </div>
     </div>
   );
-}
-
-
-/**
- * function for using the context in child components
- * @return context of user stories
- */
-export function useUserStories() {
-    return useOutletContext<UserStories>()
 }

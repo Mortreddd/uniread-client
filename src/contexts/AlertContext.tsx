@@ -60,17 +60,19 @@ export const AlertProvider: FC<AlertProviderProps> = ({ children }) => {
     <AlertContext.Provider value={contextValue}>
       <main className="antialiased isolate bg-transparent w-full">
         {children}
-        {alertMessages.map(({ type, message }, index) => (
-          <div
-            key={index}
-            className="fixed right-10 z-50 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out"
-          >
-            {type === "info" && <InfoAlert>{message}</InfoAlert>}
-            {type === "error" && <DangerAlert>{message}</DangerAlert>}
-            {type === "success" && <SuccessAlert>{message}</SuccessAlert>}
-            {type === "warning" && <WarningAlert>{message}</WarningAlert>}
-          </div>
-        ))}
+        <div className="fixed right-10 z-30 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out">
+          {alertMessages.map(({ type, message }, index) => {
+            if (type === "info")
+              return <InfoAlert key={index}>{message}</InfoAlert>;
+            if (type === "error")
+              return <DangerAlert key={index}>{message}</DangerAlert>;
+            if (type === "success")
+              return <SuccessAlert key={index}>{message}</SuccessAlert>;
+            if (type === "warning")
+              return <WarningAlert key={index}>{message}</WarningAlert>;
+            return null;
+          })}
+        </div>
       </main>
     </AlertContext.Provider>
   );

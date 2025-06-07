@@ -12,7 +12,7 @@ interface DeleteBookModalProps extends ModalProps {
 
 function DeleteBookModal({ book, onDelete, onCancel } : DeleteBookModalProps, ref: Ref<ModalRef>) {
     return(
-        <Modal ref={ref} className={"w-96 h-fit rounded p-4"}>
+        <Modal ref={ref} className={"w-96 h-fit rounded-sm p-4"}>
             <ExclamationCircleIcon className={"mb-3 size-16 block mx-auto bg-transparent text-red-500"} />
             <p className={"text-center mb-4 text-lg text-gray-600 font-sans font-semibold"}>
                 You won't be able to undo this operation by deleting this book.

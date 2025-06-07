@@ -14,7 +14,7 @@ export default function TextJustify({
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded ${className}`}
+      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
       <Bars3Icon className="h-5 w-5 text-gray-800" />

@@ -1,14 +1,14 @@
-import { XMarkIcon } from "@heroicons/react/20/solid";
 import {
   forwardRef,
   HTMLAttributes,
   PropsWithChildren,
   Ref,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
-import { Button } from "../form/Button";
+import { motion, AnimatePresence } from "motion/react";
 
 export interface ModalProps
   extends HTMLAttributes<HTMLDivElement>,
@@ -27,6 +27,18 @@ function Modal({ children }: ModalProps, ref: Ref<ModalRef>) {
     setIsOpen(false);
   }
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isOpen]);
+
   useImperativeHandle(
     ref,
     () => {
@@ -41,34 +53,65 @@ function Modal({ children }: ModalProps, ref: Ref<ModalRef>) {
     },
     []
   );
+
   return (
-    <>
-      <div
-        ref={modalRef}
-        className={`fixed inset-0 flex justify-center z-50 rounded items-center transition-all ${
-          isOpen
-            ? "bg-black/50 visible duration-200 ease-in-out"
-            : "invisible duration-300 ease-in"
-        }`}
-      >
-        <div
-          className={`rounded-xl bg-white duration-200 shadow p-6 transition-all ${
-            isOpen
-              ? "translate-y-0 opacity-100 ease-in"
-              : "translate-y-4 opacity-0 ease-out"
-          }`}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          ref={modalRef}
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+            transition: {
+              duration: 0.2,
+            },
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          className={"fixed w-full h-screen bg-black/60 inset-0 z-50"}
+          onClick={handleClose}
         >
-          <Button
-            onClick={handleClose}
-            className="absolute top-0 right-0 rounded-lg"
-            variant={"transparent"}
+          <motion.div
+            initial={{
+              y: 20,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.2,
+                ease: "easeInOut",
+              },
+            }}
+            exit={{
+              y: 20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeInOut",
+              },
+            }}
+            className={
+              "fixed inset-x-0 top-10 mx-auto w-fit max-w-3xl bg-white rounded-lg shadow-lg p-6 max-h-[90vh] overflow-y-auto"
+            }
+            onClick={(e) => e.stopPropagation()}
           >
-            <XMarkIcon className="text-gray-400 size-6 transition-colors duration-200 ease-in-out hover:text-gray-600" />
-          </Button>
-          {children}
-        </div>
-      </div>
-    </>
+            {/* <Button
+              onClick={handleClose}
+              className="absolute top-2 right-2 rounded-full"
+              variant={"transparent"}
+            >
+              <XMarkIcon className="text-gray-600 rounded-full size-6 transition-all duration-200 ease-in-out hover:text-gray-600" />
+            </Button> */}
+            {children}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

@@ -89,7 +89,7 @@ function TextEditor({
       <Editable
         {...rest}
         placeholder={placeholder}
-        className={`${className} p-2 focus:ring-1 focus:ring-primary focus:outline-none border transition-all duration-200 ease-in-out border-primary rounded`}
+        className={`${className} p-2 focus:ring-1 focus:ring-primary focus:outline-hidden border transition-all duration-200 ease-in-out border-primary rounded-sm`}
         renderLeaf={RenderLeaf}
         renderElement={RenderElement}
       />

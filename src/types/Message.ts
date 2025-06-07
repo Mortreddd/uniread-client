@@ -4,14 +4,14 @@ export interface Conversation {
   id: string;
   name: string;
   isGroup: boolean;
-  participants: Participant[];
+  participants?: Participant[];
   messages?: Message[];
   createdAt: string;
 }
 
 export interface Participant {
   id: string;
-  conversation: Conversation;
+  conversationId: string;
   user: User;
   addedAt: string;
 }
@@ -19,9 +19,8 @@ export interface Participant {
 export interface Message {
   id: string;
   sender: User;
-  conversation: Conversation;
+  conversationId: string;
   message: string;
-  readAt: string | null;
   createdAt: string;
   updatedAt: string;
 }

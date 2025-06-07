@@ -8,13 +8,13 @@ import { useEffect, useState } from "react";
 export interface GetUserConversationsProps {
   pageNo?: number;
   pageSize?: number;
-  userId: string | null;
+  userId: string | null | undefined;
   name?: string;
 }
 export default function useGetUserConversations({
+  userId,
   pageNo = 0,
   pageSize = 10,
-  userId,
   name,
 }: GetUserConversationsProps) {
   const [state, setState] = useState<RequestState<Paginate<Conversation[]>>>({

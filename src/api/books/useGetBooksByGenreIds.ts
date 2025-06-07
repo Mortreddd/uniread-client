@@ -26,8 +26,8 @@ export default function useGetBooksByGenreIds({ genreIds, pageNo,pageSize, query
     async function getBooksByMultipleGenre() {
       setResult((prev) => ({ ...prev, loading: true }));
 
-      api
-        .get(`/genres/options`, {
+      await api
+        .get(`/books`, {
           params: {
             pageNo, pageSize, genres: genreIds, query, status: status !== undefined ? status : null
           },

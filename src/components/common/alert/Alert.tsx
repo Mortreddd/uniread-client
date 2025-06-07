@@ -1,6 +1,6 @@
 import { cn } from "@/utils/ClassNames";
 import { cva, VariantProps } from "class-variance-authority";
-import { HTMLAttributes } from "react";
+import { HTMLMotionProps, motion } from "motion/react";
 
 const alertVariants = cva(
   "rounded-lg p-2 md:p-4 w-full md:min-w-64 h-fit min-w-52 my-1 md:my-2",
@@ -25,7 +25,7 @@ const alertVariants = cva(
 );
 
 interface AlertVariantsProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends HTMLMotionProps<"div">,
     VariantProps<typeof alertVariants> {}
 export default function Alert({
   className,
@@ -34,8 +34,25 @@ export default function Alert({
   ...rest
 }: AlertVariantsProps) {
   return (
-    <div className={cn(alertVariants({ className, variant }))} {...rest}>
+    <motion.div
+      initial={{
+        translateX: 100,
+      }}
+      animate={{
+        translateX: 0,
+        opacity: 1,
+        transition: {
+          duration: 0.8,
+          ease: "easeOut",
+        },
+      }}
+      exit={{
+        opacity: 0,
+      }}
+      className={cn(alertVariants({ className, variant }))}
+      {...rest}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }

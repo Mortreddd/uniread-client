@@ -102,11 +102,11 @@ export const router = createBrowserRouter([
   // Requires Authentication
   // Message or Inbox Page
   {
-    path: "/messages",
+    path: "/conversations",
     element: <MessagesPage />,
     children: [
       {
-        path: "/messages/conversation/:conversationId",
+        path: "/conversations/:conversationId/messages",
         element: <Conversation />,
       },
     ],
@@ -192,5 +192,10 @@ export const router = createBrowserRouter([
   {
     path: "/about",
     element: <AboutPage />,
+  },
+
+  {
+    path: "/test",
+    element: <HomePage />,
   },
 ]);

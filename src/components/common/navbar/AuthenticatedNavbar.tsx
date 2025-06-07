@@ -1,45 +1,60 @@
-import { Button } from "../form/Button";
-import { Link } from "react-router-dom";
-import { BuildingLibraryIcon } from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import ExploreDropdown from "../dropdown/ExploreDropdown";
+import useScrollPosition from "@/hooks/useScrollPosition";
 
-import Popover from "@/components/Popover.tsx";
-import MessageButton from "../../messages/MessageButton.tsx";
-import ProfileDropdown from "../dropdown/ProfileDropdown.tsx";
-import NotificationDropdown from "../dropdown/NotificationDropdown.tsx";
-import WriteDropdown from "../dropdown/WriteDropdown.tsx";
 export default function AuthenticatedNavbar() {
+  const [showNavbar, setShowNavbar] = useState(true);
+  const lastScrollY = useRef(0);
+
+  const { scrollY } = useScrollPosition();
+
+  useEffect(() => {
+    if (scrollY > lastScrollY.current + 5) {
+      // Scrolled down more than 5px
+      setShowNavbar(false);
+    } else if (scrollY < lastScrollY.current - 5) {
+      // Scrolled up more than 5px
+      setShowNavbar(true);
+    }
+
+    lastScrollY.current = scrollY;
+  }, [scrollY]);
+
   return (
-    <div className="flex items-center gap-3 md:gap-5 h-fit">
-      {/**
-       * Library navbar option
-       */}
-      <Link to="/library/saved">
-        <Button
-          variant={"light"}
-          size={"custom"}
-          className={"rounded-full p-3"}
-        >
-          <BuildingLibraryIcon className={"size-5"} />
-          <Popover position={"top"}>
-            <h3 className="text-xs font-sans text-black">Library</h3>
-          </Popover>
-        </Button>
-      </Link>
-
-      <div className="relative">
-        <WriteDropdown />
-      </div>
-      {/* Messages navbar option*/}
-      <MessageButton />
-
-      {/* Notification navbar option */}
-      <NotificationDropdown />
-
-      {/*
-       * Avatar dropdown with preferences options
-       */}
-
-      <ProfileDropdown />
-    </div>
+    <>
+      <AnimatePresence>
+        {showNavbar && (
+          <motion.nav
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            exit={{ opacity: 0, y: -10 }}
+            className="w-full flex justify-between items-center z-30 fixed top-0 py-5 px-32"
+          >
+            <a href="/" className="text-2xl font-medium text-black font-serif">
+              Uniread
+            </a>
+            <ul className="gap-5 items-center font-serif flex">
+              <li>
+                <ExploreDropdown />
+              </li>
+              <li className="hover:cursor-pointer w-fit relative group">
+                <a href="/stories">Write</a>
+                <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
+              </li>
+              <li className="hover:cursor-pointer w-fit relative group">
+                <a href="/library">Library</a>
+                <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
+              </li>
+              <li className="hover:cursor-pointer w-fit relative group">
+                <a href="/conversations">Messages</a>
+                <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
+              </li>
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

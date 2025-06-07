@@ -6,8 +6,8 @@ import {Button} from "@/components/common/form/Button.tsx";
 import api from "@/services/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {Chapter} from "@/types/Chapter.ts";
-import {useAlert} from "@/contexts/AlertContext.tsx";
 import {ErrorResponse} from "@/types/Error.ts";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 interface AddNewChapterModalProps {
     bookId?: string;
@@ -21,7 +21,7 @@ interface CreateNewChapterModalProps {
 
 
 function AddNewChapterModal({ bookId, onCreate } : AddNewChapterModalProps, ref: Ref<ModalRef>) {
-    const { showAlert } = useAlert();
+    const { showToast} = useToast();
     const { register, handleSubmit, formState: { isSubmitting } } = useForm<CreateNewChapterModalProps>({
         defaultValues: {
             bookId,
@@ -32,10 +32,10 @@ function AddNewChapterModal({ bookId, onCreate } : AddNewChapterModalProps, ref:
     const onSubmit: SubmitHandler<CreateNewChapterModalProps> = async (data) => {
         await api.post(`/books/${data.bookId}/chapters/create`, data)
             .then((response: AxiosResponse<Chapter>) => {
-                showAlert("You created a new chapter!", "success")
+                showToast("You created a new chapter!", "success")
                 onCreate(response.data)
             }).catch((error: AxiosError<ErrorResponse>) => {
-                showAlert(error?.response?.data.message ?? "Something went wrong creating chapter", "error")
+                showToast(error?.response?.data.message ?? "Something went wrong creating chapter", "error")
             })
     }
 
@@ -49,7 +49,7 @@ function AddNewChapterModal({ bookId, onCreate } : AddNewChapterModalProps, ref:
                     <label className={'font-sans font-semibold text-xl text-gray-700'}></label>
                     <Input {...register("title")} variant={'primary'} className={'w-full'} placeholder={"Chapter title"}/>
                 </div>
-                <Button loading={isSubmitting} type={"submit"} variant={'primary'} className={'w-full rounded'}>
+                <Button loading={isSubmitting} type={"submit"} variant={'primary'} className={'w-full rounded-sm'}>
                     Create Chapter
                 </Button>
             </form>

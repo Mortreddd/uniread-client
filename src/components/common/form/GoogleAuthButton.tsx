@@ -6,20 +6,16 @@ import { AxiosError, AxiosResponse } from "axios";
 import { LoginResponse } from "@/types/Auth";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
-import { useAlert } from "@/contexts/AlertContext";
 import { ErrorResponse } from "@/types/Error";
+import GoogleAuthProvider from "@/provider/google/GoogleAuthProvider.tsx";
 
 export default function GoogleAuthButton() {
   const [loading, setLoading] = useState(false);
-  const { showAlert } = useAlert();
   const { login } = useAuth();
   const handleGoogleAuth = useGoogleLogin({
     onError: (error) => {
       setLoading(false);
-      showAlert(
-        error.error_description ?? "Unable to process the request",
-        "error"
-      );
+      console.log(error)
     },
     onSuccess: async (response) => {
       setLoading(true);
@@ -31,10 +27,8 @@ export default function GoogleAuthButton() {
           login(result.data);
         })
         .catch((error: AxiosError<ErrorResponse>) => {
-          showAlert(
-            error.response?.data.message ?? "Unable to process login",
-            "error"
-          );
+
+          console.log(error)
         })
         .finally(() => {
           setLoading(false);
@@ -44,6 +38,8 @@ export default function GoogleAuthButton() {
   });
 
   return (
+      <GoogleAuthProvider>
+
     <Button
       type="button"
       size={"custom"}
@@ -58,5 +54,6 @@ export default function GoogleAuthButton() {
         style={{ height: "2rem", width: "2rem" }}
       />
     </Button>
+      </GoogleAuthProvider>
   );
 }

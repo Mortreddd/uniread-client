@@ -2,7 +2,6 @@ import Banner, { BannerProps } from "@/components/Banner.tsx";
 import { Genre } from "@/types/Book.ts";
 import { cn } from "@/utils/ClassNames.ts";
 import { memo } from "react";
-import { useSearchParams } from "react-router-dom";
 
 interface GenreOptionProps extends BannerProps {
   genreIds: number[] | undefined;

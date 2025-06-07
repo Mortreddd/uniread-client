@@ -2,7 +2,6 @@ import ApplicationLogo from "@/components/ApplicationLogo";
 import DangerAlert from "@/components/common/alert/DangerAlert";
 import { Button } from "@/components/common/form/Button";
 import { Input } from "@/components/common/form/Input";
-import { useAlert } from "@/contexts/AlertContext";
 import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/ApiService";
 import { ErrorResponse } from "@/types/Error";
@@ -12,6 +11,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 interface SetupUsernameProps {
   username: string;
@@ -19,7 +19,7 @@ interface SetupUsernameProps {
 
 export default function SetupUsernamePage() {
   const { user } = useAuth();
-  const { showAlert } = useAlert();
+  const { showToast } = useToast();
   const navigate = useNavigate();
 
   const suggestedUsername = useMemo(() => {
@@ -43,7 +43,7 @@ export default function SetupUsernamePage() {
         username,
       })
       .then((response: AxiosResponse<SuccessResponse>) => {
-        showAlert(response.data.message, "success");
+        showToast(response.data.message, "success");
         navigate("/", { replace: true });
       })
       .catch((error: AxiosError<ErrorResponse>) => {
@@ -92,7 +92,7 @@ export default function SetupUsernamePage() {
               loading={isSubmitting}
               type={"submit"}
               variant={"primary"}
-              className={"rounded"}
+              className={"rounded-sm"}
             >
               Submit
             </Button>

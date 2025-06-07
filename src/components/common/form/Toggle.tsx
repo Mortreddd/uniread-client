@@ -3,7 +3,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { InputHTMLAttributes } from "react";
 
 const toggleVariant = cva(
-  "flex items-center flex-shrink-0 ml-4 p-0.5 bg-gray-300 rounded-full after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-6 ease-in-out",
+  "flex items-center shrink-0 ml-4 p-0.5 bg-gray-300 rounded-full after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-6 ease-in-out",
   {
     variants: {
       variant: {

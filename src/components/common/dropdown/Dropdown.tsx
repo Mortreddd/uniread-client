@@ -12,7 +12,7 @@ interface DropdownProps
     VariantProps<typeof dropdownVariant> {}
 
 const dropdownVariant = cva(
-  "transition-color px-3 py-2 duration-300 ease-in-out rounded hover:shadow-md cursor-pointer block",
+  "transition-color px-3 py-2 duration-300 ease-in-out rounded-sm hover:shadow-md cursor-pointer block",
   {
     variants: {
       variant: {
@@ -45,7 +45,7 @@ export interface DropdownContentProps
         VariantProps<typeof dropdownContentVariant> {}
 
 const dropdownContentVariant = cva(
-    "absolute right-0 bg-gray-100 rounded p-3 hidden",
+    "absolute right-0 bg-gray-100 rounded-sm p-3 hidden",
     {
         variants: {
             size: {
@@ -105,7 +105,7 @@ interface DropdownItemProps
         VariantProps<typeof dropdownItemVariant> {}
 
 const dropdownItemVariant = cva(
-    "transition-all px-2 py-1 duration-300 ease-in-out rounded hover:bg-gray-300 cursor-pointer block",
+    "transition-all px-2 py-1 duration-300 ease-in-out rounded-sm hover:bg-gray-300 cursor-pointer block",
     {
         variants: {
             variant: {

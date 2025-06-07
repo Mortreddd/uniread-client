@@ -1,7 +1,6 @@
-import LoadingCirlce from "@/components/LoadingCirlce";
 import { cn } from "@/utils/ClassNames";
 import { VariantProps, cva } from "class-variance-authority";
-import { ButtonHTMLAttributes, FC, forwardRef } from "react";
+import { ButtonHTMLAttributes, forwardRef } from "react";
 
 interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
@@ -10,7 +9,7 @@ interface ButtonProps
 }
 
 const buttonVariants = cva(
-  "active:scale-95 inline-flex justify-center items-center transition-colors font-medium duration-200 ease-in-out",
+  "active:scale-95 transition-colors hover:cursor-pointer font-medium duration-200 ease-in-out disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -23,7 +22,7 @@ const buttonVariants = cva(
         light: "bg-gray-100 hover:bg-gray-200 text-black",
         ghost: "bg-transparent hover:bg-gray-100 text-white",
         dark: "bg-gray-800 hover:bg-gray-900 text-white",
-        transparent: "bg-transparent hover:bg-transparent/10",
+        transparent: "bg-transparent hover:bg-transparent/30",
         inactivePrimary:
           "border border-primary text-primary bg-transparent hover:bg-primary/10",
         custom: "",
@@ -43,7 +42,7 @@ const buttonVariants = cva(
   }
 );
 
-const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, size, variant, children, loading = false, ...props }, ref) => {
     return (
       <button
@@ -52,7 +51,7 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {loading ? <LoadingCirlce variant={"light"} /> : children}
+        {children}
       </button>
     );
   }

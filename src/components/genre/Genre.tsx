@@ -17,7 +17,7 @@ export default function Genre({ genre, className, ...rest }: GenreProps) {
         style={{
           background: `url(${backgroundImage})`,
         }}
-        className="bg-cover bg- bg-no-repeat aspect-video w-full backdrop-blur-sm h-full rounded-lg"
+        className="bg-cover bg- bg-no-repeat aspect-video w-full backdrop-blur-xs h-full rounded-lg"
       >
         <div className="flex justify-center items-center cursor-pointer bg-[rgba(0,0,0,0.4)] w-full h-full">
           <h1 className="text-2xl text-white font-serif font-bold">{name}</h1>

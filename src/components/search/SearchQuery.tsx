@@ -12,6 +12,7 @@ import SearchResult from "./SearchResult";
 import Dropdown, {
   DropdownContentRef,
 } from "@/components/common/dropdown/Dropdown.tsx";
+import { BookStatus } from "@/types/Enums";
 
 /**
  * The component for search bar in home page
@@ -36,7 +37,6 @@ function SearchQuery() {
    * If the query is valid, it closes the dropdown and navigates to the search results page.
    * @param event - The event object for the form submit event
    * @description - This function handles the form submit event for the search bar.
-   * @returns
    */
   function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,6 +59,7 @@ function SearchQuery() {
     const controller = new AbortController();
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
+
     async function getBookResults() {
       if (debounceSearch.trim().length <= 0) {
         setResult({
@@ -77,6 +78,7 @@ function SearchQuery() {
             pageNo: 0,
             pageSize: 5,
             query: debounceSearch,
+            status: BookStatus.PUBLISHED,
           },
           cancelToken: source.token,
         })
@@ -123,7 +125,7 @@ function SearchQuery() {
           value={query}
           variant={"none"}
           className={
-            "focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+            "focus:outline-hidden focus:border-primary focus:ring-2 focus:ring-primary"
           }
           placeholder="eg: genre, book"
         />
@@ -136,8 +138,8 @@ function SearchQuery() {
         ref={dropdownContentRef}
         className={`w-72 ${result?.data?.content.length ? "block" : "hidden"}`}
       >
-        {result.data?.content.map((book) => (
-          <Link to={`/books/${book.id}`} key={book.id}>
+        {result.data?.content.map((book, key) => (
+          <Link to={`/books/${book.id}`} key={key}>
             <SearchResult book={book} className={"w-full h-fit"} />
           </Link>
         ))}

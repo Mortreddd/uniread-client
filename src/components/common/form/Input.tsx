@@ -4,13 +4,15 @@ import { forwardRef, InputHTMLAttributes, memo } from "react";
 
 interface InputProps
   extends InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariant> {}
+    VariantProps<typeof inputVariant> {
+  loading?: boolean;
+}
 
 /**
  * The input styles with differnt variants
  */
 const inputVariant = cva(
-  "inline-flex outline-0 justify-start items-center transition-all rounded font-medium duration-200 ease-in-out placeholder:text-gray-300",
+  "inline-flex outline-0 justify-start items-center transition-all rounded-sm invalid:border-red-600 invalid:ring-red-600 disabled:border-gray-300 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-400 disabled:text-gray-500 placeholder:text-gray-400 duration-200 ease-in-out placeholder:text-gray-300",
   {
     variants: {
       variant: {
@@ -35,9 +37,10 @@ const inputVariant = cva(
 
 export const Input = memo(
   forwardRef<HTMLInputElement, InputProps>(
-    ({ className, variant, ...props }, ref) => {
+    ({ className, variant, loading = false, ...props }, ref) => {
       return (
         <input
+          disabled={loading}
           ref={ref}
           {...props}
           className={cn(inputVariant({ className, variant }))}
