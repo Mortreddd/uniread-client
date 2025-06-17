@@ -1,14 +1,21 @@
 import { useRef } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import ExploreDropdown from "../dropdown/ExploreDropdown";
 import LoginModal from "../modal/auth/LoginModal";
 import { ModalRef } from "../modal/Modal";
+import { useAuth } from "@/contexts/AuthContext";
+import ProfileDropdown from "../dropdown/ProfileDropdown";
+import useGetGenres from "@/api/genres/useGetGenres";
 
 export default function GuestNavbar() {
   const loginModalRef = useRef<ModalRef>(null);
 
+  const { isLoggedIn } = useAuth();
+  const { data } = useGetGenres();
+
+  console.log(data);
   return (
-    <>
+    <AnimatePresence>
       <motion.nav
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -21,19 +28,25 @@ export default function GuestNavbar() {
         </a>
         <ul className="gap-5 items-center text-lg font-serif flex">
           <li>
-            <ExploreDropdown />
+            <ExploreDropdown genres={data} />
           </li>
           <li className="hover:cursor-pointer w-fit relative group">
             <a href="/about">About Us</a>
             <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
           </li>
-          <li className="hover:cursor-pointer w-fit relative group">
-            <p onClick={() => loginModalRef.current?.open()}>Login</p>
-            <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
-          </li>
+          {isLoggedIn() ? (
+            <li className="hover:cursor-pointer w-fit relative">
+              <ProfileDropdown />
+            </li>
+          ) : (
+            <li className="hover:cursor-pointer w-fit relative group">
+              <p onClick={() => loginModalRef.current?.open()}>Login</p>
+              <div className="w-0 group-hover:h-0 group-hover:w-full border-b border-black transition-all duration-200 ease-in-out border-solid"></div>
+            </li>
+          )}
         </ul>
       </motion.nav>
       <LoginModal ref={loginModalRef} />
-    </>
+    </AnimatePresence>
   );
 }

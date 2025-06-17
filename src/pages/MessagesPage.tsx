@@ -1,16 +1,16 @@
 import Inbox from "@/components/messages/Inbox";
 import { Outlet, useMatch } from "react-router-dom";
-import Navbar from "@/components/common/navbar/Navbar.tsx";
+import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar";
 
 export default function MessagesPages() {
   const hasNoActiveConversation = useMatch("/conversations");
   return (
     <>
-      <header className={'w-full relative'}>
-        <Navbar />
+      <header className={"w-full relative"}>
+        <AuthenticatedNavbar />
       </header>
       <div className="w-full h-full flex flex-col">
-        <div className="flex grow">
+        <div className="flex grow flex-1">
           <div className="w-fit h-full">
             <Inbox />
           </div>

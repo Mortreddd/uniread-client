@@ -18,6 +18,8 @@ export default function useGetBookComments({
   bookId,
   pageNo,
   pageSize,
+  sortBy,
+  orderBy,
 }: GetBookCommentsProps) {
   const [state, setState] = useState<RequestState<Paginate<BookComment[]>>>({
     data: null,
@@ -35,6 +37,8 @@ export default function useGetBookComments({
           params: {
             pageNo,
             pageSize,
+            sortBy,
+            orderBy,
           },
           signal,
         })
@@ -55,7 +59,7 @@ export default function useGetBookComments({
     }
 
     getBookComments();
-  }, [bookId, pageNo, pageSize]);
+  }, [bookId, pageNo, pageSize, sortBy, orderBy]);
 
   return state;
 }

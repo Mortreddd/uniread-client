@@ -22,7 +22,6 @@ interface MessageContextProps {
 
 interface SendMessageProps {
   conversationId: string | undefined;
-  senderId: string | undefined;
   message: string;
 }
 
@@ -30,6 +29,9 @@ const MessageContext = createContext<MessageContextProps | undefined>(
   undefined
 );
 
+/**
+ * Utility function to access the context of Message Context
+ */
 function useMessage() {
   const context = useContext(MessageContext);
   if (context === undefined) {
@@ -40,12 +42,21 @@ function useMessage() {
 
 interface MessageProviderProps extends PropsWithChildren {}
 
+/**
+ * Message Wrapper for the whole component
+ * @param children
+ * @constructor
+ */
 function MessageProvider({ children }: MessageProviderProps) {
   const baseUrl = import.meta.env.VITE_API_URL as string;
   const stompClientRef = useRef<Client | null>(null);
   const { isLoggedIn, accessToken } = useAuth();
   const [messages, setMessages] = useState<MessageType[]>([]);
 
+  /**
+   * Sends a message to a server
+   * @param message
+   */
   function sendMessage(message: SendMessageProps) {
     const stompClient = stompClientRef.current;
     if (stompClient?.connected) {
@@ -53,6 +64,9 @@ function MessageProvider({ children }: MessageProviderProps) {
     }
   }
 
+  /**
+   * Listening to incoming messages using subscribe function of stomp
+   */
   useEffect(() => {
     if (!isLoggedIn() || !accessToken) return;
 
@@ -67,7 +81,6 @@ function MessageProvider({ children }: MessageProviderProps) {
       // Subscribe to user's private queue for all messages
       client.subscribe("/user/queue/messages", (message: Message) => {
         const newMessage = JSON.parse(message.body) as MessageType;
-        console.log("New Message: ", newMessage)
         setMessages((prevMessages) => {
           // Only add the message if it's not already in the list
           if (!prevMessages.some((msg) => msg.id === newMessage.id)) {
@@ -75,8 +88,6 @@ function MessageProvider({ children }: MessageProviderProps) {
           }
           return prevMessages;
         });
-
-        console.log("Current Messages:", messages);
       });
     });
 

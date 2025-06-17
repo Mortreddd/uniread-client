@@ -5,21 +5,18 @@ import Label from "@/components/common/form/Label";
 import TextArea from "@/components/common/form/TextArea";
 import Toggle from "@/components/common/form/Toggle";
 import GenreOption from "@/components/genre/GenreOption";
-import { useAuth } from "@/contexts/AuthContext";
 import api from "@/services/ApiService";
 import { Genre, CreateBookFormProps, Book } from "@/types/Book";
 import { ErrorResponse } from "@/types/Error";
 import { RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {useToast} from "@/contexts/ToastContext.tsx";
 
 export default function CreateBookForm() {
-  const { user } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
-  const authorId = user?.id || null;
   const { data } = useGetGenres();
   const [{ loading }, setRequestState] = useState<RequestState<Book>>({
     data: null,
@@ -43,7 +40,6 @@ export default function CreateBookForm() {
     title: "",
     description: "",
     matured: false,
-    authorId: null,
     genreIds: [],
     photo: null,
   });
@@ -79,7 +75,6 @@ export default function CreateBookForm() {
     formData.append("title", formValues.title);
     formData.append("description", formValues.description);
     formData.append("matured", String(formValues.matured));
-    formData.append("authorId", String(formValues.authorId));
     formValues.genreIds.forEach((genreId) => {
       formData.append("genreIds", genreId.toString());
     });
@@ -103,7 +98,6 @@ export default function CreateBookForm() {
           title: "",
           description: "",
           matured: false,
-          authorId: null,
           genreIds: [],
           photo: null,
         });
@@ -123,10 +117,6 @@ export default function CreateBookForm() {
         );
       });
   }
-
-  useEffect(() => {
-    setFormValues((prev) => ({ ...prev, authorId }));
-  }, [authorId]);
 
   return (
     <div className="w-[60%]">

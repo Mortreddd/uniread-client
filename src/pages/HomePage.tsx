@@ -3,19 +3,19 @@ import headline1 from "@/assets/headline-image-1.jpg";
 import headline2 from "@/assets/headline-image-2.jpg";
 import { motion } from "motion/react";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/common/navbar/Navbar.tsx";
+import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
 
 export default function Home() {
   return (
     <>
+      <header className={"w-full relative"}>
+        <GuestNavbar />
+      </header>
       <div className="absolute inset-0 overflow-hidden -z-50">
         <div className="absolute w-[40rem] h-[40rem] bg-[#C291AE] rounded-full blur-[100px] -top-60 -left-60"></div>
-        <div className="absolute w-[40rem] h-[40rem] bg-[#C291AE] rounded-full blur-[100px] -right-80"></div>
+        <div className="absolute w-[40rem] h-[40rem] bg-[#C291AE] rounded-full blur-[100px] right-0"></div>
       </div>
-      <header className={"w-full relative"}>
-        <Navbar />
-      </header>
-      <section className="w-full h-[calc(100vh-80px)] flex justify-center items-center relative">
+      <section className="w-full mt-10 h-[calc(100vh-80px)] flex justify-center items-center relative">
         <div className="w-full px-32 pt-16 font-serif h-full flex justify-center ">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ export default function Home() {
               variant={"custom"}
               size={"custom"}
             >
-              Get Started
+              <a href="/books">Explore Stories</a>
             </Button>
           </motion.div>
         </div>

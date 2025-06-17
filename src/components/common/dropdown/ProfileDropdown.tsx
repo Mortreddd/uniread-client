@@ -1,24 +1,15 @@
 import Icon from "@/components/Icon";
-import { Link, useNavigate } from "react-router-dom";
-import Dropdown, { DropdownContentRef } from "./Dropdown.tsx";
-import { useRef, useState } from "react";
-import defaultProfile from "@/assets/profiles/default-profile.jpg";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { AnimatePresence, motion } from "motion/react";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import defaultProfile from "@/assets/profiles/gojo.jpg";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState<boolean>(false);
-  const profileContentRef = useRef<DropdownContentRef>(null);
   const navigate = useNavigate();
   const { logout, user } = useAuth();
-
-  function handleProfileClick() {
-    if (open) {
-      profileContentRef.current?.close();
-    } else {
-      profileContentRef.current?.open();
-    }
-    setOpen(!open);
-  }
 
   function handleLogout() {
     navigate("/");
@@ -26,32 +17,80 @@ export default function ProfileDropdown() {
   }
 
   return (
-    <>
-      <Dropdown onClick={handleProfileClick}>
-        {user?.username}
-        <Icon src={defaultProfile} />
-      </Dropdown>
-      <Dropdown.Content ref={profileContentRef}>
-        <Dropdown.Item>
-          <a className="w-full" href="/settings">
-            Settings
-          </a>
-        </Dropdown.Item>
-        <Dropdown.Item>
-          <a className="w-full" href={`/profile/works`}>
-            Profile
-          </a>
-        </Dropdown.Item>
-        <Dropdown.Item
-          className={
-            "ease-in-out duratio-200 transition-colors hover:bg-red-600 w-full hover:text-white text-black rounded-sm"
-          }
-        >
-          <Link to={"/"} replace className="w-full" onClick={handleLogout}>
-            Logout
-          </Link>
-        </Dropdown.Item>
-      </Dropdown.Content>
-    </>
+    <motion.button
+      onClick={() => setOpen(!open)}
+      className={
+        "inline-flex items-center gap-2 x-5 py-2 text-left  relative isolate text-lg font-medium font-serif text-black bg-transparent"
+      }
+    >
+      <Icon src={defaultProfile} size={"sm"} />
+
+      <p className="font-serif hover:cursor-pointer text-md">
+        {user?.fullName ?? "Anonymous"}
+      </p>
+
+      <ChevronDownIcon
+        className={`size-4 transition-all duration-200 ease-in-out hover:cursor-pointer ${
+          open && "rotate-180"
+        }`}
+      />
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            onMouseLeave={() => setOpen(false)}
+            initial={{
+              opacity: 0,
+              y: -10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: {
+                duration: 0.3,
+                ease: "easeInOut",
+              },
+            }}
+            exit={{
+              opacity: 0,
+              y: -10,
+            }}
+            className={
+              "absolute right-0 text-start bg-white w-fit top-10 text-gray-800 min-w-xs rounded-lg overflow-hidden"
+            }
+          >
+            <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
+              <a className="w-full" href="/profile">
+                Profile
+              </a>
+            </li>
+            <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
+              <a className="w-full" href="/conversations">
+                Messages
+              </a>
+            </li>
+            <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
+              <a className="w-full" href="/workspace">
+                Workspace
+              </a>
+            </li>
+            <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
+              <a className="w-full" href="/notifications">
+                Notifications
+              </a>
+            </li>
+            <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
+              <a className="w-full" href="/settings">
+                Settings
+              </a>
+            </li>
+            <li className="block px-5 py-2 text-left hover:bg-red-600 hover:text-white hover:cursor-pointer bg-transparent transition-all duration-200 ease-in-out">
+              <p className="w-full" onClick={handleLogout}>
+                Logout
+              </p>
+            </li>
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </motion.button>
   );
 }

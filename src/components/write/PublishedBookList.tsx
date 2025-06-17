@@ -1,11 +1,11 @@
 import { BookStatus } from "@/types/Enums.ts";
-import PublishedBookItem from "@/components/write/PublishedBookItem.tsx";
 import useGetUserBooks from "@/api/books/useGetUserBooks";
 import { useAuth } from "@/contexts/AuthContext";
 import { Book } from "@/types/Book";
 import { PaginateParams } from "@/types/Pagination";
 import { useState, useEffect } from "react";
 import LoadingCircle from "../LoadingCirlce";
+import PersonalBook from "../book/PersonalBook";
 
 export default function PublishedBookList() {
   const [{ pageNo, pageSize, query }] = useState<PaginateParams>({
@@ -30,20 +30,18 @@ export default function PublishedBookList() {
   }, [data]);
 
   return (
-    <section className={"w-full h-full space-y-2"}>
+    <section className={"w-full h-full p-10 space-y-4"}>
       {loading && !data?.content ? (
-        <div className={"w-full flex items-center justify-center h-full"}>
-          <LoadingCircle />
+        <div className={"w-full flex h-full justify-center items-center"}>
+          <LoadingCircle size={"lg"} />
         </div>
-      ) : publishedBooks.length > 0 ? (
-        publishedBooks.map((book) => (
-          <PublishedBookItem book={book} key={book.id} />
-        ))
+      ) : !loading && publishedBooks.length !== 0 ? (
+        publishedBooks.map((book) => <PersonalBook book={book} />)
       ) : (
         <div className={"w-full h-full flex items-center justify-center"}>
-          <h1 className={"text-xl font-sans text-gray-800 font-bold"}>
-            Empty published books
-          </h1>
+          <p className={"text-2xl font-serif font-semibold text-gray-800"}>
+            No Available Books
+          </p>
         </div>
       )}
     </section>

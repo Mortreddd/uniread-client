@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import AuthorProfileContainer from "@/components/author/AuthorProfileContainer";
 import AuthorProfileDescription from "@/components/author/AuthorProfileDescription";
 import useGetUserById from "@/api/user/useGetUserById.ts";
-import Navbar from "@/components/common/navbar/Navbar.tsx";
+import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
 
 export default function AuthorProfilePage() {
   const { userId } = useParams<"userId">();
@@ -11,8 +11,8 @@ export default function AuthorProfilePage() {
   const { data: user } = useGetUserById(userId);
   return (
     <>
-      <header className={'w-full'}>
-        <Navbar />
+      <header className={"w-full relative mb-20"}>
+        <AuthenticatedNavbar />
       </header>
       <div className="w-full h-full min-h-52">
         <div className="h-fit w-full">

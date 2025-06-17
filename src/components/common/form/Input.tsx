@@ -19,7 +19,7 @@ const inputVariant = cva(
         primary:
           "text-primary border border-primary focus:ring-1 focus:ring-primary",
         default:
-          "text-gray-800 ring-gray-500 ring-gray-500 ring-0 border-2 border-gray-500 focus:ring-2 focus:border-0 focus:ring-gray-500",
+          "text-gray-800 border border-gray-800 focus:ring-1 focus:ring-gray-800",
         none: "",
       },
       inputSize: {

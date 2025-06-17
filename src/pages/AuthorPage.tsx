@@ -2,13 +2,13 @@ import useGetUsers from "@/api/user/useGetUsers";
 import AuthorDetail from "@/components/author/AuthorDetail";
 import LoginModal from "@/components/common/modal/auth/LoginModal";
 import { ModalRef } from "@/components/common/modal/Modal";
-import Navbar from "@/components/common/navbar/Navbar";
 import LoadingCircle from "@/components/LoadingCirlce";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaginateParams } from "@/types/Pagination";
 import { User } from "@/types/User";
 import { useMemo, useRef, useState } from "react";
 import useFollow from "@/hooks/useFollow.ts";
+import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
 
 /**
  * Page for displaying authors
@@ -59,8 +59,8 @@ export default function AuthorPage() {
 
   return (
     <>
-      <header className={"w-full relative"}>
-        <Navbar />
+      <header className={"w-full relative mb-20"}>
+        <AuthenticatedNavbar />
       </header>
       <div className="px-20 py-6 w-full h-full">
         <LoginModal ref={loginModalRef} />

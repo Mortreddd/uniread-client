@@ -7,23 +7,20 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { MessageProvider } from "./contexts/MessageContext.tsx";
 import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
-import LoadingProvider from "./contexts/LoadingScreenContext.tsx";
 import { ToastProvider } from "@/contexts/ToastContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <LoadingProvider>
-      <GoogleAuthProvider>
+    <GoogleAuthProvider>
+      <ToastProvider>
         <AuthProvider>
-          <ToastProvider>
-            <NotificationProvider>
-              <MessageProvider>
-                <RouterProvider router={router}></RouterProvider>
-              </MessageProvider>
-            </NotificationProvider>
-          </ToastProvider>
+          <NotificationProvider>
+            <MessageProvider>
+              <RouterProvider router={router}></RouterProvider>
+            </MessageProvider>
+          </NotificationProvider>
         </AuthProvider>
-      </GoogleAuthProvider>
-    </LoadingProvider>
+      </ToastProvider>
+    </GoogleAuthProvider>
   </React.StrictMode>
 );

@@ -11,18 +11,18 @@ import {
   useState,
 } from "react";
 import { ErrorResponse } from "@/types/Error.ts";
-import Layout from "@/components/Layout.tsx";
 
 interface AuthProviderProps extends PropsWithChildren {}
 
 interface AuthContextProps {
+  accessToken: string | null;
+  refreshToken: string | null;
   login: (response: LoginResponse) => void;
   logout: () => void;
   isLoggedIn: () => boolean;
   isUser: boolean;
   isSuperAdmin: boolean;
   isAdmin: boolean;
-  accessToken: string | null;
   user?: User | null;
 }
 
@@ -37,18 +37,39 @@ function useAuth() {
 }
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [accessToken, setAccessToken] = useState<string | null>(
-    localStorage.getItem("accessToken") || null
-  );
-  const [refreshToken, setRefreshToken] = useState<string | null>(
-    localStorage.getItem("refreshToken") || null
-  );
+  // const [accessToken, setAccessToken] = useState<string | null>(
+  //   localStorage.getItem("accessToken") || null
+  // );
+
+  const accessToken = localStorage.getItem("accessToken");
+  const memoizedAccessToken = useMemo(() => {
+    if (accessToken) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      return accessToken;
+    } else {
+      delete api.defaults.headers.common["Authorization"];
+      return null;
+    }
+  }, [accessToken]);
+
+  // const [refreshToken, setRefreshToken] = useState<string | null>(
+  //   localStorage.getItem("refreshToken") || null
+  // );
+
+  const refreshToken = localStorage.getItem("refreshToken");
+  const memoizedRefreshToken = useMemo(() => {
+    return refreshToken;
+  }, [refreshToken]);
+
   const [user, setUser] = useState<User | null>(null);
 
   const isAdmin = user !== null && user.isAdmin;
   const isSuperAdmin = user !== null && user.isSuperAdmin;
   const isUser = user !== null && user.isUser;
 
+  /**
+   * Get the information of current authenticated user using accessToken
+   */
   async function getUser(): Promise<void> {
     await api
       .get("/users/current")
@@ -82,10 +103,14 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [user]);
 
+  /**
+   * Refresh token will be used when the accessToken is expired
+   * RefreshToken will be used instead of accessToken to get a new accessToken
+   */
   async function tryRefreshToken() {
     await api
       .post("/auth/refresh-token", {
-        refreshToken,
+        memoizedRefreshToken,
       })
       .then((response: AxiosResponse<LoginResponse>) => {
         login(response.data);
@@ -97,26 +122,35 @@ function AuthProvider({ children }: AuthProviderProps) {
       });
   }
 
+  /**
+   * Logout function that clears the local storage,
+   * resets the user state, and removes the Authorization header from the API.
+   * This function is used to log out the user from the application.
+   * It removes the access token, refresh token, and issued at time from local storage,
+   */
   function logout() {
     localStorage.removeItem("iat");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
-    setRefreshToken(null);
-    setAccessToken(null);
-    delete api.defaults.headers.common["Authorization"];
+    window.location.href = "/";
   }
 
+  /**
+   * Login function handling the response from the server.
+   * This function sets the access token and refresh token in local storage,
+   * updates the state, and redirects the user to the home page.
+   * @param response
+   */
   function login(response: LoginResponse) {
     console.log(response);
     const { refreshToken, iat, accessToken } = response;
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("iat", iat.toString());
     localStorage.setItem("accessToken", accessToken);
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
-    getUser();
-    window.location.href = "/";
+    // setRefreshToken(refreshToken);
+    // getUser();
+    window.location.reload();
   }
 
   function isLoggedIn(): boolean {
@@ -125,7 +159,8 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const memoizedContext = useMemo(() => {
     return {
-      accessToken,
+      accessToken: memoizedAccessToken,
+      refreshToken: memoizedRefreshToken,
       isAdmin,
       isSuperAdmin,
       isUser,
@@ -134,11 +169,20 @@ function AuthProvider({ children }: AuthProviderProps) {
       login,
       isLoggedIn,
     };
-  }, [accessToken, isAdmin, isSuperAdmin, isUser, user, login, isLoggedIn]);
+  }, [
+    isAdmin,
+    isSuperAdmin,
+    isUser,
+    user,
+    login,
+    isLoggedIn,
+    memoizedRefreshToken,
+    memoizedAccessToken,
+  ]);
 
   return (
     <AuthContext.Provider value={memoizedContext}>
-      <Layout>{children}</Layout>
+      {children}
     </AuthContext.Provider>
   );
 }

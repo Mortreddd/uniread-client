@@ -9,6 +9,7 @@ export enum BookStatus {
 }
 
 export enum Reaction {
+  LIKE = "LIKE",
   LOVE = "LOVE",
   HAHA = "HAHA",
   WOW = "WOW",

@@ -2,7 +2,6 @@ import { Conversation } from "@/types/Message";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import Chat from "./Chat";
-import { useMessage } from "@/contexts/MessageContext";
 
 interface ChatsProps {
   chats: Conversation[];

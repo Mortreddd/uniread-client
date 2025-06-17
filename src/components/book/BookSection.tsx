@@ -18,7 +18,7 @@ export default function BookSection() {
   const BookInfoWithHover = withHover(BookInfo);
   const [{ pageNo, pageSize, query, status }, setState] = useState<BookParams>({
     pageNo: 0,
-    pageSize: 5,
+    pageSize: 10,
     query: "",
     status: BookStatus.PUBLISHED,
   });
@@ -33,6 +33,10 @@ export default function BookSection() {
 
   console.log(data);
 
+  /**
+   * This function is called when the bottom of the book section is reached.
+   * It increments the page number to load more books if there are more books to load.
+   */
   const onBottomReach = () => {
     if (!data || data.last) return;
     setState((prev) => ({ ...prev, pageNo: (prev.pageNo ?? 0) + 1 }));
@@ -44,7 +48,7 @@ export default function BookSection() {
   useEffect(() => {
     setState({
       pageNo: 0,
-      pageSize: 5,
+      pageSize: 10,
       query: "",
       genres: memoizedIds,
       status: BookStatus.PUBLISHED,
@@ -95,7 +99,7 @@ export default function BookSection() {
           <h2 className="text-2xl font-serif font-medium">No books found</h2>
         </div>
       )}
-      <div ref={observerRef}></div>
+      {!data?.last && <div ref={observerRef}></div>}
     </section>
   );
 }

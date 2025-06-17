@@ -129,26 +129,26 @@ export const router = createBrowserRouter([
 
   // My Stories Page
   {
-    path: "/stories",
+    path: "/workspace",
     element: <MyStoriesPage />,
     children: [
       {
         index: true,
-        path: "/stories/published",
+        path: "/workspace/published",
         element: <PublishedBookList />,
       },
       {
-        path: "/stories/drafts",
+        path: "/workspace/drafts",
         element: <DraftsBookList />,
       },
     ],
   },
   {
-    path: "/stories/edit/:bookId",
+    path: "/workspace/edit/:bookId",
     element: <WriteChapterPage />,
     children: [
       {
-        path: "/stories/edit/:bookId/chapters/:chapterId",
+        path: "/workspace/edit/:bookId/chapters/:chapterId",
         element: <EditChapter />,
       },
     ],

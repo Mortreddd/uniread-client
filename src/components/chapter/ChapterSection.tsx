@@ -27,7 +27,7 @@ export default function ChapterSection({ bookId }: ChapterSectionProps) {
   console.log(data);
 
   return (
-    <div className="flex flex-col h-full w-full rounded-lg border">
+    <div className="flex flex-col h-fit min-h-72 w-full rounded-lg border">
       <h1 className="text-2xl font-bold text-gray-800 my-4 ml-4">
         Table of Contents
       </h1>

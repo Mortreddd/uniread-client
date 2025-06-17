@@ -1,15 +1,16 @@
-import useGetGenres from "@/api/genres/useGetGenres";
+import { Genre } from "@/types/Book";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { memo, useState } from "react";
 
-export default function ExploreDropdown() {
+interface ExploreDropdownProps {
+  genres: Genre[] | null;
+}
+
+function ExploreDropdown({ genres }: ExploreDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data } = useGetGenres();
-
-  if (!data) return null;
-  console.log(data);
+  if (!genres) return null;
 
   return (
     <motion.button
@@ -84,7 +85,7 @@ export default function ExploreDropdown() {
                   Genres
                 </h2>
                 <div className="mt-2 space-x-2 flex flex-wrap">
-                  {data.map(({ id, name }) => (
+                  {genres.map(({ id, name }) => (
                     <a
                       key={id}
                       href={`/genres/${id}`}
@@ -103,3 +104,5 @@ export default function ExploreDropdown() {
     </motion.button>
   );
 }
+
+export default memo(ExploreDropdown);

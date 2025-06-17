@@ -55,13 +55,13 @@ export default function DraftBookItem({ book, onDelete, ...rest } : DraftBookIte
             </div>
             <div className={"w-fit h-full flex items-center gap-2"}>
                 <Button variant={'transparent'} size={'custom'} className={'rounded-full flex items-center justify-center p-4'}>
-                    <Link to={`/stories/edit/${book.id}`}>
+                    <Link to={`/workspace/edit/${book.id}`}>
                         <PencilSquareIcon className={'size-7'} />
                     </Link>
                 </Button>
                 <div className={"relative"}>
                     <Button onClick={onClick} variant={'transparent'} size={'custom'} className={'rounded-full flex items-center justify-center px-3 py-2'}>
-                        <Link to={`/stories/edit/${book.id}`}>
+                        <Link to={`/workspace/edit/${book.id}`}>
                             <EllipsisHorizontalIcon className={'size-8'}/>
                         </Link>
                     </Button>

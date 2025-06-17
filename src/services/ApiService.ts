@@ -4,7 +4,6 @@ const API_URL: string = `${import.meta.env.VITE_API_URL as string}/api/v1`;
 
 const unauthorizedUrl: string[] = [
   "/books",
-  "/books/:bookId",
   "/auth/login",
   "/auth/register",
   "/users",
@@ -17,11 +16,10 @@ const authInterceptor = (config: InternalAxiosRequestConfig) => {
   }
 
   const accessToken: string | null = localStorage.getItem("accessToken");
-  console.log("Access Token: ", accessToken);
   if (accessToken) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
-
+  console.log(accessToken);
   return config;
 };
 

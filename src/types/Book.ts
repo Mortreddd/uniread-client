@@ -52,7 +52,16 @@ export interface BookComment {
   parentBookComment: BookComment;
   rating: number;
   content: string;
-  bookCommentLikes: BookCommentLike;
+  reactions: BookCommentReactor[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BookCommentReactor {
+  id: string;
+  bookCommentId: string;
+  userId: string;
+  reaction: Reaction;
   createdAt: string;
   updatedAt: string;
 }
@@ -68,8 +77,9 @@ export interface BookLike {
 
 export interface BookCommentLike {
   id: string;
-  bookComment: BookComment;
-  user: User;
+  bookCommentId: string;
+  userId: string;
+  reaction: Reaction;
   createdAt: string;
   updatedAt: string;
 }
@@ -82,7 +92,11 @@ export interface BookParams extends PaginateParams {
 
 type MutableFieldType = "title" | "description" | "matured";
 export interface CreateBookFormProps extends Pick<Book, MutableFieldType> {
-  authorId: string | null;
   photo: File | null;
   genreIds: number[];
+}
+
+export interface CreateReviewFormProps {
+  rating: number;
+  content: string;
 }

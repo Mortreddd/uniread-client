@@ -15,7 +15,7 @@ import { SuccessResponse } from "@/types/Success.ts";
 import { ErrorResponse } from "@/types/Error.ts";
 import WarningPublishedChapterModal from "@/components/common/modal/chapter/WarningPublishedChapterModal.tsx";
 import { useToast } from "@/contexts/ToastContext.tsx";
-import Navbar from "@/components/common/navbar/Navbar.tsx";
+import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
 
 export default function WriteChapterPage() {
   const { bookId, chapterId } = useParams<{
@@ -93,10 +93,10 @@ export default function WriteChapterPage() {
   }, [selectedChapter]);
 
   return (
-      <>
-        <header className={'w-full relative'}>
-          <Navbar />
-        </header>
+    <>
+      <header className={"w-full relative mb-20"}>
+        <AuthenticatedNavbar />
+      </header>
       <section className="w-full h-fit min-h-screen flex flex-col bg-gray-50">
         <div className="w-full flex flex-1 overflow-hidden ">
           <aside className="w-96 px-5 border border-solid rounded-sm relative">
