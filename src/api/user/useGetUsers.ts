@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { User } from "@/types/User";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
 
-export default function useGetUsers({
+export default function useGetUsers<T>({
   pageNo,
   pageSize,
   query,
 }: PaginateParams) {
-  const [state, setState] = useState<RequestState<Paginate<User[]>>>({
+  const [state, setState] = useState<RequestState<Paginate<T[]>>>({
     loading: false,
     error: null,
     data: null,
@@ -25,7 +24,7 @@ export default function useGetUsers({
           query,
         },
       })
-      .then((response: AxiosResponse<Paginate<User[]>>) => {
+      .then((response: AxiosResponse<Paginate<T[]>>) => {
         setState({ loading: false, error: null, data: response.data });
       })
       .catch((error: AxiosError) => {

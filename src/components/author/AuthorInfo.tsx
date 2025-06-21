@@ -1,6 +1,6 @@
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
 import Icon from "../Icon";
-import { User } from "@/types/User";
+import {AuthorDetail} from "@/types/User";
 import { Button } from "../common/form/Button";
 import { UserMinusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { HTMLAttributes, memo } from "react";
@@ -8,7 +8,7 @@ import { cn } from "@/utils/ClassNames";
 import { Link } from "react-router-dom";
 
 interface AuthorInfoProps extends HTMLAttributes<HTMLDivElement> {
-  author: User;
+  author: AuthorDetail;
   onFollow: (authorId: string) => Promise<void>;
   onUnfollow: (authorId: string) => Promise<void>;
   isFollowing: boolean;

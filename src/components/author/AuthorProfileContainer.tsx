@@ -10,10 +10,10 @@ import FollowerModal from "@/components/common/modal/follow/FollowerModal.tsx";
 import { useRef } from "react";
 import FollowingModal from "@/components/common/modal/follow/FollowingModal.tsx";
 import { ModalRef } from "@/components/common/modal/Modal.tsx";
-import { User } from "@/types/User.ts";
+import {AuthorDetail} from "@/types/User.ts";
 
 interface AuthorContainerProps {
-  user?: User | null;
+  user?: AuthorDetail | null;
 }
 export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
   const followerModalRef = useRef<ModalRef>(null);

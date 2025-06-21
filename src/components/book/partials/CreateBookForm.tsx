@@ -73,7 +73,7 @@ export default function CreateBookForm() {
     setRequestState((prev) => ({ ...prev, loading: true }));
     const formData = new FormData();
     formData.append("title", formValues.title);
-    formData.append("description", formValues.description);
+    formData.append("description", formValues.description ?? "");
     formData.append("matured", String(formValues.matured));
     formValues.genreIds.forEach((genreId) => {
       formData.append("genreIds", genreId.toString());

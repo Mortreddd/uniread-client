@@ -5,14 +5,15 @@ import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Notification } from "@/types/Notification";
 
-interface GetUserNotificationsProps extends PaginateParams {
-  userId: string | undefined;
-}
+interface GetUserNotificationsProps extends PaginateParams {}
 export default function useGetUserNotifications({
-  userId,
   pageNo,
   pageSize,
   query,
+  sortBy,
+  orderBy,
+  startDate,
+  endDate,
 }: GetUserNotificationsProps) {
   const [state, setState] = useState<RequestState<Paginate<Notification[]>>>({
     data: null,
@@ -25,11 +26,15 @@ export default function useGetUserNotifications({
     async function getUserNotifications() {
       setState({ ...state, loading: true });
       await api
-        .get(`/users/${userId}/notifications`, {
+        .get(`/notifications`, {
           params: {
             pageNo,
             pageSize,
             query,
+            sortBy,
+            orderBy,
+            startDate,
+            endDate,
           },
           signal: controller.signal,
         })
@@ -51,7 +56,7 @@ export default function useGetUserNotifications({
     }
 
     getUserNotifications();
-  }, [userId, pageNo, pageSize, query]);
+  }, [pageNo, pageSize, query, sortBy, orderBy, startDate, endDate]);
 
   return state;
 }

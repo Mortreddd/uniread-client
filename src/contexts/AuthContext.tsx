@@ -43,13 +43,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   const accessToken = localStorage.getItem("accessToken");
   const memoizedAccessToken = useMemo(() => {
-    if (accessToken) {
-      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      return accessToken;
-    } else {
-      delete api.defaults.headers.common["Authorization"];
-      return null;
-    }
+    return accessToken;
   }, [accessToken]);
 
   // const [refreshToken, setRefreshToken] = useState<string | null>(

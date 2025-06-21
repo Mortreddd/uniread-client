@@ -2,19 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 
 const API_URL: string = `${import.meta.env.VITE_API_URL as string}/api/v1`;
 
-const unauthorizedUrl: string[] = [
-  "/books",
-  "/auth/login",
-  "/auth/register",
-  "/users",
-  "/auth/forgot-password",
-];
-
 const authInterceptor = (config: InternalAxiosRequestConfig) => {
-  if (unauthorizedUrl.includes(config.url as string)) {
-    return config;
-  }
-
   const accessToken: string | null = localStorage.getItem("accessToken");
   if (accessToken) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
@@ -29,6 +17,7 @@ const errorInterceptor = async (error: any) => {
 
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(authInterceptor, errorInterceptor);

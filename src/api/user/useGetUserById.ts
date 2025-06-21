@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import {User} from "@/types/User.ts";
+import {AuthorDetail} from "@/types/User.ts";
 import {RequestState} from "@/types/Pagination.ts";
 import api from "@/services/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {ErrorResponse} from "@/types/Error.ts";
 
 export default function useGetUserById(userId?: string) {
-  const [state, setState] = useState<RequestState<User>>({
+  const [state, setState] = useState<RequestState<AuthorDetail>>({
     data: null,
     error: null,
     loading: false,
@@ -17,7 +17,7 @@ export default function useGetUserById(userId?: string) {
     async function getUserById() {
       setState({...state, loading : true})
       api.get(`/users/${userId}`)
-          .then((response: AxiosResponse<User>) => {
+          .then((response: AxiosResponse<AuthorDetail>) => {
             console.log(response.data)
             setState({loading: false, data: response.data, error : null})
           }).catch((error: AxiosError<ErrorResponse>) => {

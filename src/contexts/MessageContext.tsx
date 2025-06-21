@@ -4,6 +4,7 @@ import {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -49,56 +50,63 @@ interface MessageProviderProps extends PropsWithChildren {}
  */
 function MessageProvider({ children }: MessageProviderProps) {
   const baseUrl = import.meta.env.VITE_API_URL as string;
+  const messageUrl = `${baseUrl}/ws`;
   const stompClientRef = useRef<Client | null>(null);
   const { isLoggedIn, accessToken } = useAuth();
   const [messages, setMessages] = useState<MessageType[]>([]);
 
-  /**
-   * Sends a message to a server
-   * @param message
-   */
-  function sendMessage(message: SendMessageProps) {
-    const stompClient = stompClientRef.current;
-    if (stompClient?.connected) {
-      stompClient.send("/app/messages/send", {}, JSON.stringify(message));
-    }
-  }
+  const connect = useCallback(() => {
+    if (!isLoggedIn() || !accessToken) return;
+
+    const socket = new SockJS(
+      `${baseUrl}/ws/messages?access_token=${accessToken}`
+    );
+    const client = over(socket);
+    console.log("Access Token:", accessToken);
+    client.connect(
+      {},
+      () => {
+        console.log("STOMP connected");
+
+        // Subscribe to private queue
+        client.subscribe("/user/queue/messages", (message: Message) => {
+          const newMessage = JSON.parse(message.body) as MessageType;
+          setMessages((prev) =>
+            prev.some((msg) => msg.id === newMessage.id)
+              ? prev
+              : [newMessage, ...prev]
+          );
+        });
+      },
+      (error) => {
+        console.error("Connection error:", error);
+        // setTimeout(connect, 5000); // Reconnect after 5 seconds
+      }
+    );
+  }, [isLoggedIn, accessToken, messageUrl]);
 
   /**
    * Listening to incoming messages using subscribe function of stomp
    */
   useEffect(() => {
-    if (!isLoggedIn() || !accessToken) return;
-
-    const socket = new SockJS(
-      `${baseUrl}/messages?access_token=${accessToken}`
-    );
-    const client = over(socket);
-    stompClientRef.current = client;
-
-    client.connect({}, () => {
-      console.log("STOMP connected");
-      // Subscribe to user's private queue for all messages
-      client.subscribe("/user/queue/messages", (message: Message) => {
-        const newMessage = JSON.parse(message.body) as MessageType;
-        setMessages((prevMessages) => {
-          // Only add the message if it's not already in the list
-          if (!prevMessages.some((msg) => msg.id === newMessage.id)) {
-            return [newMessage, ...prevMessages];
-          }
-          return prevMessages;
-        });
-      });
-    });
-
+    connect();
     return () => {
       if (stompClientRef.current?.connected) {
-        stompClientRef.current.disconnect(() => {
-          console.log("Disconnected from Websocket");
-        });
+        stompClientRef.current.disconnect(() => {});
       }
     };
-  }, [isLoggedIn, baseUrl, accessToken]);
+  }, [connect]);
+
+  /**
+   * Sends a message to a server
+   * @param message
+   */
+  const sendMessage = useCallback((message: SendMessageProps) => {
+    const stompClient = stompClientRef.current;
+    if (stompClient?.connected) {
+      stompClient.send("/app/messages/send", {}, JSON.stringify(message));
+    }
+  }, []);
 
   return (
     <MessageContext.Provider value={{ messages, setMessages, sendMessage }}>

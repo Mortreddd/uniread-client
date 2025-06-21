@@ -1,29 +1,35 @@
-import { Book } from "./Book";
-import { Follow } from "./Follow";
+export enum Role {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
 
 export interface User {
   id: string;
-  googleUuid?: string;
   firstName: string;
   lastName: string;
+  fullName: string;
   username: string;
-  gender: string;
-  image?: string;
-  bio?: string;
-  roleId?: number;
   email: string;
+  gender: string;
+  photoUrl: string | null;
+  role: Role;
   emailVerifiedAt?: string | null;
   createdAt: string;
   updatedAt: string;
-  books?: Book[];
   admin: boolean;
   superAdmin: boolean;
   isAdmin: boolean;
   isSuperAdmin: boolean;
   isUser: boolean;
-  fullName: string;
-  followings: Follow[];
-  followers: Follow[];
+}
+
+type ImmutableAttribute = Omit<
+  User,
+  "isUser" | "isSuperAdmin" | "isAdmin" | "admin" | "superAdmin" | "user"
+>;
+
+export interface AuthorDetail extends ImmutableAttribute {
   followersCount: number;
   followingsCount: number;
   storiesCount: number;

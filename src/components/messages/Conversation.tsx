@@ -30,14 +30,15 @@ export default function Conversation() {
     (participant) => participant.id !== currentUser?.id
   );
   const fullName = participant?.user.fullName;
-  const conversationName =
-    conversation && conversation?.name !== null
+  const conversationName = useMemo(() => {
+    return conversation && conversation?.name !== null
       ? conversation.name
       : conversation && conversation.isGroup
       ? conversation.participants
           ?.map((participant) => participant.user.username)
           .join(", ")
       : fullName;
+  }, [fullName, conversation])
 
   function handleSendMessage() {
     if (content.trim() === "") {
@@ -48,7 +49,6 @@ export default function Conversation() {
 
     sendMessage({
       conversationId,
-      senderId: currentUser?.id,
       message: content,
     });
 

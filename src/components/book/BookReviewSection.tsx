@@ -51,6 +51,7 @@ export default function BookReviewSection({ bookId }: BookReviewSectionProps) {
   const {
     register,
     setValue,
+    reset,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
@@ -79,6 +80,7 @@ export default function BookReviewSection({ bookId }: BookReviewSectionProps) {
 
           return [...prev, response.data];
         });
+        reset({ rating: 0, content: "" });
         showToast("Review submitted successfully!", "success");
       })
       .catch((error: AxiosError<ErrorResponse>) => {

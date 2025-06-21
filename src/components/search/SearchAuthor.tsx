@@ -8,6 +8,7 @@ import LoadingCircle from "../LoadingCirlce";
 import { ModalRef } from "../common/modal/Modal";
 import LoginModal from "../common/modal/auth/LoginModal";
 import useFollow from "@/hooks/useFollow.ts";
+import {AuthorDetail} from "@/types/User.ts";
 
 /**
  * The component of Authors in /search/authors
@@ -28,7 +29,7 @@ export default function SearchAuthor() {
   const loginModalRef = useRef<ModalRef>(null);
 
   // Call the get users api call and get pagination of users
-  const { data, loading } = useGetUsers({ pageNo, pageSize, query: search });
+  const { data, loading } = useGetUsers<AuthorDetail>({ pageNo, pageSize, query: search });
 
   // Memoized the authors for filtering currentUser
   const memoizedAuthors = useMemo(() => {

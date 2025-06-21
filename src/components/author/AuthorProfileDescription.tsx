@@ -4,16 +4,18 @@ import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
-import { User } from "@/types/User.ts";
+import {AuthorDetail} from "@/types/User.ts";
 import {useRef} from "react";
 import { ModalRef } from "../common/modal/Modal";
 import LoginModal from "../common/modal/auth/LoginModal";
 import useFollow from "@/hooks/useFollow.ts";
+
+
 interface AuthorInfo {
-  author?: User | null
+  author?: AuthorDetail | null
 }
 interface AuthorProfileDescriptionProps {
-  user?: User | null;
+  user?: AuthorDetail | null;
 }
 
 export default function AuthorProfileDescription({

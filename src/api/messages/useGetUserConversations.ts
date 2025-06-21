@@ -12,7 +12,6 @@ export interface GetUserConversationsProps {
   name?: string;
 }
 export default function useGetUserConversations({
-  userId,
   pageNo = 0,
   pageSize = 10,
   name,
@@ -26,7 +25,7 @@ export default function useGetUserConversations({
   useEffect(() => {
     setState({ ...state, loading: true });
     api
-      .get(`/users/${userId}/conversations`, {
+      .get(`/conversations`, {
         params: { pageNo, pageSize, name },
       })
       .then((response: AxiosResponse<Paginate<Conversation[]>>) => {
@@ -39,7 +38,7 @@ export default function useGetUserConversations({
           loading: false,
         });
       });
-  }, [pageNo, pageSize, userId]);
+  }, [pageNo, pageSize]);
 
   return state;
 }

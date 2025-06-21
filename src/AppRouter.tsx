@@ -22,12 +22,12 @@ import { BooksPage } from "@/pages/books/BooksPage.tsx";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
-import MyStoriesPage from "./pages/MyStoriesPage";
 import PublishedBookList from "@/components/write/PublishedBookList.tsx";
 import DraftsBookList from "@/components/write/DraftsBookList.tsx";
 import LoadingScreen from "@/components/LoadingScreen..tsx";
 import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
 import EditChapter from "./components/chapter/partial/EditChapter.tsx";
+import WorkspacePage from "./pages/WorkspacePage.tsx";
 
 /**
  *
@@ -130,7 +130,7 @@ export const router = createBrowserRouter([
   // My Stories Page
   {
     path: "/workspace",
-    element: <MyStoriesPage />,
+    element: <WorkspacePage />,
     children: [
       {
         index: true,

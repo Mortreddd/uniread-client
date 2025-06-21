@@ -1,7 +1,8 @@
 import { Chapter } from "@/types/Chapter";
+import {formatWeekdayWithDate} from "@/utils/Dates.ts";
 
 interface ChapterDetailProps {
-  chapter?: Chapter;
+  chapter: Chapter;
 }
 export default function ChapterDetail({ chapter }: ChapterDetailProps) {
   // const publishedDate = new Date(chapter.createdAt).toLocaleDateString("Asia/Manila", {
@@ -20,10 +21,10 @@ export default function ChapterDetail({ chapter }: ChapterDetailProps) {
     <article className="flex justify-between w-full px-4 py-2">
       <div className="flex text-lg text-gray-700 items-center flex-1 truncate">
         <h2 className="font-sans font-semibold ml-4">
-          Chapter 1: Hell University
+            {chapter.title}
         </h2>
       </div>
-      <h3 className="text-gray-600 font-semibold text-md">Wed, Nov 2, 2022</h3>
+      <h3 className="text-gray-600 font-semibold text-md">{formatWeekdayWithDate(new Date(chapter.createdAt))}</h3>
     </article>
   );
 }

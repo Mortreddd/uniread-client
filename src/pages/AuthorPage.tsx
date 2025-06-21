@@ -5,10 +5,10 @@ import { ModalRef } from "@/components/common/modal/Modal";
 import LoadingCircle from "@/components/LoadingCirlce";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaginateParams } from "@/types/Pagination";
-import { User } from "@/types/User";
 import { useMemo, useRef, useState } from "react";
 import useFollow from "@/hooks/useFollow.ts";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
+import {AuthorDetail as AuthorDetailType} from "@/types/User";
 
 /**
  * Page for displaying authors
@@ -26,14 +26,14 @@ export default function AuthorPage() {
   const loginModalRef = useRef<ModalRef>(null);
 
   // Get the authors
-  const { data, loading } = useGetUsers({ pageNo, pageSize, query });
+  const { data, loading } = useGetUsers<AuthorDetailType>({ pageNo, pageSize, query });
   const { isMutualFollowing, followUser, unfollowUser } = useFollow();
 
   /**
    * Memoized authors to avoid unnecessary re-renders
    * @returns {User[]} Array of authors excluding the current user
    */
-  const memoizedAuthors: User[] = useMemo(() => {
+  const memoizedAuthors: AuthorDetailType[] = useMemo(() => {
     if (!data?.content) return [];
 
     return data.content.filter((author) => author.id !== currentUser?.id);

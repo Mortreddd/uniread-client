@@ -2,7 +2,7 @@ import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar"
 import { motion } from "motion/react";
 import { NavLink, Outlet } from "react-router-dom";
 
-export default function MyStoriesPage() {
+export default function WorkspacePage() {
   return (
     <>
       <header className="w-full relative">

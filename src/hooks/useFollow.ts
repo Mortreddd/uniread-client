@@ -6,10 +6,12 @@ import {Follow} from "@/types/Follow.ts";
 import {SuccessResponse} from "@/types/Success.ts";
 import api from "@/services/ApiService.ts";
 import {useToast} from "@/contexts/ToastContext.tsx";
+import useGetUserFollowings from "@/api/follow/useGetUserFollowings.ts";
 
 export default function useFollow() {
     const { user: currentUser } = useAuth();
     const { showToast } = useToast();
+    const { data } = useGetUserFollowings({ userId: currentUser?.id });
     /**
      * Get the followers of the author
      */
@@ -84,8 +86,11 @@ export default function useFollow() {
      * @returns {Follow[]} Array of followings of the current authenticated user
      */
     useEffect(() => {
-        setCurrentUserFollowings(currentUser?.followings || []);
-    }, [currentUser?.followings]);
+        if(data?.content) {
+            setCurrentUserFollowings({ ...data.content ?? []})
+        }
+    }, [data])
+
 
     function isFollowingUser(userId: string | undefined) {
         return currentUserFollowings.some((f) => f.following.id === userId)

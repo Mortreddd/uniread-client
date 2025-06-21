@@ -10,20 +10,23 @@ import FollowerModal from "@/components/common/modal/follow/FollowerModal.tsx";
 import { useRef } from "react";
 import { ModalRef } from "@/components/common/modal/Modal";
 import FollowingModal from "@/components/common/modal/follow/FollowingModal.tsx";
-import {User} from "@/types/User.ts";
+import useGetUserById from "@/api/user/useGetUserById.ts";
 
 interface ProfileContainerProps {
-  currentUser?: User | null
+  currentUserId: string | undefined;
 }
 
-export default function ProfileContainer({ currentUser : user } : ProfileContainerProps) {
+export default function ProfileContainer({
+  currentUserId,
+}: ProfileContainerProps) {
   const followerRef = useRef<ModalRef>(null);
   const followingRef = useRef<ModalRef>(null);
+  const { data: user } = useGetUserById(currentUserId);
 
   return (
     <>
       {user && <FollowerModal authorId={user.id} ref={followerRef} />}
-      {user && <FollowingModal authorId={user.id} ref={followingRef} /> }
+      {user && <FollowingModal authorId={user.id} ref={followingRef} />}
       <section
         className="w-full h-[60vh] bg-center bg-cover"
         style={{
@@ -68,8 +71,8 @@ export default function ProfileContainer({ currentUser : user } : ProfileContain
             </div>
             <div className="w-fit h-fit flex flex-col items-center hover:cursor-pointer">
               <div
-                  onClick={() => followingRef.current?.open()}
-                  className="flex gap-2 items-center"
+                onClick={() => followingRef.current?.open()}
+                className="flex gap-2 items-center"
               >
                 <UserGroupIcon className={"size-8 text-gray-300"} />
                 <h6 className="text-xl font-bold text-gray-300 ">Followings</h6>

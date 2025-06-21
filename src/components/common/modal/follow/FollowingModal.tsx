@@ -5,7 +5,6 @@ import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import AuthorFollowInfo from "@/components/author/AuthorFollowerInfo.tsx";
 import useGetUserFollows from "@/api/follow/useGetUserFollows.ts";
 import useFollow from "@/hooks/useFollow.ts";
-import { useAuth } from "@/contexts/AuthContext.tsx";
 
 /**
  * Following modal component

@@ -25,3 +25,17 @@ export function formatDateWithTime(date: Date): string {
     minute: "2-digit",
   });
 }
+
+/**
+ * Wed, Nov 2, 2022
+ * @param date
+ */
+export function formatWeekdayWithDate(date: Date): string {
+  const language = getCurrentLanguage();
+  return date.toLocaleDateString(language, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    weekday: "short"
+  })
+}
