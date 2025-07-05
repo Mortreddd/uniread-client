@@ -4,13 +4,14 @@ import { useSearchParams } from "react-router-dom";
 import useGetGenres from "@/api/genres/useGetGenres";
 import { useCallback } from "react";
 import { Button } from "../common/form/Button";
+import { FunnelIcon } from "@heroicons/react/24/outline";
 
 /**
  * The component for genre options in home page
  * @constructor
  */
-function GenreOptions() {
-  const { data: genres, loading, error } = useGetGenres();
+function GenreFilter() {
+  const { data: genres, loading } = useGetGenres();
   const [params, setParams] = useSearchParams();
   const genreIds: number[] = params
     .getAll("genres")
@@ -41,13 +42,25 @@ function GenreOptions() {
       prev.delete("genres");
       return prev;
     });
-  }, []);
+  }, [setParams]);
+
+  if (loading || !genres) {
+    return (<div className="h-fit py-5 px-4 flex items-center justify-center">
+      <LoadingCircle />
+    </div>);
+  }
+
   return (
-    <section className={"w-full flex gap-4 py-5 px-10 flex-wrap items-center"}>
-      {loading && <LoadingCircle />}
-      {error !== null && <p>{error}</p>}
+    <section className={"w-full py-5 px-10"}>
+      <div className="mb-5 relative flex items-center">
+        <FunnelIcon
+          fill="currentColor"
+          className={"size-5 text-primary mr-2"}
+        />
+        <p className="text-xl text-zinc-800 font-semibold">Filters</p>
+      </div>
       {genres && (
-        <>
+        <div className="flex flex-wrap gap-4 items-center">
           <Button
             variant={"custom"}
             className={
@@ -67,10 +80,10 @@ function GenreOptions() {
               onClick={() => addGenre(genre.id)}
             />
           ))}
-        </>
+        </div>
       )}
     </section>
   );
 }
 
-export default GenreOptions;
+export default GenreFilter;

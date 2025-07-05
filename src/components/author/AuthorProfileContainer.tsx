@@ -36,7 +36,6 @@ export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
               className="border-2 border-solid border-primary"
               size={"profile"}
             />
-
             {/* Replace with the actual username */}
             <h1 className="text-2xl font-bold text-gray-200 font-sans">
               @{user?.username ?? "Unknown"}

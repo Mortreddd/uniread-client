@@ -25,6 +25,7 @@ export default function useFollow() {
      * @returns {boolean} - True if the selected user is also following the given followingUserId, false otherwise
      */
     const isMutualFollowing = (followingUserId: string | undefined): boolean => {
+        if(!data) return false;
         return currentUserFollowings.some(
             (f) => f.following.id === followingUserId
         );
@@ -87,9 +88,9 @@ export default function useFollow() {
      */
     useEffect(() => {
         if(data?.content) {
-            setCurrentUserFollowings({ ...data.content ?? []})
+            setCurrentUserFollowings(data.content ?? [])
         }
-    }, [data])
+    }, [data?.content])
 
 
     function isFollowingUser(userId: string | undefined) {

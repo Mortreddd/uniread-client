@@ -34,3 +34,13 @@ export interface AuthorDetail extends ImmutableAttribute {
   followingsCount: number;
   storiesCount: number;
 }
+
+export interface UserDashboard {
+  totalCreatedBooks: number;
+  totalPublishedBooks: number;
+  totalDraftBooks: number;
+  totalLikes: number;
+  totalReads: number;
+  totalFollowers: number;
+  totalFollowings: number;
+}

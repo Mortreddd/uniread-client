@@ -3,11 +3,22 @@ import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
 
-export default function useGetUsers<T>({
+interface GetUsersProps extends PaginateParams {
+  bannedAt?: string
+  deletedAt?: string
+}
+
+export default function useGetAuthors<T>({
   pageNo,
   pageSize,
   query,
-}: PaginateParams) {
+    sortBy,
+    orderBy,
+    startDate,
+    endDate,
+    bannedAt,
+    deletedAt
+}: GetUsersProps) {
   const [state, setState] = useState<RequestState<Paginate<T[]>>>({
     loading: false,
     error: null,
@@ -17,11 +28,17 @@ export default function useGetUsers<T>({
   useEffect(() => {
     setState({ loading: true, error: null, data: null });
     api
-      .get("/users", {
+      .get("/authors", {
         params: {
           pageNo,
           pageSize,
           query,
+          sortBy,
+          orderBy,
+          startDate,
+          endDate,
+          bannedAt,
+          deletedAt
         },
       })
       .then((response: AxiosResponse<Paginate<T[]>>) => {
@@ -34,7 +51,7 @@ export default function useGetUsers<T>({
           loading: false,
         });
       });
-  }, [pageNo, pageSize, query]);
+  }, [pageNo, pageSize, query, sortBy, orderBy, startDate, endDate, bannedAt, deletedAt]);
 
   return state;
 }

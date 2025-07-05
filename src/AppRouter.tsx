@@ -18,16 +18,16 @@ import SearchAuthor from "@/components/search/SearchAuthor";
 import AuthorProfilePage from "@/pages/AuthorProfilePage";
 import AuthorWorks from "@/components/author/AuthorWorks";
 import AuthorAbout from "@/components/author/AuthorAbout";
-import { BooksPage } from "@/pages/books/BooksPage.tsx";
+import BooksPage from "@/pages/books/BooksPage.tsx";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
-import PublishedBookList from "@/components/write/PublishedBookList.tsx";
 import DraftsBookList from "@/components/write/DraftsBookList.tsx";
-import LoadingScreen from "@/components/LoadingScreen..tsx";
 import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
 import EditChapter from "./components/chapter/partial/EditChapter.tsx";
-import WorkspacePage from "./pages/WorkspacePage.tsx";
+import WorkspacePage from "./pages/workspace/WorkspacePage.tsx";
+import UserDashboard from "./pages/workspace/UserDashboard.tsx";
+import Stories from "./pages/workspace/Stories.tsx";
 
 /**
  *
@@ -36,10 +36,6 @@ import WorkspacePage from "./pages/WorkspacePage.tsx";
  *
  */
 export const router = createBrowserRouter([
-  {
-    path: "/loading",
-    element: <LoadingScreen />,
-  },
   // Default Page or Landing Page
   {
     path: "/",
@@ -72,7 +68,6 @@ export const router = createBrowserRouter([
   // Create Book Page
   {
     path: "/books/new",
-    element: <CreateBookPage />,
   },
   // Author Page
   {
@@ -127,15 +122,23 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // My Stories Page
+  // Workspace Page
   {
     path: "/workspace",
     element: <WorkspacePage />,
     children: [
       {
-        index: true,
-        path: "/workspace/published",
-        element: <PublishedBookList />,
+        path: "/workspace",
+        element: <UserDashboard />,
+      },
+      {
+        path: "/workspace/my-stories",
+        element: <Stories />,
+      },
+
+      {
+        path: "/workspace/my-stories/new",
+        element: <CreateBookPage />,
       },
       {
         path: "/workspace/drafts",
@@ -144,16 +147,13 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/workspace/edit/:bookId",
+    path: "/edit/:bookId",
     element: <WriteChapterPage />,
-    children: [
-      {
-        path: "/workspace/edit/:bookId/chapters/:chapterId",
-        element: <EditChapter />,
-      },
-    ],
+    children: [{
+      path: "/edit/:bookId/chapters/:chapterId",
+      element: <EditChapter />
+    }]
   },
-
   // Profile Page
   {
     path: "/profile",
@@ -173,15 +173,15 @@ export const router = createBrowserRouter([
 
   // Author Profile Page
   {
-    path: "/authors/:userId/profile",
+    path: "/authors/:authorId/profile",
     element: <AuthorProfilePage />,
     children: [
       {
-        path: "/authors/:userId/profile/works",
+        path: "/authors/:authorId/profile/works",
         element: <AuthorWorks />,
       },
       {
-        path: "/authors/:userId/profile/about",
+        path: "/authors/:authorId/profile/about",
         element: <AuthorAbout />,
         index: true,
       },
