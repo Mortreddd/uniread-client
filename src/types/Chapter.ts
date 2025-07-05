@@ -1,11 +1,10 @@
-import { Book } from "@/types//Book.ts";
 import { User } from "@/types/User.ts";
 import { ChapterStatus, Reaction } from "./Enums";
 import { Paragraph } from "./Paragraph";
 
 export interface Chapter {
   id: string;
-  book: Book;
+  bookId: string;
   title: string;
   chapterNumber: number;
   status: ChapterStatus;

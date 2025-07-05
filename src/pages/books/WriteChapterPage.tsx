@@ -56,11 +56,11 @@ export default function WriteChapterPage() {
       return [...prev, chapter];
     });
     handleClose();
-    navigate(`/stories/edit/${chapter.book.id}/chapters/${chapter.id}`);
+    navigate(`/edit/${chapter.bookId}/chapters/${chapter.id}`);
   }
   async function handleDelete(chapter?: Chapter) {
     await api
-      .delete(`/books/${chapter?.book.id}/chapters/${chapter?.id}/delete`)
+      .delete(`/books/${chapter?.bookId}/chapters/${chapter?.id}/delete`)
       .then((response: AxiosResponse<SuccessResponse>) => {
         showToast(response.data.message ?? "Successfully deleted!", "success");
         setChapters((prev) => {
@@ -68,7 +68,7 @@ export default function WriteChapterPage() {
         });
         deleteChapterModalRef.current?.close();
         if (chapter?.id === chapterId) {
-          navigate(`/stories/edit/${chapter?.book.id}`, { replace: true });
+          navigate(`/edit/${chapter?.bookId}`, { replace: true });
         }
       })
       .catch((error: AxiosError<ErrorResponse>) => {
@@ -94,7 +94,7 @@ export default function WriteChapterPage() {
 
   return (
     <>
-      <header className={"w-full relative mb-20"}>
+      <header className={"w-full relative"}>
         <AuthenticatedNavbar />
       </header>
       <section className="w-full h-fit min-h-screen flex flex-col bg-gray-50">
@@ -117,7 +117,7 @@ export default function WriteChapterPage() {
                       </h3>
                       <div className="flex items-end justify-end w-full h-fit">
                         <NavLink
-                          to={`/stories/edit/${chapter.book.id}/chapters/${chapter.id}`}
+                          to={`/edit/${chapter.bookId}/chapters/${chapter.id}`}
                         >
                           <Button
                             variant={"custom"}
@@ -165,7 +165,7 @@ export default function WriteChapterPage() {
               <Button
                 variant={"primary"}
                 onClick={() => handleOpen()}
-                className="rounded-xs w-full flex items-center"
+                className="rounded-xs flex items-center justify-center w-full"
               >
                 Add Chapter
                 <PlusIcon className="size-6 ml-3" />

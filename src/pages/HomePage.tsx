@@ -18,12 +18,12 @@ export default function Home() {
       <section className="w-full mt-10 h-[calc(100vh-80px)] flex justify-center items-center relative">
         <div className="w-full px-32 pt-16 font-serif h-full flex justify-center ">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{
               opacity: 1,
               y: 0,
               transition: {
-                duration: 1.3,
+                duration: 0.8,
                 ease: "easeInOut",
               },
             }}

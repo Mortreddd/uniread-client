@@ -33,7 +33,6 @@ export interface PaginateParams {
   pageSize?: number;
   query?: string;
   sortBy?: string; // e.g., "asc" or "desc"
-  status?: string; // e.g., "PUBLISHED", "DRAFT", etc.
   orderBy?: string; // e.g., "createdAt", "updatedAt"
   startDate?: string; // Format: "YYYY-MM-DD"
   endDate?: string; // Format: "YYYY-MM-DD"

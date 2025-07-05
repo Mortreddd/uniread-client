@@ -1,4 +1,4 @@
-import useGetUsers from "@/api/user/useGetUsers";
+import useGetAuthors from "@/api/user/useGetAuthors.ts";
 import AuthorDetail from "@/components/author/AuthorDetail";
 import LoginModal from "@/components/common/modal/auth/LoginModal";
 import { ModalRef } from "@/components/common/modal/Modal";
@@ -7,8 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { PaginateParams } from "@/types/Pagination";
 import { useMemo, useRef, useState } from "react";
 import useFollow from "@/hooks/useFollow.ts";
-import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
 import {AuthorDetail as AuthorDetailType} from "@/types/User";
+import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
 
 /**
  * Page for displaying authors
@@ -26,7 +26,7 @@ export default function AuthorPage() {
   const loginModalRef = useRef<ModalRef>(null);
 
   // Get the authors
-  const { data, loading } = useGetUsers<AuthorDetailType>({ pageNo, pageSize, query });
+  const { data, loading } = useGetAuthors<AuthorDetailType>({ pageNo, pageSize, query });
   const { isMutualFollowing, followUser, unfollowUser } = useFollow();
 
   /**
@@ -59,8 +59,8 @@ export default function AuthorPage() {
 
   return (
     <>
-      <header className={"w-full relative mb-20"}>
-        <AuthenticatedNavbar />
+      <header className={"w-full relative"}>
+        <GuestNavbar />
       </header>
       <div className="px-20 py-6 w-full h-full">
         <LoginModal ref={loginModalRef} />

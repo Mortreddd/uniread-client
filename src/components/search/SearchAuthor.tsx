@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import useGetUsers from "@/api/user/useGetUsers";
+import useGetAuthors from "@/api/user/useGetAuthors.ts";
 import { useMemo, useRef, useState } from "react";
 import { PaginateParams } from "@/types/Pagination";
 import AuthorInfo from "../author/AuthorInfo";
@@ -29,7 +29,7 @@ export default function SearchAuthor() {
   const loginModalRef = useRef<ModalRef>(null);
 
   // Call the get users api call and get pagination of users
-  const { data, loading } = useGetUsers<AuthorDetail>({ pageNo, pageSize, query: search });
+  const { data, loading } = useGetAuthors<AuthorDetail>({ pageNo, pageSize, query: search });
 
   // Memoized the authors for filtering currentUser
   const memoizedAuthors = useMemo(() => {
