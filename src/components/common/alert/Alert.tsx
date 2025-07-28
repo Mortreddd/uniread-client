@@ -3,7 +3,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { HTMLMotionProps, motion } from "motion/react";
 
 const alertVariants = cva(
-  "rounded-lg p-2 md:p-4 w-full md:min-w-64 h-fit min-w-52 my-1 md:my-2",
+  "rounded-lg p-2 md:p-4 w-full max-w-52 md:min-w-64 h-fit min-w-52 my-1 md:my-2",
   {
     variants: {
       variant: {
@@ -36,18 +36,20 @@ export default function Alert({
   return (
     <motion.div
       initial={{
-        translateX: 100,
+        translateX: 20,
+        opacity: 0,
       }}
       animate={{
         translateX: 0,
         opacity: 1,
         transition: {
-          duration: 0.8,
+          duration: 0.3,
           ease: "easeOut",
         },
       }}
       exit={{
         opacity: 0,
+        transition: { duration: 0.3, ease: "easeInOut" },
       }}
       className={cn(alertVariants({ className, variant }))}
       {...rest}

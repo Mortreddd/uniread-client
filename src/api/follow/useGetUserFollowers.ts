@@ -1,9 +1,9 @@
 import api from "@/services/ApiService";
 import { ErrorResponse } from "@/types/Error";
-import { Follow } from "@/types/Follow";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
+import {AuthorDetail} from "@/types/User.ts";
 
 interface GetUserFollowersProps extends PaginateParams {
   userId: string | undefined;
@@ -14,7 +14,7 @@ export default function useGetUserFollowers({
   pageSize,
   query,
 }: GetUserFollowersProps) {
-  const [state, setState] = useState<RequestState<Paginate<Follow[]>>>({
+  const [state, setState] = useState<RequestState<Paginate<AuthorDetail[]>>>({
     data: null,
     loading: false,
     error: null,
@@ -27,7 +27,7 @@ export default function useGetUserFollowers({
         .get(`/users/${userId}/follow/followers`, {
           params: { pageNo, pageSize, query },
         })
-        .then((response: AxiosResponse<Paginate<Follow[]>>) => {
+        .then((response: AxiosResponse<Paginate<AuthorDetail[]>>) => {
           setState({ data: response.data, error: null, loading: false });
         })
         .catch((error: AxiosError<ErrorResponse>) => {

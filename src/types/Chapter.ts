@@ -1,6 +1,7 @@
 import { User } from "@/types/User.ts";
 import { ChapterStatus, Reaction } from "./Enums";
 import { Paragraph } from "./Paragraph";
+import { PaginateParams } from "./Pagination";
 
 export interface Chapter {
   id: string;
@@ -53,4 +54,9 @@ export interface ChapterCreationRequest {
   content: string;
   status: ChapterStatus;
   paragraphs: Paragraph[];
+}
+
+export interface ChapterParams extends PaginateParams {
+  bookId: string | undefined;
+  status: ChapterStatus;
 }

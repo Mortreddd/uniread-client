@@ -9,6 +9,7 @@ import { useMemo, useRef, useState } from "react";
 import useFollow from "@/hooks/useFollow.ts";
 import {AuthorDetail as AuthorDetailType} from "@/types/User";
 import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 /**
  * Page for displaying authors
@@ -16,7 +17,8 @@ import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
  * @returns
  */
 export default function AuthorPage() {
-  const { user: currentUser, isLoggedIn } = useAuth();
+  const { showToast } = useToast();
+  const { isLoggedIn } = useAuth();
   // Pagination params for requesting user
   const [{ pageNo, pageSize, query }] = useState<PaginateParams>({
     pageNo: 0,
@@ -27,34 +29,56 @@ export default function AuthorPage() {
 
   // Get the authors
   const { data, loading } = useGetAuthors<AuthorDetailType>({ pageNo, pageSize, query });
-  const { isMutualFollowing, followUser, unfollowUser } = useFollow();
-
+  const { followUser, unfollowUser } = useFollow();
+  console.log(data);
   /**
    * Memoized authors to avoid unnecessary re-renders
    * @returns {User[]} Array of authors excluding the current user
    */
   const memoizedAuthors: AuthorDetailType[] = useMemo(() => {
     if (!data?.content) return [];
+    return data.content;
 
-    return data.content.filter((author) => author.id !== currentUser?.id);
-  }, [data?.content, currentUser?.id]);
+  }, [data?.content]);
 
-  function handleFollow(followingUserId: string) {
+  /**
+   * Handle the follow button by adding the provided followingUserId
+   * @param followingUserId
+   */
+  async function handleFollow(followingUserId: string) {
     if (!isLoggedIn()) {
       loginModalRef.current?.open();
       return;
     }
 
-    followUser(followingUserId);
+    await followUser(followingUserId, {
+      onSuccess: message => {
+        showToast(message, "success")
+      },
+      onError: message => {
+        showToast(message, "error")
+      }
+    });
   }
 
-  function handleUnfollow(followingUserId: string) {
+  /**
+   * Handle the Unfollow button for unfollowing the given followingUserId
+   * @param followingUserId
+   */
+  async function handleUnfollow(followingUserId: string) {
     if (!isLoggedIn()) {
       loginModalRef.current?.open();
       return;
     }
 
-    unfollowUser(followingUserId);
+    await unfollowUser(followingUserId, {
+      onSuccess: message => {
+        showToast(message, "success")
+      },
+      onError: message => {
+        showToast(message, "error")
+      }
+    });
   }
 
   return (
@@ -76,7 +100,7 @@ export default function AuthorPage() {
                   user={author}
                   onUnfollow={() => handleUnfollow(author.id)}
                   onFollow={() => handleFollow(author.id)}
-                  isFollowing={isMutualFollowing(author.id)}
+                  isFollowing={author.isFollowing}
                 />
               </div>
             ))

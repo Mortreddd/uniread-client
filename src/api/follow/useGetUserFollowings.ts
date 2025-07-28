@@ -1,16 +1,16 @@
 import {Paginate, PaginateParams, RequestState} from "@/types/Pagination.ts";
 import {useEffect, useState} from "react";
-import {Follow} from "@/types/Follow.ts";
 import api from "@/services/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {ErrorResponse} from "@/types/Error.ts";
+import {AuthorDetail} from "@/types/User.ts";
 
 interface GetUserFollowingsProps extends PaginateParams {
     userId: string | undefined;
 }
 
-export default function useGetUserFollowings({ userId, pageNo, pageSize, query, status, sortBy, orderBy, startDate, endDate } : GetUserFollowingsProps ) {
-    const [state, setState] = useState<RequestState<Paginate<Follow[]>>>({
+export default function useGetUserFollowings({ userId, pageNo, pageSize, query, sortBy, orderBy, startDate, endDate } : GetUserFollowingsProps ) {
+    const [state, setState] = useState<RequestState<Paginate<AuthorDetail[]>>>({
         data: null,
         error: null,
         loading: false
@@ -24,10 +24,10 @@ export default function useGetUserFollowings({ userId, pageNo, pageSize, query, 
             await api.get(`/users/${userId}/follow/followings`,
                 {
                     params: {
-                        pageNo, pageSize, query, status, sortBy, orderBy, startDate, endDate
+                        pageNo, pageSize, query, sortBy, orderBy, startDate, endDate
                     },
                     signal
-                }).then((response: AxiosResponse<Paginate<Follow[]>>) => {
+                }).then((response: AxiosResponse<Paginate<AuthorDetail[]>>) => {
                     setState({ loading: false, data: response.data, error: null })
             }).catch((error: AxiosError<ErrorResponse>) => {
                 setState({ loading : false, data: null, error: error.response?.data.message ?? "An error occurred"})
@@ -35,7 +35,7 @@ export default function useGetUserFollowings({ userId, pageNo, pageSize, query, 
         }
 
         getCurrentUserFollowings()
-    }, [userId, pageNo, pageSize, query, status, sortBy, orderBy, startDate, endDate]);
+    }, [userId, pageNo, pageSize, query, sortBy, orderBy, startDate, endDate]);
 
 
     return state;

@@ -8,8 +8,7 @@ import Modal, { ModalRef } from "../Modal.tsx";
 import { PaginateParams } from "@/types/Pagination.ts";
 import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import AuthorFollowInfo from "@/components/author/AuthorFollowerInfo.tsx";
-import useGetUserFollows from "@/api/follow/useGetUserFollows.ts";
-import useFollow from "@/hooks/useFollow.ts";
+import useGetUserFollowers from "@/api/follow/useGetUserFollowers.ts";
 
 /**
  * Follower modal component
@@ -31,25 +30,20 @@ function FollowerModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
    * Get the follows of the selected user, either the selected user is following or follower
    * @returns {Follow[]} Array of follows of the selected user
    */
-  const { data, loading } = useGetUserFollows({
+  const { data, loading } = useGetUserFollowers({
     userId: authorId,
     pageNo,
     pageSize,
     query,
   });
 
-  const { followUser, unfollowUser, isMutualFollowing } = useFollow();
-  /**
-   * Filter the followers of the author to exclude the author themselves
-   * @returns {Follow[]} Array of followers excluding the author
-   */
-  const memoizedSelectedUserFollowers = useMemo(() => {
+  const memoizedFollowers = useMemo(() => {
     if (!data?.content) return [];
 
-    return data.content.filter(
-      (f) => f.following.id === authorId && f.follower.id !== authorId
-    );
-  }, [data, authorId]);
+    return data.content;
+  }, [data?.content])
+
+  console.log(data)
 
   // function onBottomReached() {
   //   if (data?.last) return;
@@ -71,14 +65,11 @@ function FollowerModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
               <div className="flex justify-center">
                 <LoadingCircle />
               </div>
-            ) : !loading && memoizedSelectedUserFollowers.length > 0 ? (
-              memoizedSelectedUserFollowers.map((follow, index) => (
+            ) : !loading && memoizedFollowers.length > 0 ? (
+                memoizedFollowers.map((author, index) => (
                 <AuthorFollowInfo
                   key={index}
-                  follow={follow}
-                  isMutualFollowing={isMutualFollowing(follow.follower.id)}
-                  onFollow={() => followUser(follow.follower.id)}
-                  onUnfollow={() => unfollowUser(follow.follower.id)}
+                  author={author}
                 />
               ))
             ) : (

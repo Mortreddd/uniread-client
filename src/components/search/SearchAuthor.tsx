@@ -9,12 +9,14 @@ import { ModalRef } from "../common/modal/Modal";
 import LoginModal from "../common/modal/auth/LoginModal";
 import useFollow from "@/hooks/useFollow.ts";
 import {AuthorDetail} from "@/types/User.ts";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 /**
  * The component of Authors in /search/authors
  * @returns Search Author component
  */
 export default function SearchAuthor() {
+    const { showToast } = useToast();
   const { user: currentUser, isLoggedIn } = useAuth();
   const [searchParams] = useSearchParams();
   const { isFollowingUser, unfollowUser, followUser } = useFollow();
@@ -44,7 +46,14 @@ export default function SearchAuthor() {
           loginModalRef.current?.open();
           return;
       }
-      await unfollowUser(authorId);
+      await unfollowUser(authorId, {
+          onSuccess: message => {
+              showToast(message, "success")
+          },
+          onError: message => {
+              showToast(message, "error")
+          }
+      });
   }
 
   // Unfollow function making delete request for the following id or authorId
@@ -53,7 +62,14 @@ export default function SearchAuthor() {
           loginModalRef.current?.open();
           return;
       }
-      await followUser(authorId)
+      await followUser(authorId, {
+          onSuccess: message => {
+              showToast(message, 'success')
+          },
+          onError: message => {
+              showToast(message, 'error')
+          }
+      })
   };
 
   return (

@@ -30,7 +30,7 @@ function AddNewChapterModal({ bookId, onCreate } : AddNewChapterModalProps, ref:
     })
 
     const onSubmit: SubmitHandler<CreateNewChapterModalProps> = async (data) => {
-        await api.post(`/books/${data.bookId}/chapters/create`, data)
+        await api.post(`/books/${data.bookId}/chapters`, data)
             .then((response: AxiosResponse<Chapter>) => {
                 showToast("You created a new chapter!", "success")
                 onCreate(response.data)

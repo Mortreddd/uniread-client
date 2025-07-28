@@ -26,7 +26,7 @@ export default function useGetUserFollows({
     async function getUserFollows() {
       setState({ ...state, loading: true });
       await api
-        .get(`/users/${userId}/follow/follows`, {
+        .get(`/users/${userId}/follows`, {
           signal: controller.signal,
         })
         .then((response: AxiosResponse<Paginate<Follow[]>>) => {

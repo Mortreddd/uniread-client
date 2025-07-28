@@ -1,19 +1,19 @@
 import api from "@/services/ApiService";
-import { Chapter } from "@/types/Chapter";
+import { Chapter, ChapterParams } from "@/types/Chapter";
 import { ErrorResponse } from "@/types/Error";
-import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
+import { Paginate, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-
-interface GetBookChaptersProps extends PaginateParams {
-  bookId: string | undefined;
-}
 
 export default function useGetBookChapters({
   bookId,
   pageNo,
   pageSize,
-}: GetBookChaptersProps) {
+  query,
+  status,
+  startDate,
+  endDate,
+}: ChapterParams) {
   const [state, setState] = useState<RequestState<Paginate<Chapter[]>>>({
     data: null,
     loading: false,
@@ -31,11 +31,15 @@ export default function useGetBookChapters({
           params: {
             pageNo,
             pageSize,
+            status,
+            startDate,
+            endDate,
+            query,
           },
           signal: signal,
         })
         .then((response: AxiosResponse<Paginate<Chapter[]>>) => {
-          console.log(response.data)
+          console.log(response.data);
           setState({
             ...state,
             data: response.data,
@@ -52,7 +56,7 @@ export default function useGetBookChapters({
     }
 
     getBookChapters();
-  }, [bookId, pageSize, pageNo]);
+  }, [bookId, pageSize, pageNo, status, startDate, endDate, query]);
 
   return state;
 }

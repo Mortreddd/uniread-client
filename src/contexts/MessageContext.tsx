@@ -10,10 +10,10 @@ import {
   useRef,
   useState,
 } from "react";
-import SockJS from "sockjs-client";
-
 import { Client, Message, over } from "stompjs";
 import { useAuth } from "@/contexts/AuthContext.tsx";
+import SockJS from "sockjs-client";
+import {useToast} from "@/contexts/ToastContext.tsx";
 
 interface MessageContextProps {
   messages: MessageType[];
@@ -22,7 +22,9 @@ interface MessageContextProps {
 }
 
 interface SendMessageProps {
-  conversationId: string | undefined;
+  conversationId?: string;
+  receiverIds: string[];
+  isGroup: boolean;
   message: string;
 }
 
@@ -50,9 +52,9 @@ interface MessageProviderProps extends PropsWithChildren {}
  */
 function MessageProvider({ children }: MessageProviderProps) {
   const baseUrl = import.meta.env.VITE_API_URL as string;
-  const messageUrl = `${baseUrl}/ws`;
   const stompClientRef = useRef<Client | null>(null);
   const { isLoggedIn, accessToken } = useAuth();
+  const { showToast } = useToast();
   const [messages, setMessages] = useState<MessageType[]>([]);
 
   const connect = useCallback(() => {
@@ -67,23 +69,24 @@ function MessageProvider({ children }: MessageProviderProps) {
       {},
       () => {
         console.log("STOMP connected");
+        stompClientRef.current = client;
 
         // Subscribe to private queue
         client.subscribe("/user/queue/messages", (message: Message) => {
+          console.log("Received message:", message);
           const newMessage = JSON.parse(message.body) as MessageType;
+          showToast(newMessage.message, 'info')
           setMessages((prev) =>
-            prev.some((msg) => msg.id === newMessage.id)
-              ? prev
-              : [newMessage, ...prev]
+              prev.some((msg) => msg.id === newMessage.id) ? prev : [newMessage, ...prev]
           );
         });
       },
       (error) => {
         console.error("Connection error:", error);
-        // setTimeout(connect, 5000); // Reconnect after 5 seconds
+        setTimeout(connect, 5000); // Reconnect after 5 seconds
       }
     );
-  }, [isLoggedIn, accessToken, messageUrl]);
+  }, [isLoggedIn, accessToken, baseUrl, showToast]);
 
   /**
    * Listening to incoming messages using subscribe function of stomp
@@ -101,12 +104,18 @@ function MessageProvider({ children }: MessageProviderProps) {
    * Sends a message to a server
    * @param message
    */
-  const sendMessage = useCallback((message: SendMessageProps) => {
-    const stompClient = stompClientRef.current;
-    if (stompClient?.connected) {
-      stompClient.send("/app/messages/send", {}, JSON.stringify(message));
-    }
-  }, []);
+  const sendMessage = useCallback(
+    (message: SendMessageProps) => {
+      const stompClient = stompClientRef.current;
+      if (stompClient?.connected) {
+        console.log("Sending message:", message);
+        stompClient.send("/app/messages/send", {}, JSON.stringify(message));
+      }
+    },
+    [stompClientRef]
+  );
+
+  console.log("messages from Message Context ", messages);
 
   return (
     <MessageContext.Provider value={{ messages, setMessages, sendMessage }}>

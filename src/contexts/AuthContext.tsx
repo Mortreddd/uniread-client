@@ -37,18 +37,10 @@ function useAuth() {
 }
 
 function AuthProvider({ children }: AuthProviderProps) {
-  // const [accessToken, setAccessToken] = useState<string | null>(
-  //   localStorage.getItem("accessToken") || null
-  // );
-
   const accessToken = localStorage.getItem("accessToken");
   const memoizedAccessToken = useMemo(() => {
     return accessToken;
   }, [accessToken]);
-
-  // const [refreshToken, setRefreshToken] = useState<string | null>(
-  //   localStorage.getItem("refreshToken") || null
-  // );
 
   const refreshToken = localStorage.getItem("refreshToken");
   const memoizedRefreshToken = useMemo(() => {
@@ -66,7 +58,7 @@ function AuthProvider({ children }: AuthProviderProps) {
    */
   async function getUser(): Promise<void> {
     await api
-      .get("/users/current")
+      .get("/users/me")
       .then((response: AxiosResponse<User>) => {
         console.log(response);
         setUser(response.data);

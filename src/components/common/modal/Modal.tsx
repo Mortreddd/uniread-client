@@ -71,7 +71,9 @@ function Modal({ children }: ModalProps, ref: Ref<ModalRef>) {
           exit={{
             opacity: 0,
           }}
-          className={"fixed w-full h-screen bg-black/60 inset-0 z-50"}
+          className={
+            "fixed w-full h-screen max-h-screen bg-black/60 inset-0 z-50"
+          }
           onClick={handleClose}
         >
           <motion.div
@@ -100,13 +102,6 @@ function Modal({ children }: ModalProps, ref: Ref<ModalRef>) {
             }
             onClick={(e) => e.stopPropagation()}
           >
-            {/* <Button
-              onClick={handleClose}
-              className="absolute top-2 right-2 rounded-full"
-              variant={"transparent"}
-            >
-              <XMarkIcon className="text-gray-600 rounded-full size-6 transition-all duration-200 ease-in-out hover:text-gray-600" />
-            </Button> */}
             {children}
           </motion.div>
         </motion.div>

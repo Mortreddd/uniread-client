@@ -1,17 +1,17 @@
-import {useAuth} from "@/contexts/AuthContext.tsx";
 import {AxiosError, AxiosResponse} from "axios";
 import {ErrorResponse} from "@/types/Error.ts";
-import {useCallback, useEffect, useState} from "react";
+import {useCallback, useState} from "react";
 import {Follow} from "@/types/Follow.ts";
 import {SuccessResponse} from "@/types/Success.ts";
 import api from "@/services/ApiService.ts";
-import {useToast} from "@/contexts/ToastContext.tsx";
-import useGetUserFollowings from "@/api/follow/useGetUserFollowings.ts";
+
+interface ResultHandlerProps {
+    onSuccess: (message: string) => void;
+    onError: (message: string) => void;
+}
 
 export default function useFollow() {
-    const { user: currentUser } = useAuth();
-    const { showToast } = useToast();
-    const { data } = useGetUserFollowings({ userId: currentUser?.id });
+    // const { data } = useGetCurrentUserFollowings({ pageNo, pageSize });
     /**
      * Get the followers of the author
      */
@@ -24,36 +24,42 @@ export default function useFollow() {
      * @param followingUserId
      * @returns {boolean} - True if the selected user is also following the given followingUserId, false otherwise
      */
-    const isMutualFollowing = (followingUserId: string | undefined): boolean => {
-        if(!data) return false;
-        return currentUserFollowings.some(
-            (f) => f.following.id === followingUserId
-        );
-    };
+    // const isMutualFollowing = (followingUserId: string | undefined): boolean => {
+    //     if(!data) return false;
+    //     return currentUserFollowings.some(
+    //         (f) => f.following.id === followingUserId
+    //     );
+    // };
+
+    /**
+     * Checks if the selected user is following the given followingUserId
+     * @param userId
+     * @returns {boolean}
+     */
+    function isFollowingUser(userId: string | undefined) {
+        return currentUserFollowings.some((f) => f.following.id === userId)
+    }
 
     /**
      * Unfollows the given followingUserId
      * @param followingUserId - The userId to unfollow
      */
     // Unfollow function for making delete request when delete follow to authorId
-    const unfollowUser : (authorId: string | undefined) => Promise<void> = useCallback(
-        async (authorId: string | undefined) => {
+    const unfollowUser : (authorId: string | undefined, {onSuccess, onError} : ResultHandlerProps) => Promise<void> = useCallback(
+        async (authorId: string | undefined, { onSuccess, onError } : ResultHandlerProps) => {
             await api
-                .delete(`/users/${currentUser?.id}/follow/${authorId}/delete`)
+                .delete(`/users/${authorId}/follow`)
                 .then((response: AxiosResponse<SuccessResponse>) => {
                     setCurrentUserFollowings((prev) => {
                         return prev.filter((follow) => follow.following.id !== authorId);
                     });
-                    showToast(response?.data.message, "info");
+                    onSuccess(response?.data.message);
                 })
                 .catch((error: AxiosError<ErrorResponse>) => {
-                    showToast(
-                        error.response?.data.message ?? "An unexpected error occurred",
-                        "error"
-                    );
+                    onError(error.response?.data.message ?? "An unexpected error occurred");
                 });
         },
-        [currentUser?.id, showToast]
+        []
     );
 
     /**
@@ -61,24 +67,26 @@ export default function useFollow() {
      * @param followingUserId - The userId to follow
      */
     // Follow function for making post request creating new follow for authorId
-    const followUser : (authorId: string | undefined) => Promise<void> = useCallback(
-        async (authorId: string | undefined) => {
+    const followUser : (authorId: string | undefined, {onSuccess, onError} : ResultHandlerProps) => Promise<void> = useCallback(
+        async (authorId: string | undefined, {onSuccess, onError}) => {
             await api
-                .post(`/users/${currentUser?.id}/follow/${authorId}`)
+                .post(`/users/${authorId}/follow`)
                 .then((response: AxiosResponse<Follow>) => {
                     setCurrentUserFollowings((prev) => {
                         return [...prev, response.data];
                     });
-                    showToast(`Followed ${response.data.following.username}`, "success");
+
+                    onSuccess(`Followed ${response.data.following.username}`);
+
                 })
                 .catch((error: AxiosError<ErrorResponse>) => {
-                    showToast(
-                        error.response?.data.message ?? "An unexpected error occurred",
-                        "error"
-                    );
+
+
+                    onError(error.response?.data.message ?? "An unexpected error occurred");
+
                 });
         },
-        [currentUser?.id, showToast]
+        []
     );
 
     /**
@@ -86,16 +94,9 @@ export default function useFollow() {
      * Set the current user followings to the followings of the selected user
      * @returns {Follow[]} Array of followings of the current authenticated user
      */
-    useEffect(() => {
-        if(data?.content) {
-            setCurrentUserFollowings(data.content ?? [])
-        }
-    }, [data?.content])
 
 
-    function isFollowingUser(userId: string | undefined) {
-        return currentUserFollowings.some((f) => f.following.id === userId)
-    }
 
-    return { currentUserFollowings, followUser, unfollowUser, isMutualFollowing, setCurrentUserFollowings, isFollowingUser } as const;
+
+    return { currentUserFollowings, followUser, unfollowUser, isFollowingUser } as const;
 }

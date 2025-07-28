@@ -2,20 +2,15 @@ import Footer from "@/components/Footer.tsx";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/common/form/Button";
 import { Chapter } from "@/types/Chapter";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { ModalRef } from "@/components/common/modal/Modal.tsx";
 import AddNewChapterModal from "@/components/common/modal/chapter/AddNewChapterModal.tsx";
 import useGetBookChapters from "@/api/chapters/useGetBookChapters.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
 import LoadingCircle from "@/components/LoadingCirlce.tsx";
-import api from "@/services/ApiService.ts";
-import { AxiosError, AxiosResponse } from "axios";
-import { SuccessResponse } from "@/types/Success.ts";
-import { ErrorResponse } from "@/types/Error.ts";
-import WarningPublishedChapterModal from "@/components/common/modal/chapter/WarningPublishedChapterModal.tsx";
-import { useToast } from "@/contexts/ToastContext.tsx";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
+import ChapterSectionList from "@/components/chapter/ChapterSectionList.tsx";
 
 export default function WriteChapterPage() {
   const { bookId, chapterId } = useParams<{
@@ -24,8 +19,6 @@ export default function WriteChapterPage() {
   }>();
   const newChapterModalRef = useRef<ModalRef>(null);
   const navigate = useNavigate();
-  const deleteChapterModalRef = useRef<ModalRef>(null);
-  const { showToast } = useToast();
   const [{ pageNo, pageSize }] = useState<PaginateParams>({
     pageNo: 0,
     pageSize: 10,
@@ -33,7 +26,6 @@ export default function WriteChapterPage() {
   });
   const { data, loading } = useGetBookChapters({ bookId, pageNo, pageSize });
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
 
   function handleOpen() {
     newChapterModalRef.current?.open();
@@ -43,41 +35,12 @@ export default function WriteChapterPage() {
     newChapterModalRef.current?.close();
   }
 
-  function handleWarningChapterModalOpen() {
-    deleteChapterModalRef.current?.open();
-  }
-
-  function handleWarningChapterModalClose() {
-    deleteChapterModalRef.current?.close();
-  }
-
   function onCreate(chapter: Chapter) {
     setChapters((prev) => {
       return [...prev, chapter];
     });
     handleClose();
-    navigate(`/edit/${chapter.bookId}/chapters/${chapter.id}`);
-  }
-  async function handleDelete(chapter?: Chapter) {
-    await api
-      .delete(`/books/${chapter?.bookId}/chapters/${chapter?.id}/delete`)
-      .then((response: AxiosResponse<SuccessResponse>) => {
-        showToast(response.data.message ?? "Successfully deleted!", "success");
-        setChapters((prev) => {
-          return prev.filter((c) => c.id !== chapter?.id);
-        });
-        deleteChapterModalRef.current?.close();
-        if (chapter?.id === chapterId) {
-          navigate(`/edit/${chapter?.bookId}`, { replace: true });
-        }
-      })
-      .catch((error: AxiosError<ErrorResponse>) => {
-        showToast(
-          error?.response?.data.message ??
-            "Something went wrong deleting the chapter",
-          "error"
-        );
-      });
+    navigate(`/workspace/stories/${chapter.bookId}/chapters/${chapter.id}`);
   }
 
   useEffect(() => {
@@ -85,12 +48,6 @@ export default function WriteChapterPage() {
       setChapters(data.content);
     }
   }, [data?.content]);
-
-  useEffect(() => {
-    if (selectedChapter) {
-      deleteChapterModalRef.current?.open();
-    }
-  }, [selectedChapter]);
 
   return (
     <>
@@ -101,66 +58,19 @@ export default function WriteChapterPage() {
         <div className="w-full flex flex-1 overflow-hidden ">
           <aside className="w-96 px-5 border border-solid rounded-sm relative">
             <div className="w-full h-full my-7">
-              <h3 className="text-2xl font-sans text-center w-full">
+              <h3 className="text-2xl font-serif text-center w-full">
                 Chapters
               </h3>
-              <section className="w-full inline-block space-y-2 overflow-y-auto h-fit">
-                {!data?.content && loading ? (
-                  <div className="w-full h-full flex justify-center">
-                    <LoadingCircle />
-                  </div>
-                ) : chapters.length !== 0 ? (
-                  chapters.map((chapter) => (
-                    <article key={chapter.id} className="w-full h-fit">
-                      <h3 className="text-nowrap text-gray-800 bg-gray-50 rounded-sm truncate font-sans text-lg mb-4">
-                        {chapter.title}
-                      </h3>
-                      <div className="flex items-end justify-end w-full h-fit">
-                        <NavLink
-                          to={`/edit/${chapter.bookId}/chapters/${chapter.id}`}
-                        >
-                          <Button
-                            variant={"custom"}
-                            className="rounded-full text-primary text-sm"
-                          >
-                            Edit
-                          </Button>
-                        </NavLink>
-                        <Button
-                          variant={"custom"}
-                          onClick={() => {
-                            handleWarningChapterModalOpen();
-                            setSelectedChapter(chapter);
-                          }}
-                          className="rounded-full ml-2 text-red-500 text-sm"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </article>
-                  ))
-                ) : (
-                  <div className="w-full h-full flex justify-center">
-                    <h3 className="text-gray-500 text-lg mt-10 font-sans">
-                      No Chapters Found
-                    </h3>
-                  </div>
-                )}
-              </section>
+              {loading && !data ? (
+                  <LoadingCircle />
+              ) : (
+                  <ChapterSectionList chapters={chapters ?? []} />
+              )}
               <AddNewChapterModal
                 bookId={bookId}
                 ref={newChapterModalRef}
                 onCreate={onCreate}
               />
-
-              {selectedChapter && (
-                <WarningPublishedChapterModal
-                  ref={deleteChapterModalRef}
-                  chapter={selectedChapter}
-                  onCancel={handleWarningChapterModalClose}
-                  onDelete={() => handleDelete(selectedChapter)}
-                />
-              )}
 
               <Button
                 variant={"primary"}

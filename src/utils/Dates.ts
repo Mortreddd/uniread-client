@@ -26,6 +26,16 @@ export function formatDateWithTime(date: Date): string {
   });
 }
 
+export function formatShortDateWithTime(date: Date): string {
+  const language = getCurrentLanguage();
+  return date.toLocaleString(language, {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 /**
  * Wed, Nov 2, 2022
  * @param date

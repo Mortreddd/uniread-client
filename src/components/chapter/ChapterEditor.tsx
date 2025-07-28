@@ -10,11 +10,10 @@ import {
   paragraphsToDescendants,
 } from "@/types/Paragraph.ts";
 import { Descendant } from "slate";
-import api from "@/services/ApiService.ts";
-import { AxiosResponse } from "axios";
 import { useToast } from "@/contexts/ToastContext.tsx";
 import useGetBookChapterParagraphs from "@/api/chapters/useGetBookChapterParagraphs";
 import LoadingCircle from "../LoadingCirlce";
+import useChapter from "@/hooks/useChapter.ts";
 
 interface ChapterEditorProps {
   chapter: Chapter;
@@ -31,7 +30,8 @@ export default function ChapterEditor({ chapter }: ChapterEditorProps) {
    * The data is used to populate the form fields and the text editor.
    */
   const { showToast } = useToast();
-  const { data, loading, error } = useGetBookChapterParagraphs({
+  const { onUpdateChapter } = useChapter({ bookId: chapter.id });
+  const { data, loading } = useGetBookChapterParagraphs({
     bookId: chapter.bookId,
     chapterId: chapter.id,
   });
@@ -68,7 +68,6 @@ export default function ChapterEditor({ chapter }: ChapterEditorProps) {
 
   const onChange = useCallback((values: Descendant[]) => {
     setParagraphs(values);
-    console.log(values);
   }, []);
 
   const onSave: SubmitHandler<EditChapterProps> = async (data) => {
@@ -77,19 +76,21 @@ export default function ChapterEditor({ chapter }: ChapterEditorProps) {
       paragraphs: descendantsToParagraphs(paragraphs, chapter.id),
     };
 
-    await api
-      .put(`/books/${chapter.bookId}/chapters/${chapter.id}/update`, payload)
-      .then((response: AxiosResponse<Chapter>) => {
-        console.log(response);
+    await onUpdateChapter(chapter.id, payload, {
+      onUpdate: (chapter) => {
         reset({
-          title: response.data.title,
+          title: chapter.title,
           paragraphs:
-            response.data?.paragraphs && response.data?.paragraphs.length > 0
-              ? paragraphsToDescendants(response.data.paragraphs)
+            chapter.paragraphs && chapter.paragraphs.length > 0
+              ? paragraphsToDescendants(chapter.paragraphs)
               : EMPTY_CONTENT,
         });
         showToast("Successfully saved the chapter", "success");
-      });
+      },
+      onError: (message) => {
+        showToast(message, "error");
+      },
+    });
   };
 
   return (

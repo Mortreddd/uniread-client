@@ -6,7 +6,6 @@ import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import { Chapter } from "@/types/Chapter.ts";
 import ChapterEditor from "@/components/chapter/ChapterEditor.tsx";
 
-
 export default function EditChapter() {
   /**
    * The current url parameters are used to get the bookId and chapterId
@@ -18,11 +17,13 @@ export default function EditChapter() {
   }>();
   const { data, loading } = useGetBookChapterById({ bookId, chapterId });
   const [chapter, setChapter] = useState<Chapter | null>(null);
+
   useEffect(() => {
-    if(data) {
-      setChapter(data)
+    if (data) {
+      setChapter(data);
     }
   }, [data]);
+
   return (
     <>
       {loading && !chapter ? (
