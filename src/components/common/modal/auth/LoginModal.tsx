@@ -111,6 +111,17 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
           </Button>
           <GoogleAuthButton />
         </div>
+        <div className="mt-3 text-center">
+          <p className="text-md font-serif text-gray-800">
+            Don't have an account?{" "}
+            <a
+              href="/register"
+              className="text-primary transition-all duration-200 ease-in-out hover:text-primary/80"
+            >
+              Register
+            </a>
+          </p>
+        </div>
       </div>
     </Modal>
   );

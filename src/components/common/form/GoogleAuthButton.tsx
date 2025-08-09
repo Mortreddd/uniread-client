@@ -15,7 +15,7 @@ export default function GoogleAuthButton() {
   const handleGoogleAuth = useGoogleLogin({
     onError: (error) => {
       setLoading(false);
-      console.log(error)
+      console.log(error);
     },
     onSuccess: async (response) => {
       setLoading(true);
@@ -27,8 +27,7 @@ export default function GoogleAuthButton() {
           login(result.data);
         })
         .catch((error: AxiosError<ErrorResponse>) => {
-
-          console.log(error)
+          console.log(error);
         })
         .finally(() => {
           setLoading(false);
@@ -38,22 +37,21 @@ export default function GoogleAuthButton() {
   });
 
   return (
-      <GoogleAuthProvider>
-
-    <Button
-      type="button"
-      size={"custom"}
-      variant={"transparent"}
-      disabled={loading}
-      onClick={() => handleGoogleAuth()}
-      className="rounded-full"
-    >
-      <SocialIcon
-        network="google"
-        className="transition-colors duration-200 ease-in-out"
-        style={{ height: "2rem", width: "2rem" }}
-      />
-    </Button>
-      </GoogleAuthProvider>
+    <GoogleAuthProvider>
+      <Button
+        type="button"
+        size={"custom"}
+        variant={"transparent"}
+        disabled={loading}
+        onClick={() => handleGoogleAuth()}
+        className="rounded-full"
+      >
+        <SocialIcon
+          network="google"
+          className="transition-colors duration-200 ease-in-out hover:text-gray-200"
+          style={{ height: "2rem", width: "2rem" }}
+        />
+      </Button>
+    </GoogleAuthProvider>
   );
 }

@@ -11,19 +11,19 @@ import { ToastProvider } from "@/contexts/ToastContext.tsx";
 import { AlertProvider } from "./contexts/AlertContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <GoogleAuthProvider>
-      <ToastProvider>
-        <AlertProvider>
-          <AuthProvider>
-            <NotificationProvider>
-              <MessageProvider>
-                <RouterProvider router={router}></RouterProvider>
-              </MessageProvider>
-            </NotificationProvider>
-          </AuthProvider>
-        </AlertProvider>
-      </ToastProvider>
-    </GoogleAuthProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <GoogleAuthProvider>
+    <ToastProvider>
+      <AlertProvider>
+        <AuthProvider>
+          <NotificationProvider>
+            <MessageProvider>
+              <RouterProvider router={router}></RouterProvider>
+            </MessageProvider>
+          </NotificationProvider>
+        </AuthProvider>
+      </AlertProvider>
+    </ToastProvider>
+  </GoogleAuthProvider>
+  // </React.StrictMode>
 );

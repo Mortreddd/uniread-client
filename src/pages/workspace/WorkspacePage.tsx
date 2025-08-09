@@ -1,8 +1,46 @@
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar";
 import { motion } from "motion/react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, NavLinkProps, Outlet } from "react-router-dom";
+
+interface SidebarOptionProps extends NavLinkProps {
+  label: string;
+}
 
 export default function WorkspacePage() {
+  function optionStyle(isActive: boolean) {
+    return `transition-all block duration-200 ease-in-out px-4 py-2 rounded ${
+      isActive
+        ? "bg-primary text-white hover:bg-primary/80"
+        : "bg-zinc-100 text-gray-800 hover:bg-zinc-200"
+    }`;
+  }
+
+  const sidebarOptions: SidebarOptionProps[] = [
+    {
+      label: "Dashboard",
+      to: "/workspace",
+      end: true,
+      className: ({ isActive }) => optionStyle(isActive),
+    },
+    {
+      label: "My Stories",
+      to: { pathname: "/workspace/stories", search: "?category=ALL" },
+      end: true,
+      className: ({ isActive }) => optionStyle(isActive),
+    },
+    {
+      label: "Bookmarks",
+      to: "/workspace/bookmarks",
+      end: true,
+      className: ({ isActive }) => optionStyle(isActive),
+    },
+    {
+      label: "Liked Books",
+      to: "/workspace/liked-books",
+      end: true,
+      className: ({ isActive }) => optionStyle(isActive),
+    },
+  ];
   return (
     <>
       <header className="w-full relative">
@@ -16,59 +54,12 @@ export default function WorkspacePage() {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="min-w-80 h-full"
         >
-          <ul className="space-y-3 h-full px-3">
-            <li className="my-5 px-4">
-              <h2 className="block font-serif text-zinc-800 font-thin text-2xl">
-                Workspace
-              </h2>
-            </li>
-
-            <li>
-              <NavLink
-                to="/workspace"
-                end={true}
-                className={({ isActive }) =>
-                  `transition-all block duration-200 ease-in-out px-4 py-2 rounded ${
-                    isActive
-                      ? "bg-primary text-white hover:bg-primary/80"
-                      : "bg-zinc-100 text-gray-800 hover:bg-zinc-200"
-                  }`
-                }
-              >
-                Dashboard
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to={{ pathname: "/workspace/stories", search: "?category=ALL" }}
-                end={true}
-                className={({ isActive }) =>
-                  `transition-all block duration-200 ease-in-out px-4 py-2 rounded ${
-                    isActive
-                      ? "bg-primary text-white hover:bg-primary/80"
-                      : "bg-zinc-100 text-gray-800 hover:bg-zinc-200"
-                  }`
-                }
-              >
-                My Stories
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/workspace/deleted"
-                end={true}
-                className={({ isActive }) =>
-                  `transition-all block duration-200 ease-in-out px-4 py-2 rounded ${
-                    isActive
-                      ? "bg-primary text-white hover:bg-primary/80"
-                      : "bg-zinc-100 text-gray-800 hover:bg-zinc-200"
-                  }`
-                }
-              >
-                Deleted
-              </NavLink>
-            </li>
+          <ul className="space-y-3 h-full px-3 pt-5 overflow-y-auto">
+            {sidebarOptions.map((option, key) => (
+              <li key={key}>
+                <NavLink {...option}>{option.label}</NavLink>
+              </li>
+            ))}
           </ul>
         </motion.aside>
         <div className="flex-1 p-5">

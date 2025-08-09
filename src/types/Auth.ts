@@ -10,6 +10,16 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
+export interface UserRegistration {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  password: string;
+  confirmPassword: string;
+}
+
 export interface InvalidAccessToken {
   message: string;
   details: string;

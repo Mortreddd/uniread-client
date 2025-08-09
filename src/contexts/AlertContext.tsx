@@ -62,14 +62,22 @@ export const AlertProvider: FC<AlertProviderProps> = ({ children }) => {
       <div className="antialiased bg-transparent w-full min-h-screen">
         {children}
         <div className="fixed right-10 z-50 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out">
-          {alertMessages.map(({ type, message }, index) => (
-            <AnimatePresence key={index}>
-              {type === "info" && <InfoAlert>{message}</InfoAlert>}
-              {type === "error" && <DangerAlert>{message}</DangerAlert>}
-              {type === "success" && <SuccessAlert>{message}</SuccessAlert>}
-              {type === "warning" && <WarningAlert>{message}</WarningAlert>}
-            </AnimatePresence>
-          ))}
+          <AnimatePresence>
+            {alertMessages.map(({ type, message }, index) => {
+              switch (type) {
+                case "info":
+                  return <InfoAlert key={index}>{message}</InfoAlert>;
+                case "error":
+                  return <DangerAlert key={index}>{message}</DangerAlert>;
+                case "success":
+                  return <SuccessAlert key={index}>{message}</SuccessAlert>;
+                case "warning":
+                  return <WarningAlert key={index}>{message}</WarningAlert>;
+                default:
+                  return null;
+              }
+            })}
+          </AnimatePresence>
         </div>
       </div>
     </AlertContext.Provider>
