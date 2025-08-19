@@ -72,7 +72,7 @@ function Modal({ className, children }: ModalProps, ref: Ref<ModalRef>) {
             opacity: 0,
           }}
           className={
-            "fixed w-full h-screen max-h-screen bg-black/60 inset-0 z-50"
+            "fixed w-full h-screen max-h-screen bg-black/60 inset-0 z-50 backdrop-blur-xs transition-all duration-200 ease-in-out"
           }
           onClick={handleClose}
         >
