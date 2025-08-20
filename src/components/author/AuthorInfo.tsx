@@ -16,13 +16,12 @@ interface AuthorInfoProps extends HTMLAttributes<HTMLDivElement> {
 
 function AuthorInfo({
   author,
+    onFollow,
+    onUnfollow,
+    isFollowing,
   className,
-  onUnfollow,
-  onFollow,
-  isFollowing,
 }: AuthorInfoProps) {
   const fullName = `${author?.firstName} ${author?.lastName}`;
-
   return (
     <div
       className={cn(

@@ -1,21 +1,29 @@
 import useGetBookChapters from "@/api/chapters/useGetBookChapters";
-import { PaginateParams } from "@/types/Pagination";
 import { useEffect, useState } from "react";
 import ChapterDetail from "./ChapterDetail";
 import { Link } from "react-router-dom";
-import { Chapter } from "@/types/Chapter";
+import { Chapter, ChapterParams } from "@/types/Chapter";
 import LoadingCircle from "../LoadingCirlce";
+import { ChapterStatus } from "@/types/Enums";
 
 interface ChapterSectionProps {
   bookId?: undefined | string;
 }
 
 export default function ChapterSection({ bookId }: ChapterSectionProps) {
-  const [{ pageNo, pageSize }] = useState<PaginateParams>({
-    pageNo: 0,
-    pageSize: 10,
+  const [{ bookId: parentId, pageNo, pageSize, status }] =
+    useState<ChapterParams>({
+      bookId: bookId,
+      pageNo: 0,
+      pageSize: 10,
+      status: ChapterStatus.PUBLISHED,
+    });
+  const { data, loading } = useGetBookChapters({
+    bookId: parentId,
+    pageNo,
+    pageSize,
+    status,
   });
-  const { data, loading } = useGetBookChapters({ bookId, pageNo, pageSize });
   const [chapters, setChapters] = useState<Chapter[]>([]);
 
   useEffect(() => {

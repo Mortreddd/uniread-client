@@ -21,13 +21,14 @@ import AuthorAbout from "@/components/author/AuthorAbout";
 import BooksPage from "@/pages/books/BooksPage.tsx";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
-import CreateBookPage from "@/pages/books/CreateBookPage.tsx";
-import DraftsBookList from "@/components/write/DraftsBookList.tsx";
 import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
 import EditChapter from "./components/chapter/partial/EditChapter.tsx";
 import WorkspacePage from "./pages/workspace/WorkspacePage.tsx";
 import UserDashboard from "./pages/workspace/UserDashboard.tsx";
 import Stories from "./pages/workspace/Stories.tsx";
+import ReadingPage from "./pages/ReadingPage.tsx";
+import ViewChapter from "./components/chapter/ViewChapter.tsx";
+import UserRegisterationPage from "./pages/auth/UserRegisterationPage.tsx";
 
 /**
  *
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "/register",
+    element: <UserRegisterationPage />,
   },
   // Setting up username
   {
@@ -65,9 +70,19 @@ export const router = createBrowserRouter([
     path: "/books/:bookId",
     element: <BookDescriptionPage />,
   },
-  // Create Book Page
   {
-    path: "/books/new",
+    path: "/books/:bookId/chapters",
+    children: [
+      {
+        index: true,
+        path: "/books/:bookId/chapters",
+        element: <ReadingPage />,
+      },
+      {
+        path: "/books/:bookId/chapters/:chapterId",
+        element: <ViewChapter />,
+      },
+    ],
   },
   // Author Page
   {
@@ -128,32 +143,26 @@ export const router = createBrowserRouter([
     element: <WorkspacePage />,
     children: [
       {
-        path: "/workspace",
+        index: true,
         element: <UserDashboard />,
       },
       {
-        path: "/workspace/my-stories",
+        path: "stories",
         element: <Stories />,
-      },
-
-      {
-        path: "/workspace/my-stories/new",
-        element: <CreateBookPage />,
-      },
-      {
-        path: "/workspace/drafts",
-        element: <DraftsBookList />,
       },
     ],
   },
   {
-    path: "/edit/:bookId",
+    path: "/workspace/stories/:bookId",
     element: <WriteChapterPage />,
-    children: [{
-      path: "/edit/:bookId/chapters/:chapterId",
-      element: <EditChapter />
-    }]
+    children: [
+      {
+        path: "chapters/:chapterId",
+        element: <EditChapter />,
+      },
+    ],
   },
+
   // Profile Page
   {
     path: "/profile",

@@ -42,7 +42,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
                 className="rounded-full text-sm"
                 variant={"primary"}
               >
-                Start Reading
+                <a href={`/books/${book.id}/chapters`}>Start Reading</a>
               </Button>
               <Button
                 className="flex items-center gap-2 text-sm rounded-full"

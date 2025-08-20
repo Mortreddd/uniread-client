@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import ExploreDropdown from "../dropdown/ExploreDropdown";
 import LoginModal from "../modal/auth/LoginModal";
 import { ModalRef } from "../modal/Modal";
@@ -15,7 +15,7 @@ export default function GuestNavbar() {
 
   console.log(data);
   return (
-    <AnimatePresence>
+    <>
       <motion.nav
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -47,6 +47,6 @@ export default function GuestNavbar() {
         </ul>
       </motion.nav>
       <LoginModal ref={loginModalRef} />
-    </AnimatePresence>
+    </>
   );
 }

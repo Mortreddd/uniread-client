@@ -1,6 +1,6 @@
 import { cn } from "@/utils/ClassNames";
 import { cva, VariantProps } from "class-variance-authority";
-import { HTMLAttributes } from "react";
+import { LabelHTMLAttributes } from "react";
 
 const labelVariant = cva("", {
   variants: {
@@ -20,7 +20,7 @@ const labelVariant = cva("", {
   },
 });
 interface LabelProps
-  extends HTMLAttributes<HTMLLabelElement>,
+  extends LabelHTMLAttributes<HTMLLabelElement>,
     VariantProps<typeof labelVariant> {}
 
 /**

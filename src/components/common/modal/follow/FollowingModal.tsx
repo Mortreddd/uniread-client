@@ -3,8 +3,7 @@ import Modal, { ModalRef } from "../Modal.tsx";
 import { PaginateParams } from "@/types/Pagination.ts";
 import LoadingCircle from "@/components/LoadingCirlce.tsx";
 import AuthorFollowInfo from "@/components/author/AuthorFollowerInfo.tsx";
-import useGetUserFollows from "@/api/follow/useGetUserFollows.ts";
-import useFollow from "@/hooks/useFollow.ts";
+import useGetUserFollowings from "@/api/follow/useGetUserFollowings.ts";
 
 /**
  * Following modal component
@@ -22,12 +21,12 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
     pageSize: 10,
     query: "",
   });
-  const { isMutualFollowing, followUser, unfollowUser } = useFollow();
+
   /**
    * Get the follows of the selected user, either the selected user is following or follower
    * @returns {Follow[]} Array of follows of the selected user
    */
-  const { data, loading } = useGetUserFollows({
+  const { data, loading } = useGetUserFollowings({
     userId: authorId,
     pageNo,
     pageSize,
@@ -41,8 +40,8 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
   const memoizedSelectedUserFollowings = useMemo(() => {
     if (!data?.content) return [];
 
-    return data.content.filter((follow) => follow.follower.id !== authorId);
-  }, [data, authorId]);
+    return data.content
+  }, [data?.content]);
 
   return (
     <Modal ref={ref} className="max-h-96">
@@ -55,13 +54,10 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
                 <LoadingCircle />
               </div>
             ) : !loading && memoizedSelectedUserFollowings.length > 0 ? (
-              memoizedSelectedUserFollowings.map((follow, index) => (
+              memoizedSelectedUserFollowings.map((author, index) => (
                 <AuthorFollowInfo
                   key={index}
-                  follow={follow}
-                  isMutualFollowing={isMutualFollowing(follow.follower.id)}
-                  onFollow={() => followUser(follow.follower.id)}
-                  onUnfollow={() => unfollowUser(follow.follower.id)}
+                  author={author}
                 />
               ))
             ) : (

@@ -4,22 +4,17 @@ import {
   PropsWithChildren,
   useContext,
   useEffect,
-  useMemo,
   useRef,
-  useState,
 } from "react";
 import SockJS from "sockjs-client";
 import { Client, Message, over } from "stompjs";
 import { AlertType } from "./AlertContext";
-import useGetUserNotifications from "@/api/notification/useGetUserNotifications";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/contexts/ToastContext.tsx";
 
 interface NotificationContextProps {
   showNotification: (message: Notification, type: AlertType) => void;
   hideNotification: () => void;
-  unreadNotifications: Notification[];
-  notifications: Notification[];
 }
 
 const NotificationContext = createContext<NotificationContextProps | undefined>(
@@ -51,25 +46,6 @@ function NotificationProvider({ children }: NotificationProviderProps) {
   const webSocketUrl = `${baseUrl}/ws`;
 
   const { showToast } = useToast();
-
-  const { data } = useGetUserNotifications({
-    pageNo: 0,
-    pageSize: 10,
-  });
-
-  // Set the initial state for notifications
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
-  // Filter the notifications to get only the unread ones
-  // This is used to display the number of unread notifications to the user
-  const unreadNotifications: Notification[] = useMemo(() => {
-    return notifications.filter((notification) => !notification.isRead);
-  }, [notifications]);
-
-  useEffect(() => {
-    if (!data?.content) return;
-    setNotifications(data.content);
-  }, [data]);
 
   useEffect(() => {
     if (!isLoggedIn() || !accessToken) return;
@@ -116,8 +92,6 @@ function NotificationProvider({ children }: NotificationProviderProps) {
       value={{
         showNotification,
         hideNotification,
-        unreadNotifications,
-        notifications,
       }}
     >
       {children}

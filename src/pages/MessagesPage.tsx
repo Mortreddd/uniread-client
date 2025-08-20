@@ -4,14 +4,16 @@ import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar"
 import { motion } from "motion/react";
 
 export default function MessagesPages() {
-  const hasNoActiveConversation = useMatch("/conversations");
+  const hasActiveConversation = useMatch(
+    "/conversations/:conversationId/messages"
+  );
   return (
     <>
-      <header className={"w-full relative"}>
+      <header className={"w-full relative h-fit"}>
         <AuthenticatedNavbar />
       </header>
-      <div className="w-full h-full flex min-h-[87vh] relative">
-        <div className="flex-1 flex">
+      <div className="w-full h-full flex">
+        <div className="w-full h-full flex">
           <motion.div
             initial={{
               opacity: 0,
@@ -30,12 +32,12 @@ export default function MessagesPages() {
             <Inbox />
           </motion.div>
           <div className="flex-1">
-            {hasNoActiveConversation ? (
+            {hasActiveConversation ? (
+              <Outlet />
+            ) : (
               <div className="h-full w-full flex items-center justify-center bg-gray-100">
                 <p className="text-2xl text-gray-400">No active conversation</p>
               </div>
-            ) : (
-              <Outlet />
             )}
           </div>
         </div>

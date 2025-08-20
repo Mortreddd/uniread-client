@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
       ) : (
         <main
           className={
-            "min-h-screen min-w-screen relative antialiased overflow-y-hidden"
+            "min-h-screen w-full relative antialiased overflow-y-hidden"
           }
         >
           {children}

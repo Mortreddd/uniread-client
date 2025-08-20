@@ -1,10 +1,9 @@
-import { User } from "@/types/User.ts";
+import {AuthorDetail} from "@/types/User.ts";
 
 export interface Follow {
   id: string;
-  follower: User;
-  following: User;
-
+  follower: AuthorDetail;
+  following: AuthorDetail;
   createdAt: string;
   updatedAt: string;
 }

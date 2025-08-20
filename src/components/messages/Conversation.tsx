@@ -4,7 +4,7 @@ import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
 import TextArea from "../common/form/TextArea";
 import Messages from "./Messages";
 import { useMessage } from "@/contexts/MessageContext";
-import {useMemo, useRef, useState} from "react";
+import { useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext.tsx";
 import useGetConversationById from "@/api/messages/useGetConversationById.ts";
@@ -18,7 +18,6 @@ export default function Conversation() {
   const { sendMessage } = useMessage();
   const { data, loading } = useGetConversationById({
     conversationId,
-    userId: currentUser?.id,
   });
   const conversation = useMemo(() => {
     if (!data) return null;
@@ -26,19 +25,10 @@ export default function Conversation() {
     return data;
   }, [data]);
 
-  const participant = conversation?.participants?.find(
-    (participant) => participant.id !== currentUser?.id
-  );
-  const fullName = participant?.user.fullName;
-  const conversationName = useMemo(() => {
-    return conversation && conversation?.name !== null
-      ? conversation.name
-      : conversation && conversation.isGroup
-      ? conversation.participants
-          ?.map((participant) => participant.user.username)
-          .join(", ")
-      : fullName;
-  }, [fullName, conversation])
+  const conversationName : string = useMemo(() => {
+    return conversation && conversation.isGroup ? conversation.name ?? conversation?.participants?.map((participant) => participant.user.firstName).join(", ")
+        : conversation?.participants?.find((participant) => participant.id !== currentUser?.id)?.user.fullName ?? "Anonymous";
+  },[currentUser, conversation])
 
   function handleSendMessage() {
     if (content.trim() === "") {
@@ -46,16 +36,16 @@ export default function Conversation() {
       return;
     }
     setContent("");
-
     sendMessage({
       conversationId,
+      receiverIds: conversation?.participants?.map((p) => p.id) || [],
+      isGroup: conversation?.isGroup || false,
       message: content,
     });
-
   }
 
   return (
-    <div className="grow flex flex-col justify-between">
+    <div className="flex flex-col justify-between">
       {/* The sender user name */}
       <div className="w-full h-fit md:p-5 p-3 flex items-center bg-[#f2efeb] md:gap-5 gap-3">
         <Icon size={"md"} />
@@ -66,7 +56,7 @@ export default function Conversation() {
       </div>
 
       {/* The messages */}
-      <div className="w-full min-h-[50dvh] max-h-[50dvh] flex-1 overflow-y-scroll p-5">
+      <div className="w-full min-h-[53dvh] max-h-[53dvh] h-full overflow-y-scroll p-5">
         {loading && !data ? (
           <div className={"w-full flex items-center justify-center h-full"}>
             <LoadingCircle variant={"primary"} />
@@ -77,7 +67,7 @@ export default function Conversation() {
       </div>
 
       {/* The message creation */}
-      <div className="w-full h-fit bg-[#f2efeb] flex items-center md:p-3 p-2">
+      <div className="w-full h-fit sticky bottom-0 bg-[#f2efeb] flex items-center md:p-3 p-2">
         <div className="flex-1 h-fit p-2 md:p-4">
           <TextArea
             ref={textAreaRef}

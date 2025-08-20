@@ -2,25 +2,25 @@ import Modal, { ModalRef } from "../Modal";
 import { Button } from "../../form/Button";
 import { Input } from "../../form/Input";
 import { SocialIcon } from "react-social-icons";
-import { forwardRef, Ref, useState } from "react";
+import { forwardRef, Ref } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { LoginForm, LoginResponse } from "@/types/Auth";
 import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
 import { useAuth } from "@/contexts/AuthContext";
-import DangerAlert from "../../alert/DangerAlert";
 import { ErrorResponse } from "@/types/Error.ts";
 import GoogleAuthButton from "../../form/GoogleAuthButton";
+import { AnimatePresence, motion } from "motion/react";
 
 interface LoginModalProps {}
 
 function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
   const { login } = useAuth();
-  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<LoginForm>({
     defaultValues: {
       email: "",
@@ -29,7 +29,6 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
   });
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    setLoading(true);
     await api
       .post("/auth/login", data)
       .then((response: AxiosResponse<LoginResponse>) => {
@@ -37,9 +36,9 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         console.log(error);
-      })
-      .finally(() => {
-        setLoading(false);
+        setError("root", {
+          message: error.response?.data.message || "Unable to Login",
+        });
       });
   };
 
@@ -51,9 +50,27 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
             Login
           </h1>
           <div className="border-primary py-3 flex flex-col items-start gap-3">
-            {errors?.root && (
-              <DangerAlert iconSize="sm">Invalid email or password</DangerAlert>
-            )}
+            <AnimatePresence>
+              {errors?.root && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                    transition: {
+                      duration: 0.4,
+                      ease: "easeOut",
+                    },
+                  }}
+                  className="w-full rounded bg-red px-3 py-2 text-white bg-red-600 font-serif"
+                >
+                  {errors.root.message}
+                </motion.div>
+              )}
+            </AnimatePresence>
             <div className="w-full">
               <Input
                 type="email"
@@ -82,7 +99,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
           </div>
 
           <Button
-            loading={loading}
+            loading={isSubmitting}
             type="submit"
             className="rounded-xs w-full disabled:bg-priamry/50 font-medium text-white"
             variant={"primary"}
@@ -110,6 +127,17 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
             />
           </Button>
           <GoogleAuthButton />
+        </div>
+        <div className="mt-3 text-center">
+          <p className="text-md font-serif text-gray-800">
+            Don't have an account?{" "}
+            <a
+              href="/register"
+              className="text-primary transition-all duration-200 ease-in-out hover:text-primary/80"
+            >
+              Register
+            </a>
+          </p>
         </div>
       </div>
     </Modal>

@@ -8,7 +8,7 @@ import useGetAuthorById from "@/api/user/useGetAuthorById.ts";
 export default function AuthorProfilePage() {
   const { authorId } = useParams<"authorId">();
 
-  const { data: user } = useGetAuthorById({ authorId })
+  const { data: user } = useGetAuthorById({ authorId });
   return (
     <>
       <header className={"w-full relative"}>

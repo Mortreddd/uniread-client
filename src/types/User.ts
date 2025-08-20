@@ -33,6 +33,8 @@ export interface AuthorDetail extends ImmutableAttribute {
   followersCount: number;
   followingsCount: number;
   storiesCount: number;
+  isMutualFollowing: boolean;
+  isFollowing: boolean;
 }
 
 export interface UserDashboard {

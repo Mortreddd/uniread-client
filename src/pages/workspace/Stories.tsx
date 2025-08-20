@@ -1,19 +1,28 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCurrentUserBooks from "@/api/profile/useCurrentUserBooks.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
 import { Button } from "@/components/common/form/Button.tsx";
 import { motion } from "motion/react";
 import LoadingCircle from "@/components/LoadingCirlce";
-import bookCoverPhoto from "@/assets/cover6.jpg"
+import UserStory from "@/components/book/UserStory";
+import { Book } from "@/types/Book";
+import { ModalRef } from "@/components/common/modal/Modal";
+import ViewStoryModal from "@/components/common/modal/book/ViewStoryModal";
+import AddBookModal from "@/components/common/modal/book/AddBookModal";
 
 type BookCategories = "ALL" | "PUBLISHED" | "DRAFT";
 
 export default function Stories() {
+  const viewStoryModalRef = useRef<ModalRef>(null);
+  const createBookModalRef = useRef<ModalRef>(null);
+
+  const [story, selectedStory] = useState<Book | null>(null);
   const [params, setParams] = useSearchParams();
-  const [category, setCategory] = useState<BookCategories>(
-    params.get("category") as BookCategories
-  );
+  const [category, setCategory] = useState<BookCategories>(() => {
+    const category = params.get("category") as BookCategories;
+    return category || "ALL";
+  });
   const [{ pageNo, pageSize, query }] = useState<PaginateParams>({
     pageNo: 0,
     pageSize: 10,
@@ -32,8 +41,19 @@ export default function Stories() {
 
     return data.content;
   }, [data]);
+
+  const handleViewStory = useCallback(
+    (story: Book) => {
+      viewStoryModalRef.current?.open();
+      selectedStory(story);
+    },
+    [story]
+  );
+
   return (
     <section className="w-full h-full p-4 relative font-serif bg-gray-50 overflow-y-auto">
+      {story && <ViewStoryModal ref={viewStoryModalRef} story={story} />}
+      <AddBookModal ref={createBookModalRef} />
       <motion.div
         initial={{
           opacity: 0,
@@ -48,8 +68,9 @@ export default function Stories() {
             {/* Map through user's stories and display them here */}
             <span
               onClick={() => {
-                setCategory("ALL");
-                setParams({ category });
+                const newCategory: BookCategories = "ALL";
+                setCategory(newCategory);
+                setParams({ category: newCategory });
               }}
               className={`${
                 category === "ALL"
@@ -61,8 +82,9 @@ export default function Stories() {
             </span>
             <span
               onClick={() => {
-                setCategory("PUBLISHED");
-                setParams({ category });
+                const newCategory: BookCategories = "PUBLISHED";
+                setCategory(newCategory);
+                setParams({ category: newCategory });
               }}
               className={`${
                 category === "PUBLISHED"
@@ -74,8 +96,9 @@ export default function Stories() {
             </span>
             <span
               onClick={() => {
-                setCategory("DRAFT");
-                setParams({ category });
+                const newCategory: BookCategories = "DRAFT";
+                setCategory(newCategory);
+                setParams({ category: newCategory });
               }}
               className={`${
                 category === "DRAFT"
@@ -87,8 +110,12 @@ export default function Stories() {
             </span>
           </div>
         </div>
-        <Button variant={"success"} className={"rounded"}>
-          <a href={"/workspace/my-stories/new"}>New Story</a>
+        <Button
+          onClick={() => createBookModalRef.current?.open()}
+          variant={"success"}
+          className={"rounded"}
+        >
+          New Story
         </Button>
       </motion.div>
       <div className="grid grid-cols-2 gap-4">
@@ -98,27 +125,11 @@ export default function Stories() {
           </div>
         ) : (
           stories.map((story) => (
-            <motion.div
+            <UserStory
+              onView={() => handleViewStory(story)}
+              story={story}
               key={story.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white flex rounded-lg shadow hover:shadow-lg transition-shadow duration-200"
-            >
-                <img src={bookCoverPhoto} className={'rounded-none h-auto w-28'}  alt={'Book Cover'}/>
-                <div className={'p-4'}>
-
-              <h3 className="text-xl font-semibold">{story.title}</h3>
-              <p className="text-gray-600 mt-2 line-clamp-3">{story.description}</p>
-              <div className="mt-4">
-                <a
-                  href={`/edit/${story.id}`}
-                  className="text-primary hover:text-primary/80"
-                >
-                  View Story
-                </a>
-              </div>
-                </div>
-            </motion.div>
+            />
           ))
         )}
       </div>

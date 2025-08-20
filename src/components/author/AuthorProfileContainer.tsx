@@ -51,9 +51,10 @@ export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
                 {user?.storiesCount}
               </p>
             </div>
-            <div className="w-fit h-fit flex flex-col items-center">
-              <div
+            <div
                 onClick={() => followerModalRef.current?.open()}
+                className="w-fit h-fit flex hover:cursor-pointer flex-col items-center">
+              <div
                 className="flex gap-2 items-center"
               >
                 <UsersIcon className={"size-8 text-gray-300"} />
@@ -64,9 +65,10 @@ export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
                 {user?.followersCount}
               </p>
             </div>
-            <div className="w-fit h-fit flex flex-col items-center">
-              <div
+            <div
                 onClick={() => followingModalRef.current?.open()}
+                className="w-fit h-fit flex flex-col items-center hover:cursor-pointer">
+              <div
                 className="flex gap-2 items-center"
               >
                 <UserGroupIcon className={"size-8 text-gray-300"} />

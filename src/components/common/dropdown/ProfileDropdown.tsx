@@ -1,13 +1,16 @@
 import Icon from "@/components/Icon";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import defaultProfile from "@/assets/profiles/gojo.jpg";
+import NotificationsModal from "../modal/modal/NotificationsModal";
+import { ModalRef } from "../modal/Modal";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState<boolean>(false);
+  const notificaitonModalRef = useRef<ModalRef>(null);
   const navigate = useNavigate();
   const { logout, user } = useAuth();
 
@@ -23,6 +26,7 @@ export default function ProfileDropdown() {
         "inline-flex items-center gap-2 x-5 py-2 text-left  relative isolate text-lg font-medium font-serif text-black bg-transparent"
       }
     >
+      <NotificationsModal ref={notificaitonModalRef} />
       <Icon src={defaultProfile} size={"sm"} />
 
       <p className="font-serif hover:cursor-pointer text-md">
@@ -74,9 +78,12 @@ export default function ProfileDropdown() {
               </a>
             </li>
             <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
-              <a className="w-full" href="/notifications">
+              <p
+                className="w-full"
+                onClick={() => notificaitonModalRef.current?.open()}
+              >
                 Notifications
-              </a>
+              </p>
             </li>
             <li className="block px-5 py-2 text-left hover:bg-gray-200 transition-all duration-200 ease-in-out hover:cursor-pointer">
               <a className="w-full" href="/settings">

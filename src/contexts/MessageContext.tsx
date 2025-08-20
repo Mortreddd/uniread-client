@@ -7,13 +7,11 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
-import SockJS from "sockjs-client";
-
-import { Client, Message, over } from "stompjs";
+import { Message } from "stompjs";
 import { useAuth } from "@/contexts/AuthContext.tsx";
+import { useWebSocket } from "@/hooks/useWebsocket";
 
 interface MessageContextProps {
   messages: MessageType[];
@@ -22,7 +20,9 @@ interface MessageContextProps {
 }
 
 interface SendMessageProps {
-  conversationId: string | undefined;
+  conversationId?: string;
+  receiverIds: string[];
+  isGroup: boolean;
   message: string;
 }
 
@@ -49,64 +49,45 @@ interface MessageProviderProps extends PropsWithChildren {}
  * @constructor
  */
 function MessageProvider({ children }: MessageProviderProps) {
-  const baseUrl = import.meta.env.VITE_API_URL as string;
-  const messageUrl = `${baseUrl}/ws`;
-  const stompClientRef = useRef<Client | null>(null);
-  const { isLoggedIn, accessToken } = useAuth();
+  const { accessToken, user } = useAuth();
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const { client, subscribe } = useWebSocket(accessToken);
 
-  const connect = useCallback(() => {
-    if (!isLoggedIn() || !accessToken) return;
-
-    const socket = new SockJS(
-      `${baseUrl}/ws/messages?access_token=${accessToken}`
-    );
-    const client = over(socket);
-    console.log("Access Token:", accessToken);
-    client.connect(
-      {},
-      () => {
-        console.log("STOMP connected");
-
-        // Subscribe to private queue
-        client.subscribe("/user/queue/messages", (message: Message) => {
-          const newMessage = JSON.parse(message.body) as MessageType;
-          setMessages((prev) =>
-            prev.some((msg) => msg.id === newMessage.id)
-              ? prev
-              : [newMessage, ...prev]
-          );
-        });
-      },
-      (error) => {
-        console.error("Connection error:", error);
-        // setTimeout(connect, 5000); // Reconnect after 5 seconds
-      }
-    );
-  }, [isLoggedIn, accessToken, messageUrl]);
-
-  /**
-   * Listening to incoming messages using subscribe function of stomp
-   */
+  // Handle incoming messages
   useEffect(() => {
-    connect();
-    return () => {
-      if (stompClientRef.current?.connected) {
-        stompClientRef.current.disconnect(() => {});
-      }
-    };
-  }, [connect]);
+    if (!user?.id) return;
 
-  /**
-   * Sends a message to a server
-   * @param message
-   */
-  const sendMessage = useCallback((message: SendMessageProps) => {
-    const stompClient = stompClientRef.current;
-    if (stompClient?.connected) {
-      stompClient.send("/app/messages/send", {}, JSON.stringify(message));
-    }
-  }, []);
+    const sub = subscribe(`/user/queue/messages`, (message: Message) => {
+      console.log("Received message:", message);
+      try {
+        const newMessage = JSON.parse(message.body) as MessageType;
+        setMessages((prev) =>
+          prev.some((msg) => msg.id === newMessage.id)
+            ? prev
+            : [newMessage, ...prev]
+        );
+      } catch (e) {
+        console.error("Error parsing message:", e);
+      }
+    });
+
+    return () => {
+      sub?.unsubscribe();
+    };
+  }, [subscribe, user?.id]);
+
+  const sendMessage = useCallback(
+    (message: SendMessageProps) => {
+      if (client?.connected) {
+        console.log("Sending message:", message);
+        client.send("/app/messages/send", {}, JSON.stringify(message));
+      } else {
+        console.error("Cannot send message - STOMP not connected");
+        // Optionally implement a message queue to send when reconnected
+      }
+    },
+    [client]
+  );
 
   return (
     <MessageContext.Provider value={{ messages, setMessages, sendMessage }}>
@@ -114,5 +95,4 @@ function MessageProvider({ children }: MessageProviderProps) {
     </MessageContext.Provider>
   );
 }
-
 export { MessageProvider, useMessage };

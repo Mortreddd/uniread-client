@@ -8,9 +8,13 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import useGetGenres from "@/api/genres/useGetGenres";
+import NotificationsModal from "../modal/modal/NotificationsModal";
+import { useRef } from "react";
+import { ModalRef } from "../modal/Modal";
 
 export default function AuthenticatedNavbar() {
   const { data } = useGetGenres();
+  const notificationsModalRef = useRef<ModalRef>(null);
   return (
     <motion.nav
       initial={{ opacity: 0 }}
@@ -19,6 +23,7 @@ export default function AuthenticatedNavbar() {
       exit={{ opacity: 0 }}
       className="w-full py-3 bg-primary relative z-30"
     >
+      <NotificationsModal ref={notificationsModalRef} />
       <div className="w-full flex justify-between items-center bg-white py-2 px-32">
         <a href="/" className="text-2xl font-medium text-black font-serif">
           Uniread
@@ -58,14 +63,14 @@ export default function AuthenticatedNavbar() {
             </a>
           </li>
           <li className="hover:cursor-pointer w-fit relative group">
-            <a
-              href="/notifications"
+            <p
+              onClick={() => notificationsModalRef.current?.open()}
               className={
                 "p-3 rounded-full bg-transparent flex items-center justify-center w-fit hover:bg-gray-200 transition-all duration-200 ease-in-out"
               }
             >
               <BellIcon className="size-6 text-gray-800" />
-            </a>
+            </p>
           </li>
           <li className="hover:cursor-pointer">
             <ProfileDropdown />

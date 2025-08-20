@@ -1,17 +1,15 @@
 import api from "@/services/ApiService";
 import { ErrorResponse } from "@/types/Error";
 import { Message } from "@/types/Message";
-import {Paginate, PaginateParams, RequestState} from "@/types/Pagination";
+import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
 interface GetConversationMessagesProps extends PaginateParams {
-  userId?: string;
   conversationId?: string;
 }
 
 export default function useGetConversationMessages({
-  userId,
   conversationId,
   pageNo,
   pageSize,
@@ -29,7 +27,7 @@ export default function useGetConversationMessages({
     async function getConversationMessages() {
       setState({ loading: true, error: null, data: null });
       api
-        .get(`/users/${userId}/conversations/${conversationId}/messages`, {
+        .get(`/conversations/${conversationId}/messages`, {
           params: {
             pageNo,
             pageSize,
