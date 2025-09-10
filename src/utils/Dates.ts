@@ -4,7 +4,7 @@
  */
 function getCurrentLanguage(): string {
   if (navigator.languages !== undefined) {
-    return navigator.languages.at(0) ?? "en-US";
+    return navigator.languages[0] ?? "en-US";
   }
 
   return navigator.language;
@@ -46,6 +46,6 @@ export function formatWeekdayWithDate(date: Date): string {
     day: "2-digit",
     month: "short",
     year: "numeric",
-    weekday: "short"
-  })
+    weekday: "short",
+  });
 }

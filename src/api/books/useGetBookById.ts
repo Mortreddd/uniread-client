@@ -1,17 +1,17 @@
 import api from "@/services/ApiService";
-import { Book } from "@/types/Book";
+import { BookDetail } from "@/types/Book";
 import { ErrorResponse } from "@/types/Error";
 import { RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import {BookStatus} from "@/types/Enums.ts";
+import { BookStatus } from "@/types/Enums.ts";
 
 interface GetBookById {
   id?: string;
   status?: BookStatus;
 }
-export function useGetBookById({ id , status }: GetBookById) {
-  const [state, setState] = useState<RequestState<Book>>({
+export function useGetBookById({ id, status }: GetBookById) {
+  const [state, setState] = useState<RequestState<BookDetail>>({
     data: null,
     loading: false,
     error: null,
@@ -26,11 +26,11 @@ export function useGetBookById({ id , status }: GetBookById) {
       api
         .get(`/books/${id}`, {
           params: {
-            status
+            status,
           },
           cancelToken: source.token,
         })
-        .then((response: AxiosResponse<Book>) => {
+        .then((response: AxiosResponse<BookDetail>) => {
           setState({
             data: response.data,
             error: null,

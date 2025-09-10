@@ -6,21 +6,21 @@ import {
   useMemo,
   useState,
 } from "react";
-import Modal, { ModalRef } from "../Modal";
-import useGetGenres from "@/api/genres/useGetGenres";
-import GenreOption from "@/components/genre/GenreOption";
-import { useToast } from "@/contexts/ToastContext";
-import api from "@/services/ApiService";
-import { Book, Genre, CreateBookFormProps } from "@/types/Book";
-import { RequestState } from "@/types/Pagination";
+import Modal, { ModalRef } from "../Modal.tsx";
+import useGetGenres from "@/api/genres/useGetGenres.ts";
+import GenreOption from "@/components/genre/GenreOption.tsx";
+import { useToast } from "@/contexts/ToastContext.tsx";
+import api from "@/services/ApiService.ts";
+import { Book, Genre, CreateBookFormProps } from "@/types/Book.ts";
+import { RequestState } from "@/types/Pagination.ts";
 import { AxiosResponse, AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../../form/Button";
-import { Input } from "../../form/Input";
-import Label from "../../form/Label";
-import TextArea from "../../form/TextArea";
-import Toggle from "../../form/Toggle";
-import { ErrorResponse } from "@/types/Error";
+import { Button } from "../../common/form/Button.tsx";
+import { Input } from "../../common/form/Input.tsx";
+import Label from "../../common/form/Label.tsx";
+import TextArea from "../../common/form/TextArea.tsx";
+import Toggle from "../../common/form/Toggle.tsx";
+import { ErrorResponse } from "@/types/Error.ts";
 
 interface AddBookModalProps {}
 

@@ -1,7 +1,7 @@
 import useGetAuthors from "@/api/user/useGetAuthors.ts";
 import AuthorDetail from "@/components/author/AuthorDetail";
-import LoginModal from "@/components/common/modal/auth/LoginModal";
-import { ModalRef } from "@/components/common/modal/Modal";
+import LoginModal from "@/components/modal/auth/LoginModal";
+import { ModalRef } from "@/components/modal/Modal.tsx";
 import LoadingCircle from "@/components/LoadingCirlce";
 import { useAuth } from "@/contexts/AuthContext";
 import { PaginateParams } from "@/types/Pagination";

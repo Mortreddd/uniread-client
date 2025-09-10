@@ -23,9 +23,9 @@ const inputVariant = cva(
         none: "",
       },
       inputSize: {
-        sm: "px-2 py-1",
-        md: "px-3 py-2",
-        lg: "px-4 py-3 text-xl",
+        sm: "px-1.5 py-1",
+        md: "px-2 py-1.5",
+        lg: "px-4 py-2 text-lg",
       },
     },
     defaultVariants: {
@@ -37,13 +37,16 @@ const inputVariant = cva(
 
 export const Input = memo(
   forwardRef<HTMLInputElement, InputProps>(
-    ({ className, variant, loading = false, ...props }, ref) => {
+    (
+      { className, variant, inputSize = "md", loading = false, ...props },
+      ref
+    ) => {
       return (
         <input
           disabled={loading}
           ref={ref}
           {...props}
-          className={cn(inputVariant({ className, variant }))}
+          className={cn(inputVariant({ className, variant, inputSize }))}
         />
       );
     }

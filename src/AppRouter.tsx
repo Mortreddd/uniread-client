@@ -29,6 +29,8 @@ import Stories from "./pages/workspace/Stories.tsx";
 import ReadingPage from "./pages/ReadingPage.tsx";
 import ViewChapter from "./components/chapter/ViewChapter.tsx";
 import UserRegisterationPage from "./pages/auth/UserRegisterationPage.tsx";
+import BasePage from "./pages/settings/BasePage.tsx";
+import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 
 /**
  *
@@ -176,6 +178,22 @@ export const router = createBrowserRouter([
         path: "/profile/about",
         element: <AboutSection />,
         index: true,
+      },
+    ],
+  },
+
+  {
+    path: "/settings",
+    element: <BasePage />,
+    children: [
+      {
+        path: "/settings",
+        element: <ProfileSettings />,
+        index: true,
+      },
+      {
+        path: "/settings/profile",
+        element: <ProfileSettings />,
       },
     ],
   },

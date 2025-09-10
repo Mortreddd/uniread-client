@@ -1,8 +1,8 @@
 import { PropsWithChildren } from "react";
-import Alert from "./Alert";
+import Alert from "./Alert.tsx";
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/ClassNames";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { cn } from "@/utils/ClassNames.ts";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 const dangerAlertVariant = cva("", {
   variants: {
@@ -19,24 +19,24 @@ const dangerAlertVariant = cva("", {
 });
 
 type IconSize = "sm" | "md" | "lg" | "custom";
-interface DangerAlertProps
+interface SuccessAlertProps
   extends PropsWithChildren,
     VariantProps<typeof dangerAlertVariant> {
   className?: string;
   iconSize?: IconSize;
 }
 
-export default function DangerAlert({
+export default function SuccessAlert({
   className,
   iconSize,
   children,
-}: DangerAlertProps) {
+}: SuccessAlertProps) {
   return (
     <Alert
-      variant={"danger"}
+      variant={"success"}
       className={`flex items-center gap-2 ${className}`}
     >
-      <XCircleIcon className={cn(dangerAlertVariant({ iconSize }))} />
+      <ExclamationCircleIcon className={cn(dangerAlertVariant({ iconSize }))} />
       {children}
     </Alert>
   );

@@ -8,9 +8,9 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import useGetGenres from "@/api/genres/useGetGenres";
-import NotificationsModal from "../modal/modal/NotificationsModal";
+import NotificationsModal from "@/components/modal/notification/NotificationsModal";
 import { useRef } from "react";
-import { ModalRef } from "../modal/Modal";
+import { ModalRef } from "../../modal/Modal.tsx";
 
 export default function AuthenticatedNavbar() {
   const { data } = useGetGenres();

@@ -1,4 +1,3 @@
-import { NavLink, Outlet, useOutletContext } from "react-router-dom";
 import { Button } from "../common/form/Button";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
@@ -6,11 +5,12 @@ import { UserMinusIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthorDetail } from "@/types/User.ts";
 import { useRef } from "react";
-import { ModalRef } from "../common/modal/Modal";
-import LoginModal from "../common/modal/auth/LoginModal";
+import { ModalRef } from "../modal/Modal.tsx";
+import LoginModal from "@/components/modal/auth/LoginModal";
 import useFollow from "@/hooks/useFollow.ts";
 import { useToast } from "@/contexts/ToastContext.tsx";
-import NewMessageModal from "../common/modal/message/NewMessageModal";
+import NewMessageModal from "@/components/modal/message/NewMessageModal";
+import {NavLink, Outlet, useOutletContext} from "react-router-dom";
 
 interface AuthorInfo {
   author?: AuthorDetail | null;

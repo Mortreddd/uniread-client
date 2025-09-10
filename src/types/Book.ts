@@ -45,6 +45,17 @@ export interface Tag {
   updatedAt: string;
 }
 
+type ImmutableFieldType = Omit<
+  Book,
+  "user" | "bookComments" | "chapters" | "tags"
+>;
+export interface BookDetail extends ImmutableFieldType {
+  author: string;
+  isSaved: boolean;
+  isAuthor: boolean;
+  isCollaborator: boolean;
+}
+
 export interface BookComment {
   id: string;
   book: Book;

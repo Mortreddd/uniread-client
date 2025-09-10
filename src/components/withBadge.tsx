@@ -28,31 +28,30 @@ const withBadgeVariant = cva("absolute p-1.5", {
   },
 });
 
-interface WithBadgeOptions
-    extends VariantProps<typeof withBadgeVariant> {
+interface WithBadgeOptions extends VariantProps<typeof withBadgeVariant> {
   badgeContent?: React.ReactNode;
   badgeClassName?: string;
 }
 
 function withBadge<P extends object>(
-    WrappedComponent: ComponentType<P>,
-    options: WithBadgeOptions
+  WrappedComponent: ComponentType<P>,
+  options: WithBadgeOptions
 ) {
   return function WithBadgeComponent(props: P) {
     const { position, variant, badgeContent, badgeClassName } = options;
 
     return (
-        <div className="relative inline-block">
-          <WrappedComponent {...props} />
-              <div
-                  className={cn(
-                      withBadgeVariant({ position, variant }),
-                      badgeClassName
-                  )}
-              >
-                {badgeContent}
-              </div>
+      <div className="relative inline-block">
+        <WrappedComponent {...props} />
+        <div
+          className={cn(
+            withBadgeVariant({ position, variant }),
+            badgeClassName
+          )}
+        >
+          {badgeContent}
         </div>
+      </div>
     );
   };
 }

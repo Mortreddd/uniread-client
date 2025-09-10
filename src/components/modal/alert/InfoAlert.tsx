@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import Alert from "./Alert";
+import Alert from "./Alert.tsx";
 import { cva, VariantProps } from "class-variance-authority";
-import { cn } from "@/utils/ClassNames";
+import { cn } from "@/utils/ClassNames.ts";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 const infoAlertVariant = cva("", {

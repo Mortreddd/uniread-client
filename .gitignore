@@ -34,3 +34,6 @@ Dockerfile.prod
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+
+admin-ui.html

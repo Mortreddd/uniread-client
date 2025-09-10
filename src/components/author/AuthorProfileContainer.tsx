@@ -6,10 +6,10 @@ import {
   UserGroupIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import FollowerModal from "@/components/common/modal/follow/FollowerModal.tsx";
+import FollowerModal from "@/components/modal/follow/FollowerModal.tsx";
 import { useRef } from "react";
-import FollowingModal from "@/components/common/modal/follow/FollowingModal.tsx";
-import { ModalRef } from "@/components/common/modal/Modal.tsx";
+import FollowingModal from "@/components/modal/follow/FollowingModal.tsx";
+import { ModalRef } from "@/components/modal/Modal.tsx";
 import {AuthorDetail} from "@/types/User.ts";
 
 interface AuthorContainerProps {

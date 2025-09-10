@@ -1,14 +1,14 @@
 import { forwardRef, Ref, useState } from "react";
-import Modal, { ModalProps, ModalRef } from "../Modal";
-import { AuthorDetail } from "@/types/User";
-import Icon from "@/components/Icon";
+import Modal, { ModalProps, ModalRef } from "../Modal.tsx";
+import { AuthorDetail } from "@/types/User.ts";
+import Icon from "@/components/Icon.tsx";
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
-import TextArea from "../../form/TextArea";
-import { Button } from "../../form/Button";
+import TextArea from "../../common/form/TextArea.tsx";
+import { Button } from "../../common/form/Button.tsx";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { useMessage } from "@/contexts/MessageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import Message from "@/components/messages/Message";
+import { useMessage } from "@/contexts/MessageContext.tsx";
+import { useAuth } from "@/contexts/AuthContext.tsx";
+import Message from "@/components/messages/Message.tsx";
 
 interface CreateMessageProps {
   conversationId?: string;

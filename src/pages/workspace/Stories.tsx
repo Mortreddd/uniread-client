@@ -7,9 +7,9 @@ import { motion } from "motion/react";
 import LoadingCircle from "@/components/LoadingCirlce";
 import UserStory from "@/components/book/UserStory";
 import { Book } from "@/types/Book";
-import { ModalRef } from "@/components/common/modal/Modal";
-import ViewStoryModal from "@/components/common/modal/book/ViewStoryModal";
-import AddBookModal from "@/components/common/modal/book/AddBookModal";
+import { ModalRef } from "@/components/modal/Modal.tsx";
+import ViewStoryModal from "@/components/modal/book/ViewStoryModal";
+import AddBookModal from "@/components/modal/book/AddBookModal";
 
 type BookCategories = "ALL" | "PUBLISHED" | "DRAFT";
 
@@ -50,9 +50,14 @@ export default function Stories() {
     [story]
   );
 
+  function onDelete(storyId: string) {
+      stories.filter((s) => s.id === storyId)
+      viewStoryModalRef.current?.close()
+  }
+
   return (
     <section className="w-full h-full p-4 relative font-serif bg-gray-50 overflow-y-auto">
-      {story && <ViewStoryModal ref={viewStoryModalRef} story={story} />}
+      {story && <ViewStoryModal ref={viewStoryModalRef} story={story} onDelete={onDelete} />}
       <AddBookModal ref={createBookModalRef} />
       <motion.div
         initial={{

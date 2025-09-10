@@ -1,9 +1,9 @@
-import { cn } from "@/utils/ClassNames";
+import { cn } from "@/utils/ClassNames.ts";
 import { cva, VariantProps } from "class-variance-authority";
 import { HTMLMotionProps, motion } from "motion/react";
 
 const alertVariants = cva(
-  "rounded-lg p-2 md:p-4 w-full max-w-52 md:min-w-64 h-fit min-w-52 my-1 md:my-2",
+  "rounded-lg p-1 md:p-2 w-full md:min-w-64 h-fit min-w-52 my-1 md:my-2",
   {
     variants: {
       variant: {

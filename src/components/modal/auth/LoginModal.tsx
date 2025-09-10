@@ -1,16 +1,17 @@
-import Modal, { ModalRef } from "../Modal";
-import { Button } from "../../form/Button";
-import { Input } from "../../form/Input";
+import Modal, { ModalRef } from "../Modal.tsx";
+import { Button } from "../../common/form/Button.tsx";
+import { Input } from "../../common/form/Input.tsx";
 import { SocialIcon } from "react-social-icons";
 import { forwardRef, Ref } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginForm, LoginResponse } from "@/types/Auth";
-import api from "@/services/ApiService";
+import { LoginForm, LoginResponse } from "@/types/Auth.ts";
+import api from "@/services/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext.tsx";
 import { ErrorResponse } from "@/types/Error.ts";
-import GoogleAuthButton from "../../form/GoogleAuthButton";
+import GoogleAuthButton from "../../common/form/GoogleAuthButton.tsx";
 import { AnimatePresence, motion } from "motion/react";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 interface LoginModalProps {}
 
@@ -65,9 +66,10 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
                       ease: "easeOut",
                     },
                   }}
-                  className="w-full rounded bg-red px-3 py-2 text-white bg-red-600 font-serif"
+                  className="w-full flex items-center rounded bg-red px-3 py-2 text-white bg-red-600 font-serif"
                 >
-                  {errors.root.message}
+                  <ExclamationCircleIcon className="h-5 w-5 mr-2" />
+                  <p>{errors.root.message}</p>
                 </motion.div>
               )}
             </AnimatePresence>

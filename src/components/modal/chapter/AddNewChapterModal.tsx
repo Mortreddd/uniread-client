@@ -1,5 +1,5 @@
 import {forwardRef, Ref} from "react";
-import Modal, {ModalRef} from "@/components/common/modal/Modal.tsx";
+import Modal, {ModalRef} from "@/components/modal/Modal.tsx";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {Input} from "@/components/common/form/Input.tsx";
 import {Button} from "@/components/common/form/Button.tsx";

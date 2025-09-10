@@ -1,8 +1,8 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { PropsWithChildren } from "react";
-import Alert from "./Alert";
+import Alert from "./Alert.tsx";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { cn } from "@/utils/ClassNames";
+import { cn } from "@/utils/ClassNames.ts";
 
 const warningAlertVariant = cva("", {
   variants: {

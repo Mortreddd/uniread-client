@@ -5,10 +5,10 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import Banner from "../Banner";
-import { Book } from "@/types/Book";
+import { BookDetail as BookDetailType } from "@/types/Book";
 
 interface BookDetailProps {
-  book: Book;
+  book: BookDetailType;
 }
 
 export default function BookDetail({ book }: BookDetailProps) {

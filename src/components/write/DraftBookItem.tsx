@@ -5,8 +5,8 @@ import {Button} from "@/components/common/form/Button.tsx";
 import {EllipsisHorizontalIcon, PencilSquareIcon} from "@heroicons/react/24/outline";
 import Dropdown, {DropdownContentRef} from "@/components/common/dropdown/Dropdown.tsx";
 import {useRef, useState} from "react";
-import DeleteBookModal from "@/components/common/modal/book/DeleteBookModal.tsx";
-import {ModalRef} from "@/components/common/modal/Modal.tsx";
+import DeleteBookModal from "@/components/modal/book/DeleteBookModal.tsx";
+import {ModalRef} from "@/components/modal/Modal.tsx";
 import {Link} from "react-router-dom";
 
 interface DraftBookItem {

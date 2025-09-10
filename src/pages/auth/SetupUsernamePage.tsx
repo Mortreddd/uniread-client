@@ -1,5 +1,5 @@
 import ApplicationLogo from "@/components/ApplicationLogo";
-import DangerAlert from "@/components/common/alert/DangerAlert";
+import DangerAlert from "@/components/modal/alert/DangerAlert";
 import { Button } from "@/components/common/form/Button";
 import { Input } from "@/components/common/form/Input";
 import { useAuth } from "@/contexts/AuthContext";
