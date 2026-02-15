@@ -6,11 +6,11 @@ import {
   UserGroupIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import FollowerModal from "@/components/common/modal/follow/FollowerModal.tsx";
+import FollowerModal from "@/components/modal/follow/FollowerModal.tsx";
 import { useRef } from "react";
-import FollowingModal from "@/components/common/modal/follow/FollowingModal.tsx";
-import { ModalRef } from "@/components/common/modal/Modal.tsx";
-import {AuthorDetail} from "@/types/User.ts";
+import FollowingModal from "@/components/modal/follow/FollowingModal.tsx";
+import { ModalRef } from "@/components/modal/Modal.tsx";
+import { AuthorDetail } from "@/types/User.ts";
 
 interface AuthorContainerProps {
   user?: AuthorDetail | null;
@@ -48,15 +48,14 @@ export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
                 <h6 className="text-xl font-bold text-gray-300 ">Works</h6>
               </div>
               <p className="text-xl font-bold text-gray-300 ">
-                {user?.storiesCount}
+                {user?.publishedStoriesCount}
               </p>
             </div>
             <div
-                onClick={() => followerModalRef.current?.open()}
-                className="w-fit h-fit flex hover:cursor-pointer flex-col items-center">
-              <div
-                className="flex gap-2 items-center"
-              >
+              onClick={() => followerModalRef.current?.open()}
+              className="w-fit h-fit flex hover:cursor-pointer flex-col items-center"
+            >
+              <div className="flex gap-2 items-center">
                 <UsersIcon className={"size-8 text-gray-300"} />
                 <h6 className="text-xl font-bold text-gray-300 ">Followers</h6>
               </div>
@@ -66,11 +65,10 @@ export default function AuthorProfileContainer({ user }: AuthorContainerProps) {
               </p>
             </div>
             <div
-                onClick={() => followingModalRef.current?.open()}
-                className="w-fit h-fit flex flex-col items-center hover:cursor-pointer">
-              <div
-                className="flex gap-2 items-center"
-              >
+              onClick={() => followingModalRef.current?.open()}
+              className="w-fit h-fit flex flex-col items-center hover:cursor-pointer"
+            >
+              <div className="flex gap-2 items-center">
                 <UserGroupIcon className={"size-8 text-gray-300"} />
                 <h6 className="text-xl font-bold text-gray-300 ">Followings</h6>
               </div>

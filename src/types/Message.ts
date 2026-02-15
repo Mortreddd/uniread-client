@@ -1,13 +1,28 @@
-import { User } from "@/types/User.ts";
+import { SimpleUserInfo, User } from "@/types/User.ts";
 
 export interface Conversation {
   id: string;
   name: string;
+  avatar: string;
   isGroup: boolean;
   participants?: Participant[];
   messages?: Message[];
   createdAt: string;
 }
+
+export interface ConversationDetail extends Omit<
+  Conversation,
+  "participants" | "messages" | "id"
+> {
+  conversationId: string;
+  unreadCount: number;
+  hasNewMessage: boolean;
+  isMuted: boolean;
+  lastMessage: string;
+  lastMessageAt: string;
+}
+
+export interface ConversationInfo extends Pick<Conversation, "id" | "name"> {}
 
 export interface Participant {
   id: string;
@@ -25,10 +40,11 @@ export interface Message {
   updatedAt: string;
 }
 
-export interface CreateMessageRequest {
-  senderId: string;
-  receiverId: string[];
-  message: string;
+export interface ConversationMessage extends Omit<Message, "sender"> {
+  sender: SimpleUserInfo;
 }
 
-export interface CreateConversationRequest {}
+export interface ReaderParticipant {
+  participantId: string;
+  lastReadAt: string;
+}

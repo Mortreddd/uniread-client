@@ -1,7 +1,6 @@
 import { Conversation } from "@/types/Message";
 import { memo } from "react";
 import { Link } from "react-router-dom";
-import Chat from "./Chat";
 
 interface ChatsProps {
   chats: Conversation[];
@@ -14,9 +13,7 @@ function Chats({ chats }: ChatsProps) {
   return (
     <>
       {chats.map((chat) => (
-        <Link to={`/conversations/${chat.id}/messages`} key={chat.id}>
-          <Chat conversation={chat} />
-        </Link>
+        <Link to={`/conversations/${chat.id}/messages`} key={chat.id}></Link>
       ))}
     </>
   );

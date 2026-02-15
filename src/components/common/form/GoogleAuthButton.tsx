@@ -3,15 +3,13 @@ import { Button } from "./Button";
 import { SocialIcon } from "react-social-icons";
 import api from "@/services/ApiService";
 import { AxiosError, AxiosResponse } from "axios";
-import { LoginResponse } from "@/types/Auth";
-import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { ErrorResponse } from "@/types/Error";
 import GoogleAuthProvider from "@/provider/google/GoogleAuthProvider.tsx";
+import { SimpleUserInfo } from "@/types/User";
 
 export default function GoogleAuthButton() {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
   const handleGoogleAuth = useGoogleLogin({
     onError: (error) => {
       setLoading(false);
@@ -23,8 +21,15 @@ export default function GoogleAuthButton() {
         .post("/auth/google", {
           accessToken: response.access_token,
         })
-        .then((result: AxiosResponse<LoginResponse>) => {
-          login(result.data);
+        .then((result: AxiosResponse<SimpleUserInfo>) => {
+          const { username } = result.data;
+
+          if(username === null) {
+            window.location.replace("/auth/setup-username");
+            return;
+          }
+
+          window.location.reload();
         })
         .catch((error: AxiosError<ErrorResponse>) => {
           console.log(error);

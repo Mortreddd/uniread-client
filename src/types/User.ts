@@ -24,17 +24,30 @@ export interface User {
   isUser: boolean;
 }
 
+export interface SimpleUserInfo extends Pick<
+  User,
+  "id" | "username" | "fullName" | "firstName" | "lastName"
+> {}
+
 type ImmutableAttribute = Omit<
   User,
   "isUser" | "isSuperAdmin" | "isAdmin" | "admin" | "superAdmin" | "user"
 >;
 
 export interface AuthorDetail extends ImmutableAttribute {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  gender: string;
+  photoUrl: string | null;
   followersCount: number;
   followingsCount: number;
-  storiesCount: number;
-  isMutualFollowing: boolean;
+  publishedStoriesCount: number;
   isFollowing: boolean;
+  isFollower: boolean;
+  isMutualFollowing: boolean;
 }
 
 export interface UserDashboard {

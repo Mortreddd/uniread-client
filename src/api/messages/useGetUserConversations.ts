@@ -1,34 +1,43 @@
 import api from "@/services/ApiService";
 import { ErrorResponse } from "@/types/Error";
-import { Conversation } from "@/types/Message";
+import { ConversationDetail } from "@/types/Message";
 import { Paginate, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export interface GetUserConversationsProps {
   pageNo?: number;
   pageSize?: number;
-  userId: string | null | undefined;
-  name?: string;
+  isArchived?: boolean;
 }
+
 export default function useGetUserConversations({
   pageNo = 0,
   pageSize = 10,
-  name,
+  isArchived = false,
 }: GetUserConversationsProps) {
-  const [state, setState] = useState<RequestState<Paginate<Conversation[]>>>({
+  const [state, setState] = useState<
+    RequestState<Paginate<ConversationDetail[]>>
+  >({
     data: null,
     error: null,
     loading: false,
   });
 
+  const params = useMemo(() => {
+    return { pageNo, pageSize, isArchived };
+  }, [pageNo, pageSize, isArchived]);
+
+  const paramsKey = JSON.stringify(params);
+
   useEffect(() => {
     setState({ ...state, loading: true });
     api
       .get(`/conversations`, {
-        params: { pageNo, pageSize, name },
+        params,
       })
-      .then((response: AxiosResponse<Paginate<Conversation[]>>) => {
+      .then((response: AxiosResponse<Paginate<ConversationDetail[]>>) => {
+        console.log(response);
         setState({ data: response.data, error: null, loading: false });
       })
       .catch((error: AxiosError<ErrorResponse>) => {
@@ -38,7 +47,6 @@ export default function useGetUserConversations({
           loading: false,
         });
       });
-  }, [pageNo, pageSize]);
-
+  }, [paramsKey]);
   return state;
 }

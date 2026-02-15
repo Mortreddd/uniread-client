@@ -1,5 +1,5 @@
 import {forwardRef, Ref} from "react";
-import Modal, {ModalRef} from "@/components/common/modal/Modal.tsx";
+import Modal, {ModalRef} from "@/components/modal/Modal.tsx";
 import {Chapter} from "@/types/Chapter.ts";
 import {ExclamationCircleIcon} from "@heroicons/react/24/outline";
 import {Button} from "@/components/common/form/Button.tsx";

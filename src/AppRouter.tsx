@@ -6,7 +6,6 @@ import ProfilePage from "@/pages/ProfilePage";
 import WorksSection from "@/components/profile/WorksSection";
 import AboutSection from "@/components/profile/AboutSection";
 import MessagesPage from "@/pages/MessagesPage";
-import Conversation from "@/components/messages/Conversation";
 import GenresPage from "@/pages/GenresPage";
 import GenreBooksPage from "@/pages/GenreBooksPage";
 import LibraryPage from "@/pages/LibraryPage";
@@ -29,6 +28,9 @@ import Stories from "./pages/workspace/Stories.tsx";
 import ReadingPage from "./pages/ReadingPage.tsx";
 import ViewChapter from "./components/chapter/ViewChapter.tsx";
 import UserRegisterationPage from "./pages/auth/UserRegisterationPage.tsx";
+import BasePage from "./pages/settings/BasePage.tsx";
+import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
+import ConversationMessages from "./components/messages/ConversationMessages.tsx";
 
 /**
  *
@@ -117,7 +119,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/conversations/:conversationId/messages",
-        element: <Conversation />,
+        element: <ConversationMessages />,
       },
     ],
   },
@@ -176,6 +178,22 @@ export const router = createBrowserRouter([
         path: "/profile/about",
         element: <AboutSection />,
         index: true,
+      },
+    ],
+  },
+
+  {
+    path: "/settings",
+    element: <BasePage />,
+    children: [
+      {
+        path: "/settings",
+        element: <ProfileSettings />,
+        index: true,
+      },
+      {
+        path: "/settings/profile",
+        element: <ProfileSettings />,
       },
     ],
   },

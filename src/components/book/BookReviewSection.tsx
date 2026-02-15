@@ -1,7 +1,7 @@
 import { StarIcon } from "@heroicons/react/24/outline";
 import { Button } from "../common/form/Button";
 import TextArea from "../common/form/TextArea";
-import LoginModal from "../common/modal/auth/LoginModal";
+import LoginModal from "@/components/modal/auth/LoginModal";
 import api from "@/services/ApiService";
 import {
   CreateReviewFormProps,
@@ -10,7 +10,7 @@ import {
 import { AxiosResponse, AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ModalRef } from "../common/modal/Modal";
+import { ModalRef } from "../modal/Modal.tsx";
 import { ErrorResponse } from "@/types/Error";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";

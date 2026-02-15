@@ -1,54 +1,45 @@
 import { forwardRef, Ref, useState } from "react";
-import Modal, { ModalProps, ModalRef } from "../Modal";
-import { AuthorDetail } from "@/types/User";
-import Icon from "@/components/Icon";
+import Modal, { ModalProps, ModalRef } from "../Modal.tsx";
+import { AuthorDetail } from "@/types/User.ts";
+import Icon from "@/components/Icon.tsx";
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
-import TextArea from "../../form/TextArea";
-import { Button } from "../../form/Button";
+import TextArea from "../../common/form/TextArea.tsx";
+import { Button } from "../../common/form/Button.tsx";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { useMessage } from "@/contexts/MessageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import Message from "@/components/messages/Message";
+import { useMessage } from "@/contexts/MessageContext.tsx";
+import { useAuth } from "@/contexts/AuthContext.tsx";
+import Message from "@/components/messages/Message.tsx";
 
 interface CreateMessageProps {
-  conversationId?: string;
-  receiverIds: string[];
-  isGroup: boolean;
+  receiverId: string;
   message: string;
 }
 
 interface NewMessageModalProps extends ModalProps {
   author: AuthorDetail;
-  onCreateMessage: () => void;
 }
 
-function NewMessageModal(
-  { author, onCreateMessage }: NewMessageModalProps,
-  ref: Ref<ModalRef>
-) {
+function NewMessageModal({ author }: NewMessageModalProps, ref: Ref<ModalRef>) {
+  const { messages, sendFriendMessage } = useMessage();
   const [createMessage, setCreateMessage] = useState<CreateMessageProps>({
-    receiverIds: [author.id],
-    isGroup: false,
+    receiverId: author.id,
     message: "",
   });
 
   const { user: currentUser } = useAuth();
-  const { sendMessage, messages } = useMessage();
 
   async function handleSendMessage() {
     if (!createMessage.message || !currentUser) return;
 
-    console.log(createMessage);
-    sendMessage(createMessage);
-    setCreateMessage({
-      ...createMessage,
-      message: "",
+    sendFriendMessage({
+      receiverId: author.id,
+      message: createMessage.message,
     });
 
-    onCreateMessage(); // Notify parent component to refresh or update state
-
-    // Optionally, you can fetch the latest messages after sending
-    // useGetConversationMessages({ conversationId: "", pageNo: 1, pageSize: 20 });
+    setCreateMessage({
+      receiverId: author.id,
+      message: "",
+    });
   }
 
   return (

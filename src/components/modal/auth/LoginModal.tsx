@@ -1,21 +1,20 @@
-import Modal, { ModalRef } from "../Modal";
-import { Button } from "../../form/Button";
-import { Input } from "../../form/Input";
-import { SocialIcon } from "react-social-icons";
+import api from "@/services/ApiService.ts";
+import { LoginForm, LoginResponse } from "@/types/Auth.ts";
+import { ErrorResponse } from "@/types/Error.ts";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { AxiosError, AxiosResponse } from "axios";
+import { AnimatePresence, motion } from "motion/react";
 import { forwardRef, Ref } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { LoginForm, LoginResponse } from "@/types/Auth";
-import api from "@/services/ApiService";
-import { AxiosError, AxiosResponse } from "axios";
-import { useAuth } from "@/contexts/AuthContext";
-import { ErrorResponse } from "@/types/Error.ts";
-import GoogleAuthButton from "../../form/GoogleAuthButton";
-import { AnimatePresence, motion } from "motion/react";
+import { SocialIcon } from "react-social-icons";
+import { Button } from "../../common/form/Button.tsx";
+import GoogleAuthButton from "../../common/form/GoogleAuthButton.tsx";
+import { Input } from "../../common/form/Input.tsx";
+import Modal, { ModalRef } from "../Modal.tsx";
 
 interface LoginModalProps {}
 
 function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
-  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -32,7 +31,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
     await api
       .post("/auth/login", data)
       .then((response: AxiosResponse<LoginResponse>) => {
-        login(response.data);
+        window.location.reload();
       })
       .catch((error: AxiosError<ErrorResponse>) => {
         console.log(error);
@@ -65,9 +64,10 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
                       ease: "easeOut",
                     },
                   }}
-                  className="w-full rounded bg-red px-3 py-2 text-white bg-red-600 font-serif"
+                  className="w-full flex items-center rounded bg-red px-3 py-2 text-white bg-red-600 font-serif"
                 >
-                  {errors.root.message}
+                  <ExclamationCircleIcon className="h-5 w-5 mr-2" />
+                  <p>{errors.root.message}</p>
                 </motion.div>
               )}
             </AnimatePresence>

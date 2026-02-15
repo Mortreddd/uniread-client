@@ -28,6 +28,14 @@ function Modal({ className, children }: ModalProps, ref: Ref<ModalRef>) {
   }
 
   useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {

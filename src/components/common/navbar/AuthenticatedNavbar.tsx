@@ -8,13 +8,17 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import useGetGenres from "@/api/genres/useGetGenres";
-import NotificationsModal from "../modal/modal/NotificationsModal";
+import NotificationsModal from "@/components/modal/notification/NotificationsModal";
 import { useRef } from "react";
-import { ModalRef } from "../modal/Modal";
+import { ModalRef } from "../../modal/Modal.tsx";
+import Badge from "@/components/Badge.tsx";
+import { useMessage } from "@/contexts/MessageContext.tsx";
 
 export default function AuthenticatedNavbar() {
   const { data } = useGetGenres();
   const notificationsModalRef = useRef<ModalRef>(null);
+
+  const { unreadCount } = useMessage();
   return (
     <motion.nav
       initial={{ opacity: 0 }}
@@ -24,11 +28,11 @@ export default function AuthenticatedNavbar() {
       className="w-full py-3 bg-primary relative z-30"
     >
       <NotificationsModal ref={notificationsModalRef} />
-      <div className="w-full flex justify-between items-center bg-white py-2 px-32">
+      <div className="w-full flex justify-between items-center bg-white py-2 lg:px-32 sm:px-2 px-4 md:px-16">
         <a href="/" className="text-2xl font-medium text-black font-serif">
           Uniread
         </a>
-        <ul className="gap-3 items-center font-serif flex">
+        <ul className="gap-3 items-center font-serif hidden md:flex">
           <li>
             <ExploreDropdown genres={data} />
           </li>
@@ -59,6 +63,11 @@ export default function AuthenticatedNavbar() {
                 "p-3 rounded-full bg-transparent flex items-center justify-center w-fit hover:bg-gray-200 transition-all duration-200 ease-in-out"
               }
             >
+              {unreadCount > 0 && (
+                <Badge size={"xs"} className={"absolute top-0 right-0"}>
+                  {unreadCount}
+                </Badge>
+              )}
               <EnvelopeIcon className="size-6 text-gray-800" />
             </a>
           </li>
@@ -76,6 +85,9 @@ export default function AuthenticatedNavbar() {
             <ProfileDropdown />
           </li>
         </ul>
+        <li className="md:hidden flex hover:cursor-pointer">
+          <ProfileDropdown />
+        </li>
       </div>
     </motion.nav>
   );

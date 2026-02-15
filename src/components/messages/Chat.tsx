@@ -4,20 +4,11 @@ import {Conversation} from "@/types/Message";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 
 interface ChatProps {
-  conversation: Conversation;
+  conversation: ;
 }
 
 function Chat({ conversation, ...props }: ChatProps) {
-  const { user: currentUser } = useAuth();
-  const participant = conversation.participants?.find((participant) => participant.id !== currentUser?.id);
-  const fullName = participant?.user.fullName;
-  const conversationName = conversation.name !== null ? conversation.name : conversation.isGroup ? conversation
-      .participants?.map(
-          (participant) =>
-              participant.user.username)
-      .join(", ") : fullName;
-
-  const message = conversation.messages?.at(-1)
+  
   return (
       <div
         {...props}

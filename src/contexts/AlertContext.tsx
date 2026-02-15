@@ -1,7 +1,7 @@
-import DangerAlert from "@/components/common/alert/DangerAlert";
-import InfoAlert from "@/components/common/alert/InfoAlert";
-import SuccessAlert from "@/components/common/alert/SuccessAlert";
-import WarningAlert from "@/components/common/alert/WarningAlert";
+import DangerAlert from "@/components/modal/alert/DangerAlert";
+import InfoAlert from "@/components/modal/alert/InfoAlert";
+import SuccessAlert from "@/components/modal/alert/SuccessAlert";
+import WarningAlert from "@/components/modal/alert/WarningAlert";
 import { AnimatePresence } from "motion/react";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 

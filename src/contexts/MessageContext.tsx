@@ -1,4 +1,9 @@
-import { Message as MessageType } from "@/types/Message";
+import {
+  Message as MessageType,
+  ConversationDetail,
+  Participant,
+  ReaderParticipant,
+} from "@/types/Message";
 import {
   createContext,
   Dispatch,
@@ -9,25 +14,40 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Message } from "stompjs";
-import { useAuth } from "@/contexts/AuthContext.tsx";
 import { useWebSocket } from "@/hooks/useWebsocket";
-
-interface MessageContextProps {
-  messages: MessageType[];
-  setMessages: Dispatch<SetStateAction<MessageType[]>>;
-  sendMessage: (message: SendMessageProps) => void;
-}
-
-interface SendMessageProps {
-  conversationId?: string;
-  receiverIds: string[];
-  isGroup: boolean;
+import { useToast } from "./ToastContext";
+import { IMessage } from "@stomp/stompjs";
+import useGetUserConversations from "@/api/messages/useGetUserConversations";
+interface FriendMessagePayload {
+  receiverId: string;
   message: string;
 }
 
+interface GroupMessagePayload {
+  conversationId: string;
+  message: string;
+}
+
+interface ConversationMessagePayload {
+  conversationId: string;
+  message: string;
+}
+
+interface MessageContextProps {
+  conversations: ConversationDetail[];
+  setConversations: Dispatch<SetStateAction<ConversationDetail[]>>;
+  sendGroupMessage: (payload: GroupMessagePayload) => void;
+  sendFriendMessage: (payload: FriendMessagePayload) => void;
+  sendConversationMessage: (payload: ConversationMessagePayload) => void;
+  messages: MessageType[];
+  setMessages: Dispatch<SetStateAction<MessageType[]>>;
+  unreadCount: number;
+  markConversationAsRead: (conversationId: string) => void;
+  activeConversation: ConversationDetail | null;
+}
+
 const MessageContext = createContext<MessageContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 /**
@@ -49,48 +69,135 @@ interface MessageProviderProps extends PropsWithChildren {}
  * @constructor
  */
 function MessageProvider({ children }: MessageProviderProps) {
-  const { accessToken, user } = useAuth();
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const { client, subscribe } = useWebSocket(accessToken);
+  const [conversations, setConversations] = useState<ConversationDetail[]>([]);
+  const { showToast } = useToast();
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  // Handle incoming messages
+  const { data } = useGetUserConversations({ pageNo: 0, pageSize: 20 });
+  const calculateUnreadCount = useCallback((convos: ConversationDetail[]) => {
+    if (!convos) return 0;
+
+    const count = convos.reduce((acc, conv) => acc + conv.unreadCount, 0);
+    setUnreadCount(count);
+  }, []);
+
+  const [activeConversation, setActiveConversation] =
+    useState<ConversationDetail | null>(null);
+
   useEffect(() => {
-    if (!user?.id) return;
+    if (data?.content) {
+      setConversations(data.content);
+      calculateUnreadCount(data.content);
+    }
+  }, [data]);
 
-    const sub = subscribe(`/user/queue/messages`, (message: Message) => {
-      console.log("Received message:", message);
-      try {
-        const newMessage = JSON.parse(message.body) as MessageType;
-        setMessages((prev) =>
-          prev.some((msg) => msg.id === newMessage.id)
-            ? prev
-            : [newMessage, ...prev]
-        );
-      } catch (e) {
-        console.error("Error parsing message:", e);
-      }
-    });
+  const { connected, subscribe, publish } = useWebSocket({
+    onConnect: () => showToast("Connected", "success"),
+    onClose: () => showToast("Disconnected", "error"),
+  });
+
+  useEffect(() => {
+    if (!connected) return;
+    const sub1 = subscribe(
+      "/user/queue/chat-notifications",
+      (message: IMessage) => {
+        const receivedConversation = JSON.parse(
+          message.body,
+        ) as ConversationDetail;
+        setConversations((prev) => {
+          const filtered = prev.filter(
+            (conv) =>
+              conv.conversationId !== receivedConversation.conversationId,
+          );
+
+          const convos = [receivedConversation, ...filtered];
+          calculateUnreadCount(convos);
+          return convos;
+        });
+      },
+    );
 
     return () => {
-      sub?.unsubscribe();
+      sub1?.unsubscribe();
     };
-  }, [subscribe, user?.id]);
+  }, [connected, subscribe]);
 
-  const sendMessage = useCallback(
-    (message: SendMessageProps) => {
-      if (client?.connected) {
-        console.log("Sending message:", message);
-        client.send("/app/messages/send", {}, JSON.stringify(message));
-      } else {
-        console.error("Cannot send message - STOMP not connected");
-        // Optionally implement a message queue to send when reconnected
-      }
+  const sendFriendMessage = useCallback(
+    (payload: FriendMessagePayload) => {
+      if (!connected) return;
+      publish({
+        destination: "/app/chat/message",
+        body: payload,
+      });
     },
-    [client]
+    [connected, publish],
   );
 
+  const sendGroupMessage = useCallback(
+    (payload: GroupMessagePayload) => {
+      if (!connected) return;
+      publish({
+        destination: "/app/chat/group",
+        body: payload,
+      });
+    },
+    [connected, publish],
+  );
+
+  const sendConversationMessage = useCallback(
+    (payload: ConversationMessagePayload) => {
+      if (!connected) return;
+
+      publish({
+        destination: `/app/chat.${payload.conversationId}.new`,
+        body: payload,
+      });
+    },
+    [connected, publish],
+  );
+
+  function markConversationAsRead(conversationId: string) {
+    if (!connected) return;
+
+    const subMapping = subscribe(`/app/chat.${conversationId}`, (message) => {
+      // Optional: Handle the unread messages list returned by the server here
+      console.log("Subscribed to mapping and received unread messages");
+    });
+
+    const active = conversations.find(
+      (convo) => convo.conversationId === conversationId,
+    );
+    setActiveConversation(active || null);
+
+    setConversations((prev) => {
+      const updated = prev.map((conv) =>
+        conv.conversationId === conversationId
+          ? { ...conv, unreadCount: 0, hasNewMessage: false }
+          : conv,
+      );
+      calculateUnreadCount(updated);
+      return updated;
+    });
+
+    return () => subMapping?.unsubscribe();
+  }
+
   return (
-    <MessageContext.Provider value={{ messages, setMessages, sendMessage }}>
+    <MessageContext.Provider
+      value={{
+        unreadCount,
+        markConversationAsRead,
+        conversations,
+        setConversations,
+        sendFriendMessage,
+        sendGroupMessage,
+        sendConversationMessage,
+        messages,
+        setMessages,
+        activeConversation,
+      }}
+    >
       {children}
     </MessageContext.Provider>
   );

@@ -1,6 +1,6 @@
 import {Book} from "@/types/Book.ts";
 import {forwardRef, Ref} from "react";
-import Modal, {ModalProps, ModalRef} from "@/components/common/modal/Modal.tsx";
+import Modal, {ModalProps, ModalRef} from "@/components/modal/Modal.tsx";
 import {ExclamationCircleIcon} from "@heroicons/react/24/outline";
 import {Button} from "@/components/common/form/Button.tsx";
 

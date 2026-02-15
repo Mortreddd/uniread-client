@@ -1,10 +1,10 @@
 import { forwardRef, Ref, useMemo, useState } from "react";
-import Modal, { ModalRef } from "../Modal";
-import { Notification } from "@/types/Notification";
-import useGetUserNotifications from "@/api/notification/useGetUserNotifications";
-import { PaginateParams } from "@/types/Pagination";
-import NotificationRow from "@/components/notification/NotificationRow";
-import LoadingCircle from "@/components/LoadingCirlce";
+import Modal, { ModalRef } from "../Modal.tsx";
+import { Notification } from "@/types/Notification.ts";
+import useGetUserNotifications from "@/api/notification/useGetUserNotifications.ts";
+import { PaginateParams } from "@/types/Pagination.ts";
+import NotificationRow from "@/components/notification/NotificationRow.tsx";
+import LoadingCircle from "@/components/LoadingCirlce.tsx";
 
 interface NotificationsModalProps {
   notificaiton?: Notification[];

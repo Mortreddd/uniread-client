@@ -58,5 +58,5 @@ export interface ChapterCreationRequest {
 
 export interface ChapterParams extends PaginateParams {
   bookId: string | undefined;
-  status: ChapterStatus;
+  status?: ChapterStatus;
 }
