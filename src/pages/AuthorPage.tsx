@@ -1,15 +1,15 @@
 import useGetAuthors from "@/api/user/useGetAuthors.ts";
 import AuthorDetail from "@/components/author/AuthorDetail";
+import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
+import LoadingCircle from "@/components/LoadingCirlce";
 import LoginModal from "@/components/modal/auth/LoginModal";
 import { ModalRef } from "@/components/modal/Modal.tsx";
-import LoadingCircle from "@/components/LoadingCirlce";
 import { useAuth } from "@/contexts/AuthContext";
-import { PaginateParams } from "@/types/Pagination";
-import { useMemo, useRef, useState } from "react";
+import { useToast } from "@/contexts/ToastContext.tsx";
 import useFollow from "@/hooks/useFollow.ts";
-import {AuthorDetail as AuthorDetailType} from "@/types/User";
-import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
-import {useToast} from "@/contexts/ToastContext.tsx";
+import { PaginateParams } from "@/types/Pagination";
+import { AuthorDetail as AuthorDetailType } from "@/types/User";
+import { useMemo, useRef, useState } from "react";
 
 /**
  * Page for displaying authors
@@ -28,7 +28,11 @@ export default function AuthorPage() {
   const loginModalRef = useRef<ModalRef>(null);
 
   // Get the authors
-  const { data, loading } = useGetAuthors<AuthorDetailType>({ pageNo, pageSize, query });
+  const { data, loading } = useGetAuthors<AuthorDetailType>({
+    pageNo,
+    pageSize,
+    query,
+  });
   const { followUser, unfollowUser } = useFollow();
   console.log(data);
   /**
@@ -38,7 +42,6 @@ export default function AuthorPage() {
   const memoizedAuthors: AuthorDetailType[] = useMemo(() => {
     if (!data?.content) return [];
     return data.content;
-
   }, [data?.content]);
 
   /**
@@ -52,12 +55,12 @@ export default function AuthorPage() {
     }
 
     await followUser(followingUserId, {
-      onSuccess: message => {
-        showToast(message, "success")
+      onSuccess: (message) => {
+        showToast(message, "success");
       },
-      onError: message => {
-        showToast(message, "error")
-      }
+      onError: (message) => {
+        showToast(message, "error");
+      },
     });
   }
 
@@ -72,12 +75,12 @@ export default function AuthorPage() {
     }
 
     await unfollowUser(followingUserId, {
-      onSuccess: message => {
-        showToast(message, "success")
+      onSuccess: (message) => {
+        showToast(message, "success");
       },
-      onError: message => {
-        showToast(message, "error")
-      }
+      onError: (message) => {
+        showToast(message, "error");
+      },
     });
   }
 
@@ -100,7 +103,6 @@ export default function AuthorPage() {
                   user={author}
                   onUnfollow={() => handleUnfollow(author.id)}
                   onFollow={() => handleFollow(author.id)}
-                  isFollowing={author.isFollowing}
                 />
               </div>
             ))

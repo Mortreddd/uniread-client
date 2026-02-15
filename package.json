@@ -13,11 +13,12 @@
   "dependencies": {
     "@heroicons/react": "^2.1.5",
     "@react-oauth/google": "^0.12.1",
+    "@stomp/stompjs": "^7.3.0",
     "@tailwindcss/vite": "^4.1.8",
     "@types/sockjs-client": "^1.5.4",
     "@types/stompjs": "^2.3.9",
-    "axios": "^1.8.4",
-    "class-variance-authority": "^0.7.0",
+    "axios": "^1.13.5",
+    "class-variance-authority": "^0.7.1",
     "client": "file:",
     "clsx": "^2.1.1",
     "motion": "^12.15.0",
@@ -29,8 +30,6 @@
     "slate": "^0.112.0",
     "slate-dom": "^0.112.2",
     "slate-react": "^0.112.1",
-    "sockjs-client": "^1.6.1",
-    "stompjs": "^2.3.3",
     "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {

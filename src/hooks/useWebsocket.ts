@@ -1,67 +1,98 @@
-import { useAuth } from "@/contexts/AuthContext";
-import { useState, useCallback, useEffect } from "react";
-import SockJS from "sockjs-client";
-import { Client, Message, over, Subscription } from "stompjs";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { ActivationState, Client, IMessage } from "@stomp/stompjs";
 
-export function useWebSocket(accessToken: string | null) {
-  const [client, setClient] = useState<Client | null>(null);
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const baseUrl = import.meta.env.VITE_API_URL as string;
-  const { isLoggedIn } = useAuth();
+interface WebsocketProps {
+  onChangeState?: (state: ActivationState) => void;
+  onConnect?: () => void;
+  onClose?: () => void;
+}
 
-  const connect = useCallback(() => {
-    if (!accessToken || !isLoggedIn()) return;
-
-    const socket = new SockJS(
-      `${baseUrl}/ws/messages?access_token=${accessToken}`
-    );
-    const stompClient = over(socket);
-
-    stompClient.heartbeat.outgoing = 10000;
-    stompClient.heartbeat.incoming = 10000;
-
-    stompClient.connect(
-      {},
-      () => {
-        console.log("STOMP connected");
-        setClient(stompClient);
-      },
-      (error) => {
-        console.error("Connection error:", error);
-        setTimeout(connect, 5000);
-      }
-    );
-
-    return () => {
-      if (stompClient.connected) {
-        stompClient.disconnect(() => {
-          console.log("Stomp connection disconnected");
-        });
-      }
-    };
-  }, [accessToken, baseUrl]);
+export function useWebSocket({
+  onChangeState = () => {},
+  onConnect = () => {},
+  onClose = () => {},
+}: WebsocketProps) {
+  const baseUrl = import.meta.env.VITE_BASE_URL as string;
+  const [connected, setConnected] = useState(false);
+  const client = useRef<Client | null>(null);
 
   useEffect(() => {
-    const cleanup = connect();
-    return cleanup;
-  }, [connect]);
+    if (client.current) return;
+
+    client.current = new Client({
+      brokerURL: `${baseUrl}/ws`,
+      reconnectDelay: 5000,
+      heartbeatIncoming: 10000,
+      heartbeatOutgoing: 10000,
+      onChangeState,
+      onConnect: () => {
+        setConnected(true);
+        onConnect?.();
+      },
+      onDisconnect: () => {
+        setConnected(false);
+        onClose?.();
+      },
+      onHeartbeatLost: () => {
+        console.warn("WebSocket heartbeat lost. Attempting to reconnect...");
+        setConnected(false);
+        onClose?.();
+      },
+      onWebSocketClose: () => {
+        setConnected(false);
+        onClose?.();
+      },
+      onStompError: (frame) => {
+        console.error("STOMP error:", frame);
+      },
+    });
+  }, [baseUrl]);
+
+  useEffect(() => {
+    const stompClient = client.current;
+
+    if (stompClient && !stompClient.active) {
+      stompClient.activate();
+    }
+  }, []);
+
+  function publish<T>({
+    destination,
+    body,
+    headers = {},
+  }: {
+    destination: string;
+    body: T;
+    headers?: any;
+  }) {
+    if (!connected) {
+      console.error("WebSocket is not connected. Cannot send message.");
+      return;
+    }
+
+    if (!client.current) return;
+
+    client.current.publish({
+      destination,
+      headers,
+      body: JSON.stringify(body),
+    });
+  }
 
   const subscribe = useCallback(
-    (destination: string, callback: (message: Message) => void) => {
-      if (!client?.connected) return;
+    (destination: string, callback: (message: IMessage) => void) => {
+      if (!connected) {
+        console.warn(
+          "Attempting to subscribe before connection. Consider a retry logic.",
+        );
+        return;
+      }
+      if (!client.current) return;
 
-      const subscription = client.subscribe(destination, callback);
-      setSubscriptions((prev) => [...prev, subscription]);
-      return subscription;
+      return client.current.subscribe(destination, callback);
     },
-    [client]
+    [connected],
   );
 
-  useEffect(() => {
-    return () => {
-      subscriptions.forEach((sub) => sub.unsubscribe());
-    };
-  }, [subscriptions]);
-
-  return { client, subscribe };
+  return { client, subscribe, publish, connected } as const;
 }

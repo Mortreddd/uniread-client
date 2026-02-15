@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { RequestState } from "@/types/Pagination.ts";
 import api from "@/services/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
-import { Conversation as ConversationType } from "@/types/Message";
+import { ConversationInfo } from "@/types/Message";
 import { ErrorResponse } from "@/types/Error.ts";
 
 interface GetConversationByIdProps {
@@ -12,7 +12,7 @@ interface GetConversationByIdProps {
 export default function useGetConversationById({
   conversationId,
 }: GetConversationByIdProps) {
-  const [state, setState] = useState<RequestState<ConversationType>>({
+  const [state, setState] = useState<RequestState<ConversationInfo>>({
     loading: false,
     error: null,
     data: null,
@@ -23,7 +23,7 @@ export default function useGetConversationById({
       setState({ ...state, loading: true });
       await api
         .get(`/conversations/${conversationId}`)
-        .then((response: AxiosResponse<ConversationType>) => {
+        .then((response: AxiosResponse<ConversationInfo>) => {
           setState({ data: response.data, error: null, loading: false });
         })
         .catch((error: AxiosError<ErrorResponse>) => {

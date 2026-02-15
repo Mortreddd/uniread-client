@@ -10,7 +10,7 @@ import LoginModal from "@/components/modal/auth/LoginModal";
 import useFollow from "@/hooks/useFollow.ts";
 import { useToast } from "@/contexts/ToastContext.tsx";
 import NewMessageModal from "@/components/modal/message/NewMessageModal";
-import {NavLink, Outlet, useOutletContext} from "react-router-dom";
+import { NavLink, Outlet, useOutletContext } from "react-router-dom";
 
 interface AuthorInfo {
   author?: AuthorDetail | null;
@@ -73,13 +73,7 @@ export default function AuthorProfileDescription({
     <>
       <div className="w-full h-full">
         <LoginModal ref={loginModalRef} />
-        {user ? (
-          <NewMessageModal
-            author={user}
-            onCreateMessage={() => newMessageModal.current?.close()}
-            ref={newMessageModal}
-          />
-        ) : null}
+        {user ? <NewMessageModal author={user} ref={newMessageModal} /> : null}
         <div className="w-full h-fit shadow-lg px-10 bg-white flex justify-between items-center">
           <div className="h-fit flex items-center justify-start gap-10">
             <NavLink
@@ -137,9 +131,9 @@ export default function AuthorProfileDescription({
             </Button>
           </div>
         </div>
-        <div className="w-full h-fit">
+        {/* <div className="w-full h-fit">
           <Outlet context={{ author: user } satisfies AuthorInfo} />
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import api from "@/services/ApiService";
 import { ErrorResponse } from "@/types/Error";
-import { Message } from "@/types/Message";
+import { ConversationMessage } from "@/types/Message";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -14,7 +14,9 @@ export default function useGetConversationMessages({
   pageNo,
   pageSize,
 }: GetConversationMessagesProps) {
-  const [state, setState] = useState<RequestState<Paginate<Message[]>>>({
+  const [state, setState] = useState<
+    RequestState<Paginate<ConversationMessage[]>>
+  >({
     loading: false,
     error: null,
     data: null,
@@ -34,7 +36,7 @@ export default function useGetConversationMessages({
           },
           signal,
         })
-        .then((response: AxiosResponse<Paginate<Message[]>>) => {
+        .then((response: AxiosResponse<Paginate<ConversationMessage[]>>) => {
           setState({ loading: false, error: null, data: response.data });
         })
         .catch((error: AxiosError<ErrorResponse>) => {

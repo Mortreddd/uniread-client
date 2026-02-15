@@ -43,7 +43,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
       return;
     }
 
-    await api.post(`/books/${book?.id}`);
+    await api.post(`/profile/${book?.id}`);
   }
 
   return (

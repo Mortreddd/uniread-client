@@ -3,17 +3,18 @@ import { ErrorResponse } from "@/types/Error";
 import { ConversationDetail } from "@/types/Message";
 import { Paginate, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface GetUserConversationsProps {
   pageNo?: number;
   pageSize?: number;
+  isGroup?: boolean;
   isArchived?: boolean;
 }
-
-export default function useGetUserConversations({
+export default function useGetUserRecentConversations({
   pageNo = 0,
   pageSize = 10,
+  isGroup = false,
   isArchived = false,
 }: GetUserConversationsProps) {
   const [state, setState] = useState<
@@ -24,20 +25,13 @@ export default function useGetUserConversations({
     loading: false,
   });
 
-  const params = useMemo(() => {
-    return { pageNo, pageSize, isArchived };
-  }, [pageNo, pageSize, isArchived]);
-
-  const paramsKey = JSON.stringify(params);
-
   useEffect(() => {
     setState({ ...state, loading: true });
     api
       .get(`/conversations`, {
-        params,
+        params: { pageNo, pageSize, isGroup, isArchived },
       })
       .then((response: AxiosResponse<Paginate<ConversationDetail[]>>) => {
-        console.log(response);
         setState({ data: response.data, error: null, loading: false });
       })
       .catch((error: AxiosError<ErrorResponse>) => {
@@ -47,6 +41,7 @@ export default function useGetUserConversations({
           loading: false,
         });
       });
-  }, [paramsKey]);
+  }, [pageNo, pageSize]);
+
   return state;
 }
