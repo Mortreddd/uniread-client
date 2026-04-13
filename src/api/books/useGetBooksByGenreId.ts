@@ -1,5 +1,5 @@
-import api from "@/services/ApiService";
-import {Book, BookParams} from "@/types/Book";
+import api from "@/core/api/ApiService.ts";
+import {BookDetail, BookParams} from "@/features/books/types/Book.ts";
 import { ErrorResponse } from "@/types/Error";
 import { Paginate, RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -15,7 +15,7 @@ export default function useGetBooksByGenreId({
   query,
   status
 }: GetBooksByGenreProps) {
-  const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
+  const [state, setState] = useState<RequestState<Paginate<BookDetail[]>>>({
     data: null,
     error: null,
     loading: false,
@@ -37,7 +37,7 @@ export default function useGetBooksByGenreId({
           },
           cancelToken: source.token,
         })
-        .then((response: AxiosResponse<Paginate<Book[]>>) => {
+        .then((response: AxiosResponse<Paginate<BookDetail[]>>) => {
           setState({ error: null, data: response.data, loading: false });
           console.log(response);
         })

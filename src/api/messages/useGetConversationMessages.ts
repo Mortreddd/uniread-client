@@ -1,11 +1,11 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { ErrorResponse } from "@/types/Error";
-import { ConversationMessage } from "@/types/Message";
+import { ConversationMessage } from "@/features/chats/types/Chat.ts";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-interface GetConversationMessagesProps extends PaginateParams {
+interface ConversationMessagesParams extends PaginateParams {
   conversationId?: string;
 }
 
@@ -13,7 +13,7 @@ export default function useGetConversationMessages({
   conversationId,
   pageNo,
   pageSize,
-}: GetConversationMessagesProps) {
+}: ConversationMessagesParams) {
   const [state, setState] = useState<
     RequestState<Paginate<ConversationMessage[]>>
   >({
@@ -23,6 +23,10 @@ export default function useGetConversationMessages({
   });
 
   useEffect(() => {
+    if (!conversationId) {
+      setState({ data: null, error: null, loading: false });
+      return;
+    }
     const controller = new AbortController();
     const signal = controller.signal;
 
@@ -49,6 +53,8 @@ export default function useGetConversationMessages({
     }
 
     getConversationMessages();
+
+    return () => controller.abort();
   }, [conversationId, pageNo, pageSize]);
 
   return state;

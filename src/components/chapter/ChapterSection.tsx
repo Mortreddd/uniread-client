@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ChapterDetail from "./ChapterDetail";
 import { Link } from "react-router-dom";
 import { Chapter, ChapterParams } from "@/types/Chapter";
-import LoadingCircle from "../LoadingCirlce";
+import Spinner from "../../shared/components/Spinner.tsx";
 import { ChapterStatus } from "@/types/Enums";
 
 interface ChapterSectionProps {
@@ -42,7 +42,7 @@ export default function ChapterSection({ bookId }: ChapterSectionProps) {
       <div className="flex flex-col w-full bg-white flex-1">
         {loading && !data?.content ? (
           <div className="flex items-center justify-center w-full h-full">
-            <LoadingCircle />
+            <Spinner />
           </div>
         ) : !loading && chapters.length > 0 ? (
           chapters.map((chapter) => (

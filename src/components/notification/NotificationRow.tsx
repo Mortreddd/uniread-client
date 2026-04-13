@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon";
+import Icon from "@/shared/components/Icon.tsx";
 import { Notification } from "@/types/Notification";
 import { cn } from "@/utils/ClassNames";
 import { HTMLAttributes } from "react";

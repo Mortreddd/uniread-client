@@ -1,36 +1,77 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import Icon from "../Icon";
-import LoadingCircle from "../LoadingCirlce";
-import TextArea from "../common/form/TextArea";
-import { Button } from "../common/form/Button";
-import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
-import { ConversationMessage, ReaderParticipant } from "@/types/Message";
+import Icon from "../../shared/components/Icon.tsx";
+import Spinner from "../../shared/components/Spinner.tsx";
+import {
+  ConversationDetail,
+  ConversationMessage,
+  ReaderParticipant,
+} from "@/features/chats/types/Chat.ts";
 import useGetConversationMessages from "@/api/messages/useGetConversationMessages";
-import { useAuth } from "@/contexts/AuthContext";
-import { useConversationContext } from "@/pages/MessagesPage";
 import { useMessage } from "@/contexts/MessageContext";
 import { useWebSocket } from "@/hooks/useWebsocket";
+import useGetConversationById from "@/api/messages/useGetConversationById";
+import CreateMessageSection from "./CreateMessageSection";
+import { Button } from "@/shared/components/form/Button";
+import {
+  InformationCircleIcon,
+  PhoneIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/outline";
+import { IMessage } from "@stomp/stompjs";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ConversationMessages() {
-  const { conversation } = useConversationContext();
-  const [content, setContent] = useState<string>("");
-  const { markConversationAsRead, sendFriendMessage, sendGroupMessage } =
-    useMessage();
+  const { conversationId, recipientId } = useParams<{
+    conversationId: string;
+    recipientId: string;
+  }>();
+
+  const { data: conversation, loading: convoLoading } = useGetConversationById({
+    conversationId,
+  });
+
+  return (
+    <div className="h-full flex flex-col">
+      <ConversationHeader
+        convoLoading={convoLoading}
+        conversation={conversation}
+      />
+      <MessagesSection conversationId={conversationId} />
+      <CreateMessageSection
+        conversationId={conversationId}
+        recipientId={conversation?.receiverId ?? recipientId}
+        isGroup={conversation?.isGroup}
+      />
+    </div>
+  );
+}
+
+interface MessagesSectionProps {
+  conversationId: string | undefined;
+}
+function MessagesSection({ conversationId }: MessagesSectionProps) {
+  const { markConversationAsRead } = useMessage();
   const { subscribe, connected } = useWebSocket({});
-  const { conversationId } = useParams<{ conversationId: string }>();
-  const [messages, setMessages] = useState<ConversationMessage[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const [{ pageNo, pageSize }] = useState({
     pageNo: 0,
     pageSize: 15,
   });
+  const { data, loading, error } = useGetConversationMessages({
+    conversationId,
+    pageNo,
+    pageSize,
+  });
+  const [messages, setMessages] = useState<ConversationMessage[]>([]);
 
-  const { data: convoMessages, loading: messagesLoading } =
-    useGetConversationMessages({
-      conversationId,
-      pageNo,
-      pageSize,
-    });
+  const memoizedMessages: ConversationMessage[] | null = useMemo(() => {
+    if (!messages || messages.length <= 0) {
+      return null;
+    }
+
+    return messages;
+  }, [messages]);
 
   useEffect(() => {
     if (!conversationId || !connected) return;
@@ -50,79 +91,99 @@ export default function ConversationMessages() {
   }, [conversationId, connected]);
 
   useEffect(() => {
-    if (convoMessages) {
-      setMessages(convoMessages.content);
-    }
-  }, [convoMessages]);
+    if (!connected) return;
+    const sub1 = subscribe(
+      `/topic/chat.${conversationId}.messages`,
+      (message: IMessage) => {
+        const receivedMessage = JSON.parse(message.body) as ConversationMessage;
 
-  function handleSendMessage() {
-    if (!conversation || !content) return;
+        setMessages((prev) => {
+          const filtered = prev.filter((m) => m.id !== receivedMessage.id);
 
-    const isGroup = conversation.isGroup;
+          return [...filtered, receivedMessage];
+        });
+      },
+    );
 
-    if (isGroup) {
-      return;
-    }
+    return () => {
+      sub1?.unsubscribe();
+    };
+  }, [connected, subscribe]);
 
-    // sendFriendMessage({ receiverId})
-  }
+  useEffect(() => {
+    if (!data) return;
+
+    setMessages(data.content);
+  }, [data]);
 
   return (
-    <div className="flex-1 flex flex-col justify-between">
-      <div className="w-full h-fit md:p-5 p-3 flex items-center bg-[#f2efeb] md:gap-5 gap-3">
-        <Icon size={"md"} />
-        <div className="flex-1">
-          <h3 className="text-lg font-bold">
-            {conversation !== null ? conversation.name : "Anonymous"}
-          </h3>
-          {/* <p className="text-sm text-gray-500">Active 1m ago</p> */}
+    <div className="flex-1 overflow-y-auto p-2">
+      {loading && messages == null ? (
+        <div className={"w-full flex items-center justify-center h-full"}>
+          <Spinner variant={"primary"} />
         </div>
-      </div>
-
-      {/* The messages */}
-      <div className="flex-1 overflow-y-auto p-5">
-        {messagesLoading && !messages.length ? (
-          <div className={"w-full flex items-center justify-center h-full"}>
-            <LoadingCircle variant={"primary"} />
-          </div>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {messages.map((message) => (
-              <MessageItem key={message.id} message={message} />
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="w-full h-fit sticky bottom-0 bg-[#f2efeb] flex items-center md:p-3 p-2">
-        <div className="flex-1 h-fit p-2 md:p-4">
-          <TextArea
-            className="w-full"
-            placeholder="Write a message"
-            rows={3}
-          ></TextArea>
+      ) : memoizedMessages != null && !error ? (
+        <div className="flex flex-1 flex-col">
+          {memoizedMessages.map((message) => (
+            <MessageItem key={message.id} message={message} />
+          ))}
+          <div ref={bottomRef} />
         </div>
-        <div className="w-fit h-fit">
-          <Button variant={"primary"} className="rounded-full p-2">
-            <PaperAirplaneIcon className="h-5 w-5" />
-          </Button>
+      ) : (
+        <div className={"w-full flex items-center justify-center h-full"}>
+          <p className="text-lg text-gray-700 font-serif">{error}</p>
         </div>
-      </div>
+      )}
     </div>
   );
 }
 
 function MessageItem({ message }: { message: ConversationMessage }) {
+  const { message: content } = message;
   const { user } = useAuth();
-  const isMine = message.sender.id === user?.id;
+  const isMine = user?.id === message.senderId;
   return (
     <div
-      className={`w-full p-3 flex ${isMine ? "justify-end" : "justify-start"}`}
+      className={`w-full p-1 flex ${isMine ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`max-w-xs md:max-w-md w-fit p-3 rounded-lg ${isMine ? "bg-primary text-white" : "bg-gray-200 text-gray-800"}`}
+        className={`max-w-xs md:max-w-md w-fit p-3 rounded-t-lg ${isMine ? "bg-primary text-white rounded-bl-lg" : "bg-gray-200 text-gray-800 rounded-br-lg"}`}
       >
-        {message.message}
+        {content}
+      </div>
+    </div>
+  );
+}
+
+interface ConversationHeaderProps {
+  convoLoading: boolean;
+  conversation: ConversationDetail | null;
+}
+function ConversationHeader({
+  convoLoading,
+  conversation,
+}: ConversationHeaderProps) {
+  return (
+    <div className="w-full h-fit shrink-0 min-h-0 md:p-3 p-2 flex items-center justify-between bg-gray-200">
+      <div className="size-fit inline-flex md:gap-4 gap-3 items-center">
+        <Icon size={"md"} />
+        <div className="flex-1">
+          <h3 className="text-lg font-bold">
+            {!convoLoading && (conversation !== null ? conversation.name : "")}
+          </h3>
+          {/* <p className="text-sm text-gray-500">Active 1m ago</p> */}
+        </div>
+      </div>
+      <div className="inline-flex items-center gap-3 md:gap-4">
+        <Button variant={"transparent"} className={"rounded-full p-2"}>
+          <VideoCameraIcon className={"size-6 text-primary"} />
+        </Button>
+        <Button variant={"transparent"} className={"rounded-full p-2"}>
+          <PhoneIcon className={"size-6 text-primary"} />
+        </Button>
+        <Button variant={"transparent"} className={"rounded-full p-2"}>
+          <InformationCircleIcon className={"size-6 text-primary"} />
+        </Button>
       </div>
     </div>
   );

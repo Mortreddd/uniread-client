@@ -1,19 +1,18 @@
-import Icon from "@/components/Icon";
-import { useNavigate, Link } from "react-router-dom"; // Use Link for internal navigation
+import Icon from "@/shared/components/Icon.tsx";
+import { Link } from "react-router-dom"; // Use Link for internal navigation
 import { useRef, useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import defaultProfile from "@/assets/profiles/gojo.jpg";
 import NotificationsModal from "@/components/modal/notification/NotificationsModal";
-import { ModalRef } from "../../modal/Modal.tsx";
+import { ModalRef } from "@/shared/components/Modal.tsx";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the whole container
   const notificaitonModalRef = useRef<ModalRef>(null);
-  const navigate = useNavigate();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -32,7 +31,6 @@ export default function ProfileDropdown() {
   const handleLogout = () => {
     setOpen(false);
     logout();
-    navigate("/");
   };
 
   const menuItems = [
@@ -47,15 +45,10 @@ export default function ProfileDropdown() {
     <div className="relative inline-block" ref={dropdownRef}>
       <motion.button
         onClick={() => setOpen(!open)}
-        className="inline-flex items-center gap-2 px-5 py-2 text-left relative isolate text-lg font-medium font-serif text-black bg-transparent"
+        className="inline-flex items-center gap-2 px-5 py-2 text-left relative isolate text-lg font-medium font-serif text-black bg-transparent dark:text-white dark:bg-transparent/80"
       >
         <NotificationsModal ref={notificaitonModalRef} />
         <Icon src={defaultProfile} size={"sm"} />
-
-        <p className="font-serif hover:cursor-pointer sm:text-xs text-sm md:text-lg">
-          {user?.fullName ?? "Anonymous"}
-        </p>
-
         <ChevronDownIcon
           className={`sm:size-3 size-3 md:size-4 transition-all duration-200 ease-in-out ${
             open ? "rotate-180" : ""

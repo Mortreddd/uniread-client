@@ -1,5 +1,5 @@
 import { forwardRef, Ref, useMemo, useState } from "react";
-import Modal, { ModalRef } from "../Modal";
+import Modal, { ModalRef } from "../../../shared/components/Modal.tsx";
 import {
   CollaboratorRequestStatus,
   CollaboratorRequest as CollaboratorRequestType,
@@ -7,11 +7,11 @@ import {
 import { PaginateParams } from "@/types/Pagination";
 import { useToast } from "@/contexts/ToastContext";
 import { formatDateWithTime } from "@/utils/Dates";
-import Icon from "@/components/Icon";
-import { Button } from "@/components/common/form/Button";
+import Icon from "@/shared/components/Icon.tsx";
+import { Button } from "@/shared/components/form/Button";
 import useGetBookCollaboratorRequests from "@/api/collaborator/useGetBookCollaboratorRequests";
-import LoadingCircle from "@/components/LoadingCirlce";
-import api from "@/services/ApiService";
+import Spinner from "@/shared/components/Spinner.tsx";
+import api from "@/core/api/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@/types/Error";
 
@@ -91,7 +91,7 @@ function ViewCollaboratorRequests(
         <h1 className="text-2xl font-bold mb-4">Collaboration Requests</h1>
         <div className="min-h-72 max-h-96 overflow-y-auto space-y-4">
           {loading ? (
-            <LoadingCircle />
+            <Spinner />
           ) : data?.content.length === 0 ? (
             <p>No collaboration requests found.</p>
           ) : (

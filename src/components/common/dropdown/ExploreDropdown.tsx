@@ -1,4 +1,4 @@
-import { Genre } from "@/types/Book";
+import { Genre } from "@/features/books/types/Book.ts";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "motion/react";
 import { memo, useEffect, useRef, useState } from "react";

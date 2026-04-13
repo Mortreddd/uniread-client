@@ -6,28 +6,33 @@ export enum Role {
 
 export interface User {
   id: string;
+  email: string;
+  username: string;
+  
+  role: Role;
+  emailVerifiedAt?: string | null;
+  bannedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserProfile {
+  id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   fullName: string;
   username: string;
-  email: string;
   gender: string;
   photoUrl: string | null;
-  role: Role;
-  emailVerifiedAt?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  admin: boolean;
-  superAdmin: boolean;
-  isAdmin: boolean;
-  isSuperAdmin: boolean;
-  isUser: boolean;
 }
 
 export interface SimpleUserInfo extends Pick<
-  User,
-  "id" | "username" | "fullName" | "firstName" | "lastName"
-> {}
+  UserProfile,
+  "id" | "username" | "fullName" | "firstName" | "lastName" | "photoUrl"
+> {
+  userId: string;
+}
 
 type ImmutableAttribute = Omit<
   User,

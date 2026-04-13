@@ -1,8 +1,8 @@
 import { Chapter } from "@/types/Chapter.ts";
 import { useCallback, useMemo, useState } from "react";
-import { Button } from "@/components/common/form/Button.tsx";
-import { Input } from "@/components/common/form/Input.tsx";
-import TextEditor from "@/components/toolbar/TextEditor.tsx";
+import { Button } from "@/shared/components/form/Button.tsx";
+import { Input } from "@/shared/components/form/Input.tsx";
+import TextEditor from "@/shared/toolbar/TextEditor.tsx";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   descendantsToParagraphs,
@@ -12,7 +12,7 @@ import {
 import { Descendant } from "slate";
 import { useToast } from "@/contexts/ToastContext.tsx";
 import useGetBookChapterParagraphs from "@/api/chapters/useGetBookChapterParagraphs";
-import LoadingCircle from "../LoadingCirlce";
+import Spinner from "../../shared/components/Spinner.tsx";
 import useChapter from "@/hooks/useChapter.ts";
 
 interface ChapterEditorProps {
@@ -117,7 +117,7 @@ export default function ChapterEditor({ chapter }: ChapterEditorProps) {
         className="w-full my-3 border-0 ring-0 text-xl"
       />
       {loading ? (
-        <LoadingCircle />
+        <Spinner />
       ) : (
         <TextEditor
           placeholder={"Write your chapter here..."}

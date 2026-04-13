@@ -1,14 +1,14 @@
-import Footer from "@/components/Footer.tsx";
+import Footer from "@/shared/components/Footer.tsx";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { Button } from "@/components/common/form/Button";
+import { Button } from "@/shared/components/form/Button";
 import { Chapter } from "@/types/Chapter";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { ModalRef } from "@/components/modal/Modal.tsx";
+import { ModalRef } from "@/shared/components/Modal.tsx";
 import AddNewChapterModal from "@/components/modal/chapter/AddNewChapterModal.tsx";
 import useGetBookChapters from "@/api/chapters/useGetBookChapters.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar.tsx";
 import ChapterSectionList from "@/components/chapter/ChapterSectionList.tsx";
 
@@ -62,7 +62,7 @@ export default function WriteChapterPage() {
                 Chapters
               </h3>
               {loading && !data ? (
-                  <LoadingCircle />
+                  <Spinner />
               ) : (
                   <ChapterSectionList chapters={chapters ?? []} />
               )}

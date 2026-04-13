@@ -15,11 +15,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <ToastProvider>
       <AlertProvider>
         <AuthProvider>
-          <NotificationProvider>
-            <MessageProvider>
-              <RouterProvider router={router}></RouterProvider>
-            </MessageProvider>
-          </NotificationProvider>
+          {/* <NotificationProvider> */}
+          {/* <MessageProvider> */}
+          <RouterProvider router={router}></RouterProvider>
+          {/* </MessageProvider> */}
+          {/* </NotificationProvider> */}
         </AuthProvider>
       </AlertProvider>
     </ToastProvider>

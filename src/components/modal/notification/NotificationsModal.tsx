@@ -1,10 +1,10 @@
 import { forwardRef, Ref, useMemo, useState } from "react";
-import Modal, { ModalRef } from "../Modal.tsx";
+import Modal, { ModalRef } from "../../../shared/components/Modal.tsx";
 import { Notification } from "@/types/Notification.ts";
 import useGetUserNotifications from "@/api/notification/useGetUserNotifications.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
 import NotificationRow from "@/components/notification/NotificationRow.tsx";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
 
 interface NotificationsModalProps {
   notificaiton?: Notification[];
@@ -29,7 +29,7 @@ function NotificationsModal({}: NotificationsModalProps, ref: Ref<ModalRef>) {
       <div className="mt-5">
         {loading ? (
           <div className="flex items-center justify-center">
-            <LoadingCircle />
+            <Spinner />
           </div>
         ) : memoizedNotifications.length > 0 ? (
           memoizedNotifications.map((notification) => (

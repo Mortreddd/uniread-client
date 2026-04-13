@@ -1,4 +1,4 @@
-import { Genre as GenreType } from "@/types/Book";
+import { Genre as GenreType } from "@/features/books/types/Book.ts";
 import { cn } from "@/utils/ClassNames";
 import { HTMLAttributes } from "react";
 

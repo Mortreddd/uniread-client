@@ -1,9 +1,9 @@
 import {forwardRef, Ref} from "react";
-import Modal, {ModalRef} from "@/components/modal/Modal.tsx";
+import Modal, {ModalRef} from "@/shared/components/Modal.tsx";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {Input} from "@/components/common/form/Input.tsx";
-import {Button} from "@/components/common/form/Button.tsx";
-import api from "@/services/ApiService.ts";
+import {Input} from "@/shared/components/form/Input.tsx";
+import {Button} from "@/shared/components/form/Button.tsx";
+import api from "@/core/api/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {Chapter} from "@/types/Chapter.ts";
 import {ErrorResponse} from "@/types/Error.ts";

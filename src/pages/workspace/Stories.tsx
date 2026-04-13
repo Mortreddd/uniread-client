@@ -2,14 +2,14 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useCurrentUserBooks from "@/api/profile/useCurrentUserBooks.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
-import { Button } from "@/components/common/form/Button.tsx";
+import { Button } from "@/shared/components/form/Button.tsx";
 import { motion } from "motion/react";
-import LoadingCircle from "@/components/LoadingCirlce";
-import UserStory from "@/components/book/UserStory";
-import { Book } from "@/types/Book";
-import { ModalRef } from "@/components/modal/Modal.tsx";
-import ViewStoryModal from "@/components/modal/book/ViewStoryModal";
-import AddBookModal from "@/components/modal/book/AddBookModal";
+import Spinner from "@/shared/components/Spinner.tsx";
+import UserStory from "@/features/books/UserStory.tsx";
+import { BookDetail } from "@/features/books/types/Book.ts";
+import { ModalRef } from "@/shared/components/Modal.tsx";
+import ViewStoryModal from "@/features/books/modal/ViewStoryModal.tsx";
+import AddBookModal from "@/features/books/modal/AddBookModal.tsx";
 
 type BookCategories = "ALL" | "PUBLISHED" | "DRAFT";
 
@@ -17,7 +17,7 @@ export default function Stories() {
   const viewStoryModalRef = useRef<ModalRef>(null);
   const createBookModalRef = useRef<ModalRef>(null);
 
-  const [story, selectedStory] = useState<Book | null>(null);
+  const [story, selectedStory] = useState<BookDetail | null>(null);
   const [params, setParams] = useSearchParams();
   const [category, setCategory] = useState<BookCategories>(() => {
     const category = params.get("category") as BookCategories;
@@ -43,7 +43,7 @@ export default function Stories() {
   }, [data]);
 
   const handleViewStory = useCallback(
-    (story: Book) => {
+    (story: BookDetail) => {
       viewStoryModalRef.current?.open();
       selectedStory(story);
     },
@@ -126,7 +126,7 @@ export default function Stories() {
       <div className="grid grid-cols-2 gap-4">
         {loading ? (
           <div className="col-span-2 flex justify-center items-center h-96">
-            <LoadingCircle />
+            <Spinner />
           </div>
         ) : (
           stories.map((story) => (

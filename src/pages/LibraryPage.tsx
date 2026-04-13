@@ -1,11 +1,11 @@
-import { Input } from "@/components/common/form/Input";
+import { Input } from "@/shared/components/form/Input";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar";
 import { motion } from "motion/react";
 import { useState } from "react";
 import defaultCover from "@/assets/cover6.jpg";
-import { Button } from "@/components/common/form/Button";
+import { Button } from "@/shared/components/form/Button";
 import { NavLink } from "react-router-dom";
-import { Book } from "@/types/Book";
+import { BookDetail } from "@/features/books/types/Book.ts";
 import { BookmarkIcon, BookOpenIcon } from "@heroicons/react/24/outline";
 
 export default function LibraryPage() {
@@ -117,7 +117,7 @@ export default function LibraryPage() {
   );
 }
 
-function BookItem({ book }: { book: Book }) {
+function BookItem({ book }: { book: BookDetail }) {
   return (
     <div className="col-span-1 rounded-lg font-serif p-4 border-y-2 border-x space-y-1.5 border-primary border-solid transition-all duration-200 ease-in-out translate-y-0 hover:-translate-y-2 hover:shadow-lg">
       <img

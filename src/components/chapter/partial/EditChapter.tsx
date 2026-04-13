@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EmptyChapter from "../EmptyChapter.tsx";
 import useGetBookChapterById from "@/api/chapters/useGetBookChapterById.ts";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
 import { Chapter } from "@/types/Chapter.ts";
 import ChapterEditor from "@/components/chapter/ChapterEditor.tsx";
 
@@ -28,7 +28,7 @@ export default function EditChapter() {
     <>
       {loading && !chapter ? (
         <div className={"h-full w-full flex items-center justify-center"}>
-          <LoadingCircle />
+          <Spinner />
         </div>
       ) : chapter ? (
         <div className="h-full w-full flex flex-col border border-solid py-4">

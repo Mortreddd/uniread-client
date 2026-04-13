@@ -1,5 +1,5 @@
-import api from "@/services/ApiService";
-import { Genre } from "@/types/Book";
+import api from "@/core/api/ApiService.ts";
+import { Genre } from "@/features/books/types/Book.ts";
 import { RequestState } from "@/types/Pagination";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";

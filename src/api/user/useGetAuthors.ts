@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 
 interface GetUsersProps extends PaginateParams {

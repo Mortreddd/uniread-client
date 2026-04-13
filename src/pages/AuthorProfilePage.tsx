@@ -1,7 +1,7 @@
-import Footer from "@/components/Footer";
+import Footer from "@/shared/components/Footer.tsx";
 import { useParams } from "react-router-dom";
-import AuthorProfileContainer from "@/components/author/AuthorProfileContainer";
-import AuthorProfileDescription from "@/components/author/AuthorProfileDescription";
+import AuthorProfileContainer from "@/features/users/AuthorProfileContainer.tsx";
+import AuthorProfileDescription from "@/features/users/AuthorProfileDescription.tsx";
 import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
 import useGetAuthorById from "@/api/user/useGetAuthorById.ts";
 

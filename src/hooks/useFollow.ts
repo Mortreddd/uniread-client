@@ -3,7 +3,7 @@ import {ErrorResponse} from "@/types/Error.ts";
 import {useCallback, useState} from "react";
 import {Follow} from "@/types/Follow.ts";
 import {SuccessResponse} from "@/types/Success.ts";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 
 interface ResultHandlerProps {
     onSuccess: (message: string) => void;

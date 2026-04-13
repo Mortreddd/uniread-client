@@ -1,9 +1,9 @@
 import GenreOption from "@/components/genre/GenreOption.tsx";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
 import { useSearchParams } from "react-router-dom";
 import useGetGenres from "@/api/genres/useGetGenres";
 import { useCallback } from "react";
-import { Button } from "../common/form/Button";
+import { Button } from "@/shared/components/form/Button";
 import { FunnelIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -46,7 +46,7 @@ function GenreFilter() {
 
   if (loading || !genres) {
     return (<div className="h-fit py-5 px-4 flex items-center justify-center">
-      <LoadingCircle />
+      <Spinner />
     </div>);
   }
 

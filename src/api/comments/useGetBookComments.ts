@@ -1,5 +1,5 @@
-import api from "@/services/ApiService";
-import { BookComment } from "@/types/Book";
+import api from "@/core/api/ApiService.ts";
+import { BookComment } from "@/features/books/types/Book.ts";
 import { ErrorResponse } from "@/types/Error";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";

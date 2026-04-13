@@ -1,5 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { BookComment } from "@/types/Book";
+import { BookComment } from "@/features/books/types/Book.ts";
 import { Reaction } from "@/types/Enums";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useState } from "react";

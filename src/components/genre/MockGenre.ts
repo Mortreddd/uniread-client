@@ -11,7 +11,7 @@ import scienceFictionBackground from "@/assets/backgrounds/Sciencefiction.webp";
 import mysteryBackground from "@/assets/backgrounds/Mystery.webp";
 import fantasyBackground from "@/assets/backgrounds/Fantasy.webp";
 import thrillerBackground from "@/assets/backgrounds/Thriller.webp";
-import { Genre } from "@/types/Book";
+import { Genre } from "@/features/books/types/Book.ts";
 
 export const genres: Genre[] = [
   {

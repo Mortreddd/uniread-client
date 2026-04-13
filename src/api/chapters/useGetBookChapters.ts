@@ -1,4 +1,4 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { Chapter, ChapterParams } from "@/types/Chapter";
 import { ErrorResponse } from "@/types/Error";
 import { Paginate, RequestState } from "@/types/Pagination";

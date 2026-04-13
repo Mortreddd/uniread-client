@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import { Paginate, RequestState } from "@/types/Pagination.ts";
-import { Book } from "@/types/Book.ts";
+import { BookDetail } from "@/features/books/types/Book.ts";
 import { ErrorResponse } from "@/types/Error.ts";
 
 export function useGetBooksByMultipleGenre(
@@ -10,7 +10,7 @@ export function useGetBooksByMultipleGenre(
   pageNo: number = 0,
   pageSize: number = 10
 ) {
-  const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
+  const [state, setState] = useState<RequestState<Paginate<BookDetail[]>>>({
     data: null,
     loading: false,
     error: null,
@@ -32,7 +32,7 @@ export function useGetBooksByMultipleGenre(
           cancelToken: source.token,
           signal: controller.signal,
         })
-        .then((response: AxiosResponse<Paginate<Book[]>>) => {
+        .then((response: AxiosResponse<Paginate<BookDetail[]>>) => {
           setState({ error: null, data: response.data, loading: false });
           console.log(response);
         })

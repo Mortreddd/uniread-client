@@ -1,5 +1,5 @@
 import { Fragment } from "react/jsx-runtime";
-import LoadingCirlce from "../LoadingCirlce";
+import LoadingCirlce from "../../shared/components/Spinner.tsx";
 
 export default function AboutSection() {
   return (

@@ -1,4 +1,4 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { ErrorResponse } from "@/types/Error";
 import { Paginate, PaginateParams, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";

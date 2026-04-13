@@ -10,8 +10,8 @@ import {
 import useGetGenres from "@/api/genres/useGetGenres";
 import NotificationsModal from "@/components/modal/notification/NotificationsModal";
 import { useRef } from "react";
-import { ModalRef } from "../../modal/Modal.tsx";
-import Badge from "@/components/Badge.tsx";
+import { ModalRef } from "../../../shared/components/Modal.tsx";
+import Badge from "@/shared/components/Badge.tsx";
 import { useMessage } from "@/contexts/MessageContext.tsx";
 
 export default function AuthenticatedNavbar() {

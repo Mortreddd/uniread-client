@@ -1,7 +1,7 @@
 import { Chapter } from "@/types/Chapter.ts";
 import { useEffect, useState } from "react";
 import { RequestState } from "@/types/Pagination.ts";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@/types/Error.ts";
 

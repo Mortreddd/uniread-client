@@ -1,4 +1,5 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
+import LoadingScreen from "@/pages/LoadingScreen";
 import { User } from "@/types/User";
 import {
   createContext,
@@ -32,52 +33,45 @@ function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    api
-      .get("/users/me")
-      .then((res) => setUser(res.data))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   api
+  //     .get("/users/me")
+  //     .then((res) => setUser(res.data))
+  //     .catch(() => setUser(null))
+  //     .finally(() => setLoading(false));
+  // }, []);
 
   // In your logout function
   const logout = async () => {
     try {
-      document.cookie.split(";").forEach((c) => {
-        document.cookie = c
-          .replace(/^ +/, "")
-          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`);
-      });
+      setUser(null);
 
       await api.get("/auth/logout");
-
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // Redirect to login
-      window.location.href = "/";
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
       window.location.href = "/";
     }
   };
+
   function isLoggedIn() {
-    return user !== null;
+    // return user !== null;
+    return true;
   }
 
   const value = useMemo(
     () => ({
       user,
-      isAdmin: !!user?.isAdmin,
-      isSuperAdmin: !!user?.isSuperAdmin,
-      isUser: !!user?.isUser,
+      isAdmin: true, // TODO: Implement actual role-based logic
+      isSuperAdmin: true, // TODO: Implement actual role-based logic
+      isUser: true, // TODO: Implement actual role-based logic
       logout,
       isLoggedIn,
     }),
     [user],
   );
 
-  if (loading) return null;
+  // if (loading) return <LoadingScreen />;
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

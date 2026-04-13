@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {Paginate, RequestState} from "@/types/Pagination.ts";
-import {Book, BookParams} from "@/types/Book.ts";
-import api from "@/services/ApiService.ts";
+import {BookDetail, BookParams} from "@/features/books/types/Book.ts";
+import api from "@/core/api/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@/types/Error.ts";
 
@@ -10,7 +10,7 @@ interface GetUserBooksProps extends BookParams {
 }
 
 export default function useGetUserBooks({ userId, pageNo, pageSize, query, status} : GetUserBooksProps) {
-  const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
+  const [state, setState] = useState<RequestState<Paginate<BookDetail[]>>>({
     data: null,
     error: null,
     loading: false,
@@ -31,7 +31,7 @@ export default function useGetUserBooks({ userId, pageNo, pageSize, query, statu
           },
           signal: controller.signal,
         })
-        .then((response: AxiosResponse<Paginate<Book[]>>) => {
+        .then((response: AxiosResponse<Paginate<BookDetail[]>>) => {
           console.log(response);
           setState({ loading: false, data: response.data, error: null });
         })

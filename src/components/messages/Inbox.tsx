@@ -1,19 +1,20 @@
-import { ConversationDetail } from "@/types/Message";
 import { formatRelativeTime } from "@/utils/Dates";
 import {
   EllipsisVerticalIcon,
   PencilSquareIcon,
+  UserGroupIcon,
+  UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Badge from "../Badge";
-import { Button } from "../common/form/Button";
-import { Input } from "../common/form/Input";
-import Icon from "../Icon";
+import Badge from "../../shared/components/Badge.tsx";
+import { Button } from "@/shared/components/form/Button";
+import { Input } from "@/shared/components/form/Input";
+import Icon from "../../shared/components/Icon.tsx";
 import { motion, AnimatePresence } from "motion/react";
 
 interface InbokProps {
-  conversations: ConversationDetail[];
+  conversations: ChatPreview[];
 }
 
 export default function Inbox({ conversations }: InbokProps) {
@@ -34,7 +35,7 @@ export default function Inbox({ conversations }: InbokProps) {
           inputSize={"md"}
         />
       </div>
-      <section className="flex-1 overflow-y-auto flex justify-center items-start">
+      <section className="flex-1 overflow-y-auto flex flex-col items-start">
         {conversations && conversations.length > 0 ? (
           conversations.map((convo) => (
             <ConversationItem key={convo.conversationId} convo={convo} />
@@ -49,7 +50,7 @@ export default function Inbox({ conversations }: InbokProps) {
   );
 }
 
-function ConversationItem({ convo }: { convo: ConversationDetail }) {
+function ConversationItem({ convo }: { convo: ChatPreview }) {
   return (
     <div
       key={convo.conversationId}
@@ -57,12 +58,12 @@ function ConversationItem({ convo }: { convo: ConversationDetail }) {
     >
       <Icon size={"lg"} className={""} />
       <Link
-        to={`/conversations/${convo.conversationId}/messages`}
+        to={`/conversations/${convo.conversationId}`}
         className="flex-1 inline-flex items-start flex-col"
       >
-        <h3 className="font-sans text-base">{convo.name}</h3>
+        <h3 className="font-sans text=xs md:text-base">{convo.name}</h3>
         <div className="inline-flex text-wrap items-center gap-1">
-          <p className="font-sans text-xs line-clamp-1 truncate">
+          <p className="font-sans text-tiny md:text-xs line-clamp-1 truncate">
             {convo.lastMessage}
           </p>
           <time className="font-sans text-xs text-gray-500">
@@ -89,7 +90,7 @@ function ConversationItem({ convo }: { convo: ConversationDetail }) {
 
 function NewConversationDropdown() {
   const [open, setOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the whole container
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -126,10 +127,15 @@ function NewConversationDropdown() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="absolute left-0 z-50 mt-2 text-start bg-white shadow-xl border border-gray-100 sm:w-60 w-72 rounded-lg overflow-hidden"
+            className="absolute right-0 z-50 mt-2 text-start bg-white shadow-xl border border-gray-100 sm:w-60 w-72 rounded-lg overflow-hidden"
           >
-            <li className="relative isolate block px-5 py-2.5 text-gray-700 transition-colors group-hover:text-black group-hover:bg-gray-100 duration-200 ease-in-out">
-              New Conversation
+            <li className="relative isolate flex px-5 py-2.5 text-gray-700 transition-all hover:bg-gray-100 duration-200 ease-in-out cursor-pointer ">
+              <UserPlusIcon className={"size-4 mr-2 my-auto"} />
+              <p className="text-sm my-auto">New Conversation</p>
+            </li>
+            <li className="relative isolate flex px-5 py-2.5 text-gray-700 transition-all hover:bg-gray-100 duration-200 ease-in-out cursor-pointer ">
+              <UserGroupIcon className={"size-4 mr-2 my-auto"} />
+              <p className="text-sm my-auto">New Group Conversation</p>
             </li>
           </motion.ul>
         )}

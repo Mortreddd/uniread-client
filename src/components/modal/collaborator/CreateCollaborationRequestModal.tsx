@@ -1,10 +1,10 @@
 import { forwardRef, Ref } from "react";
-import Modal, { ModalRef } from "../Modal";
-import TextArea from "@/components/common/form/TextArea";
-import { Button } from "@/components/common/form/Button";
+import Modal, { ModalRef } from "../../../shared/components/Modal.tsx";
+import TextArea from "@/shared/components/form/TextArea";
+import { Button } from "@/shared/components/form/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import DangerAlert from "../alert/DangerAlert";
-import api from "@/services/ApiService";
+import DangerAlert from "@/shared/modal/alert/DangerAlert";
+import api from "@/core/api/ApiService.ts";
 import { AxiosError } from "axios";
 import { useToast } from "@/contexts/ToastContext";
 import { ErrorResponse } from "@/types/Error";

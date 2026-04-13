@@ -1,9 +1,6 @@
-import {
+import ChatPreview, {
   Message as MessageType,
-  ConversationDetail,
-  Participant,
-  ReaderParticipant,
-} from "@/types/Message";
+} from "@/features/chats/types/Chat.ts";
 import {
   createContext,
   Dispatch,
@@ -34,8 +31,8 @@ interface ConversationMessagePayload {
 }
 
 interface MessageContextProps {
-  conversations: ConversationDetail[];
-  setConversations: Dispatch<SetStateAction<ConversationDetail[]>>;
+  conversations: ChatPreview[];
+  setConversations: Dispatch<SetStateAction<ChatPreview[]>>;
   sendGroupMessage: (payload: GroupMessagePayload) => void;
   sendFriendMessage: (payload: FriendMessagePayload) => void;
   sendConversationMessage: (payload: ConversationMessagePayload) => void;
@@ -43,7 +40,7 @@ interface MessageContextProps {
   setMessages: Dispatch<SetStateAction<MessageType[]>>;
   unreadCount: number;
   markConversationAsRead: (conversationId: string) => void;
-  activeConversation: ConversationDetail | null;
+  activeConversation: ChatPreview | null;
 }
 
 const MessageContext = createContext<MessageContextProps | undefined>(
@@ -70,12 +67,12 @@ interface MessageProviderProps extends PropsWithChildren {}
  */
 function MessageProvider({ children }: MessageProviderProps) {
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [conversations, setConversations] = useState<ConversationDetail[]>([]);
+  const [conversations, setConversations] = useState<ChatPreview[]>([]);
   const { showToast } = useToast();
   const [unreadCount, setUnreadCount] = useState(0);
 
   const { data } = useGetUserConversations({ pageNo: 0, pageSize: 20 });
-  const calculateUnreadCount = useCallback((convos: ConversationDetail[]) => {
+  const calculateUnreadCount = useCallback((convos: ChatPreview[]) => {
     if (!convos) return 0;
 
     const count = convos.reduce((acc, conv) => acc + conv.unreadCount, 0);
@@ -83,7 +80,7 @@ function MessageProvider({ children }: MessageProviderProps) {
   }, []);
 
   const [activeConversation, setActiveConversation] =
-    useState<ConversationDetail | null>(null);
+    useState<ChatPreview | null>(null);
 
   useEffect(() => {
     if (data?.content) {
@@ -102,9 +99,7 @@ function MessageProvider({ children }: MessageProviderProps) {
     const sub1 = subscribe(
       "/user/queue/chat-notifications",
       (message: IMessage) => {
-        const receivedConversation = JSON.parse(
-          message.body,
-        ) as ConversationDetail;
+        const receivedConversation = JSON.parse(message.body) as ChatPreview;
         setConversations((prev) => {
           const filtered = prev.filter(
             (conv) =>
@@ -161,7 +156,6 @@ function MessageProvider({ children }: MessageProviderProps) {
     if (!connected) return;
 
     const subMapping = subscribe(`/app/chat.${conversationId}`, (message) => {
-      // Optional: Handle the unread messages list returned by the server here
       console.log("Subscribed to mapping and received unread messages");
     });
 

@@ -1,22 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "@/pages/HomePage";
 import AboutPage from "@/pages/AboutPage";
-import BookDescriptionPage from "@/pages/books/BookDescriptionPage.tsx";
 import ProfilePage from "@/pages/ProfilePage";
 import WorksSection from "@/components/profile/WorksSection";
 import AboutSection from "@/components/profile/AboutSection";
 import MessagesPage from "@/pages/MessagesPage";
-import GenresPage from "@/pages/GenresPage";
-import GenreBooksPage from "@/pages/GenreBooksPage";
 import LibraryPage from "@/pages/LibraryPage";
-import Archive from "@/components/library/Archive";
-import SearchPage from "@/pages/SearchPage";
-import SearchAll from "@/components/search/SearchAll";
-import SearchBook from "@/components/search/SearchBook";
-import SearchAuthor from "@/components/search/SearchAuthor";
 import AuthorProfilePage from "@/pages/AuthorProfilePage";
-import AuthorWorks from "@/components/author/AuthorWorks";
-import AuthorAbout from "@/components/author/AuthorAbout";
+import AuthorWorks from "@/features/users/AuthorWorks.tsx";
+import AuthorAbout from "@/features/users/AuthorAbout.tsx";
 import BooksPage from "@/pages/books/BooksPage.tsx";
 import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
@@ -27,10 +19,11 @@ import UserDashboard from "./pages/workspace/UserDashboard.tsx";
 import Stories from "./pages/workspace/Stories.tsx";
 import ReadingPage from "./pages/ReadingPage.tsx";
 import ViewChapter from "./components/chapter/ViewChapter.tsx";
-import UserRegisterationPage from "./pages/auth/UserRegisterationPage.tsx";
 import BasePage from "./pages/settings/BasePage.tsx";
 import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 import ConversationMessages from "./components/messages/ConversationMessages.tsx";
+import NewConversationMessages from "./components/messages/NewConversationMessages.tsx";
+import BookDetailPage from "./pages/BookDetailPage.tsx";
 
 /**
  *
@@ -44,24 +37,10 @@ export const router = createBrowserRouter([
     path: "/",
     element: <HomePage />,
   },
-  {
-    path: "/register",
-    element: <UserRegisterationPage />,
-  },
   // Setting up username
   {
-    path: "/auth/setup-username",
+    path: "/authentication/setup-username",
     element: <SetupUsernamePage />,
-  },
-  // Genres Page
-  {
-    path: "/genres",
-    element: <GenresPage />,
-  },
-  // Genre Books Page
-  {
-    path: "/genres/:genreId/books",
-    element: <GenreBooksPage />,
   },
   {
     path: "/books",
@@ -70,7 +49,7 @@ export const router = createBrowserRouter([
   // Book Info Page
   {
     path: "/books/:bookId",
-    element: <BookDescriptionPage />,
+    element: <BookDetailPage />,
   },
   {
     path: "/books/:bookId/chapters",
@@ -92,34 +71,13 @@ export const router = createBrowserRouter([
     element: <AuthorPage />,
   },
   {
-    path: "/search",
-    element: <SearchPage />,
-    children: [
-      {
-        path: "/search/all",
-        element: <SearchAll />,
-      },
-
-      {
-        path: "/search/books",
-        element: <SearchBook />,
-      },
-      {
-        path: "/search/authors",
-        element: <SearchAuthor />,
-      },
-    ],
-  },
-
-  // Requires Authentication
-  // Message or Inbox Page
-  {
-    path: "/conversations",
+    path: "/chats",
     element: <MessagesPage />,
     children: [
       {
-        path: "/conversations/:conversationId/messages",
-        element: <ConversationMessages />,
+        path: "/chats/:conversationId",
+        // element: <ConversationMessages />,
+        element: <h1>Hello</h1>,
       },
     ],
   },
@@ -127,16 +85,6 @@ export const router = createBrowserRouter([
   {
     path: "/library",
     element: <LibraryPage />,
-    children: [
-      {
-        path: "/library/saved",
-        element: <Archive />,
-      },
-      {
-        path: "/library/bookmarks",
-        element: <div>Bookmarks</div>,
-      },
-    ],
   },
 
   // Workspace Page

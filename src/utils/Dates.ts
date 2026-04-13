@@ -85,9 +85,33 @@ export function formatRelativeTime(date: Date): string {
     const minutes = Math.floor(diffInSeconds / 60);
     return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   }
+  if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  }
   if (diffInSeconds < 604800) {
     const days = Math.floor(diffInSeconds / 86400);
     return `${days} day${days > 1 ? "s" : ""} ago`;
   }
+
   return formatDateOnly(date);
+}
+
+export function formatShortenDate(date: Date): string {
+  const now = new Date();
+  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / 60000);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInDays < 1) {
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const ampm = hour >= 12 ? "PM" : "AM";
+    return `${hour % 12 || 12}:${minute.toString().padStart(2, "0")} ${ampm}`;
+  }
+
+  const day = date.getDate();
+  const month = date.toLocaleString(getCurrentLanguage(), { month: "short" });
+  const year = date.getFullYear();
+  return `${month} ${day}, ${year}`;
 }

@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { motion } from "motion/react";
 import ExploreDropdown from "../dropdown/ExploreDropdown";
-import LoginModal from "@/components/modal/auth/LoginModal";
-import { ModalRef } from "../../modal/Modal.tsx";
+import LoginModal from "@/features/authentication/LoginModal.tsx";
+import { ModalRef } from "../../../shared/components/Modal.tsx";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileDropdown from "../dropdown/ProfileDropdown";
 import useGetGenres from "@/api/genres/useGetGenres";

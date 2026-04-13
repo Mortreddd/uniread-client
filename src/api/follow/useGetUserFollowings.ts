@@ -1,6 +1,6 @@
 import {Paginate, PaginateParams, RequestState} from "@/types/Pagination.ts";
 import {useEffect, useState} from "react";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {ErrorResponse} from "@/types/Error.ts";
 import {AuthorDetail} from "@/types/User.ts";

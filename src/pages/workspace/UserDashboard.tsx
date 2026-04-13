@@ -1,6 +1,6 @@
 import useGetUserDashboard from "@/api/user/useGetUserDashboard";
-import CurrentTimeline from "@/components/CurrentTimeline";
-import LoadingCircle from "@/components/LoadingCirlce";
+import CurrentTimeline from "@/shared/components/CurrentTimeline.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "motion/react";
 
@@ -12,7 +12,7 @@ export default function UserDashboard() {
   if (loading || !data) {
     return (
       <section className="p-4 relative w-full h-full overflow-y-auto rounded-lg bg-gray-50">
-        <LoadingCircle />
+        <Spinner />
       </section>
     );
   }

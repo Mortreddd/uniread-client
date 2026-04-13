@@ -1,4 +1,4 @@
-import { Book } from "./Book";
+import { BookDetail } from "../features/books/types/Book.ts";
 import { User } from "./User";
 
 export enum CollaboratorPermission {
@@ -19,7 +19,7 @@ export enum CollaboratorPermission {
 export interface Collaborator {
   id: string;
   user: User;
-  book: Book;
+  book: BookDetail;
   bannedAt: string | null;
   unbannedAt: string | null;
   isAdmin: boolean;

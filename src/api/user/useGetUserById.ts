@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {AuthorDetail} from "@/types/User.ts";
 import {RequestState} from "@/types/Pagination.ts";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {ErrorResponse} from "@/types/Error.ts";
 
