@@ -1,6 +1,6 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { ErrorResponse } from "@/types/Error";
-import { ConversationDetail } from "@/types/Message";
+import ChatPreview from "@/features/chats/types/Chat.ts";
 import { Paginate, RequestState } from "@/types/Pagination";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useMemo, useState } from "react";
@@ -16,9 +16,7 @@ export default function useGetUserConversations({
   pageSize = 10,
   isArchived = false,
 }: GetUserConversationsProps) {
-  const [state, setState] = useState<
-    RequestState<Paginate<ConversationDetail[]>>
-  >({
+  const [state, setState] = useState<RequestState<Paginate<ChatPreview[]>>>({
     data: null,
     error: null,
     loading: false,
@@ -36,7 +34,7 @@ export default function useGetUserConversations({
       .get(`/conversations`, {
         params,
       })
-      .then((response: AxiosResponse<Paginate<ConversationDetail[]>>) => {
+      .then((response: AxiosResponse<Paginate<ChatPreview[]>>) => {
         console.log(response);
         setState({ data: response.data, error: null, loading: false });
       })

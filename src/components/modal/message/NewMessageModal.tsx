@@ -1,10 +1,10 @@
 import { forwardRef, Ref, useState } from "react";
-import Modal, { ModalProps, ModalRef } from "../Modal.tsx";
+import Modal, { ModalProps, ModalRef } from "../../../shared/components/Modal.tsx";
 import { AuthorDetail } from "@/types/User.ts";
-import Icon from "@/components/Icon.tsx";
+import Icon from "@/shared/components/Icon.tsx";
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
-import TextArea from "../../common/form/TextArea.tsx";
-import { Button } from "../../common/form/Button.tsx";
+import TextArea from "@/shared/components/form/TextArea.tsx";
+import { Button } from "@/shared/components/form/Button.tsx";
 import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useMessage } from "@/contexts/MessageContext.tsx";
 import { useAuth } from "@/contexts/AuthContext.tsx";

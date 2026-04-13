@@ -1,4 +1,4 @@
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { Reaction } from "@/types/Enums";
 import { ErrorResponse } from "@/types/Error";
 import { SuccessResponse } from "@/types/Success";

@@ -1,8 +1,8 @@
 import { forwardRef, Ref, useMemo, useState } from "react";
-import Modal, { ModalRef } from "../Modal.tsx";
+import Modal, { ModalRef } from "../../../shared/components/Modal.tsx";
 import { PaginateParams } from "@/types/Pagination.ts";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
-import AuthorFollowInfo from "@/components/author/AuthorFollowerInfo.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
+import AuthorFollowInfo from "@/features/users/AuthorFollowerInfo.tsx";
 import useGetUserFollowings from "@/api/follow/useGetUserFollowings.ts";
 
 /**
@@ -51,7 +51,7 @@ function FollowingModal({ authorId }: FollowModalProps, ref: Ref<ModalRef>) {
           <div className="bg-gray-100 rounded-sm px-4 py-2 w-full">
             {loading && !data?.content ? (
               <div className="flex justify-center">
-                <LoadingCircle />
+                <Spinner />
               </div>
             ) : !loading && memoizedSelectedUserFollowings.length > 0 ? (
               memoizedSelectedUserFollowings.map((author, index) => (

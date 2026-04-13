@@ -1,6 +1,6 @@
 import profileBackgroundImage from "@/assets/backgrounds/Profile.webp";
 import gojoProfilePicture from "@/assets/profiles/gojo.jpg";
-import Icon from "../Icon";
+import Icon from "../../shared/components/Icon.tsx";
 import {
   BriefcaseIcon,
   UserGroupIcon,
@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import FollowerModal from "@/components/modal/follow/FollowerModal.tsx";
 import { useRef } from "react";
-import { ModalRef } from "@/components/modal/Modal.tsx";
+import { ModalRef } from "@/shared/components/Modal.tsx";
 import FollowingModal from "@/components/modal/follow/FollowingModal.tsx";
 import useGetUserById from "@/api/user/useGetUserById.ts";
 

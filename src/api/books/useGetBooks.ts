@@ -1,104 +1,63 @@
-import api from "@/services/ApiService";
-import { Book, BookParams } from "@/types/Book";
-import { BookStatus } from "@/types/Enums";
+import api from "@/core/api/ApiService.ts";
+import { BookDetail, BookParams } from "@/features/books/types/Book.ts";
 import { Paginate, RequestState } from "@/types/Pagination";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 
-export function useGetBooks({
-  pageNo,
-  pageSize,
-  query,
-  genres = [],
-  status = BookStatus.PUBLISHED,
-  sortBy = "asc",
-  orderBy = "createdAt",
-  startDate = "",
-  endDate = "",
-  deletedAt = "",
-}: BookParams) {
-  const [state, setState] = useState<RequestState<Paginate<Book[]>>>({
+export function useGetBooks(params: BookParams) {
+  const [state, setState] = useState<RequestState<Paginate<BookDetail[]>>>({
     data: null,
     error: null,
     loading: true,
   });
 
+  const genresKey = JSON.stringify(params.genres);
+
   useEffect(() => {
     const controller = new AbortController();
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
     const fetchBooks = async () => {
-      setState({ ...state, loading: true });
-      api
-        .get("/books", {
-          params: {
-            pageNo,
-            pageSize,
-            query,
-            genres,
-            status: status !== undefined ? status : undefined,
-            sortBy,
-            orderBy,
-            startDate,
-            endDate,
-            deletedAt,
+      setState((prev) => ({ ...prev, loading: true }));
+      try {
+        const response: AxiosResponse<Paginate<BookDetail[]>> = await api.get(
+          "/books",
+          {
+            params: params,
+            signal: controller.signal,
+            paramsSerializer: {
+              indexes: null,
+            },
           },
-          signal: controller.signal,
-          cancelToken: source.token,
-          paramsSerializer: (params) => {
-            return Object.keys(params)
-              .filter((key) => params[key] !== undefined && params[key] !== "")
-              .map((key) =>
-                Array.isArray(params[key])
-                  ? params[key]
-                      .map(
-                        (val) =>
-                          `${encodeURIComponent(key)}=${encodeURIComponent(
-                            val
-                          )}`
-                      )
-                      .join("&")
-                  : `${encodeURIComponent(key)}=${encodeURIComponent(
-                      params[key]
-                    )}`
-              )
-              .join("&");
-          },
-        })
-        .then((response: AxiosResponse<Paginate<Book[]>>) => {
-          setState({
-            data: response.data,
-            error: null,
-            loading: false,
-          });
-          console.log(response.data.content);
-        })
-        .catch((error: AxiosError) => {
-          setState({
-            data: null,
-            error: error.message,
-            loading: false,
-          });
-          console.log(error);
+        );
+
+        setState({ data: response.data, error: null, loading: false });
+      } catch (error) {
+        if (axios.isCancel(error)) return;
+
+        setState({
+          data: null,
+          error: (error as AxiosError).message,
+          loading: false,
         });
+      }
     };
 
-    fetchBooks();
+    const isSearching = params.query && params.query.trim().length > 0;
+    const handler = setTimeout(fetchBooks, isSearching ? 300 : 0);
     return () => {
+      clearTimeout(handler);
       controller.abort();
-      source.cancel("Request cancelled");
     };
   }, [
-    pageNo,
-    pageSize,
-    query,
-    status,
-    genres,
-    sortBy,
-    orderBy,
-    startDate,
-    endDate,
-    deletedAt,
+    params.pageNo,
+    params.pageSize,
+    params.query,
+    params.status,
+    genresKey, // Use the stringified version!
+    params.sortBy,
+    params.orderBy,
+    params.startDate,
+    params.endDate,
+    params.deletedAt,
   ]);
 
   return state;

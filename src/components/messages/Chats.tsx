@@ -1,4 +1,4 @@
-import { Conversation } from "@/types/Message";
+import { Conversation } from "@/features/chats/types/Chat.ts";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 

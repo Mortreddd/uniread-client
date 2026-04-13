@@ -1,9 +1,9 @@
 import useGetAuthors from "@/api/user/useGetAuthors.ts";
-import AuthorDetail from "@/components/author/AuthorDetail";
+import AuthorDetail from "@/features/users/AuthorDetail.tsx";
 import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
-import LoadingCircle from "@/components/LoadingCirlce";
-import LoginModal from "@/components/modal/auth/LoginModal";
-import { ModalRef } from "@/components/modal/Modal.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
+import LoginModal from "@/features/authentication/LoginModal.tsx";
+import { ModalRef } from "@/shared/components/Modal.tsx";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext.tsx";
 import useFollow from "@/hooks/useFollow.ts";
@@ -94,7 +94,7 @@ export default function AuthorPage() {
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {loading && !data?.content ? (
             <div className="col-span-full flex justify-center">
-              <LoadingCircle size="xl" />
+              <Spinner size="xl" />
             </div>
           ) : memoizedAuthors.length > 0 ? (
             memoizedAuthors.map((author) => (

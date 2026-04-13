@@ -1,6 +1,6 @@
 // import {Book} from "@/types/Book";
 import {useCallback} from "react";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import {AxiosError, AxiosResponse} from "axios";
 import {SuccessResponse} from "@/types/Success.ts";
 import {ErrorResponse} from "@/types/Error.ts";

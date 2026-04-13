@@ -1,19 +1,11 @@
-import BookSection from "@/components/book/BookSection.tsx";
-import GenreFilter from "@/components/genre/GenreFilter.tsx";
-import GuestNavbar from "@/components/common/navbar/GuestNavbar.tsx";
+import MainNavbar from "@/shared/components/navbar/MainNavbar.tsx";
 
 export default function BooksPage() {
   return (
-    <>
+    <div className={"w-full"}>
       <header className={"w-full"}>
-        <GuestNavbar />
+        <MainNavbar />
       </header>
-      <div className={"w-full h-fit"}>
-        <GenreFilter />
-      </div>
-      <div className="w-full h-fit">
-        <BookSection />
-      </div>
-    </>
+    </div>
   );
 }

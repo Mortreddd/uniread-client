@@ -1,9 +1,9 @@
-import ApplicationLogo from "@/components/ApplicationLogo";
-import DangerAlert from "@/components/modal/alert/DangerAlert";
-import { Button } from "@/components/common/form/Button";
-import { Input } from "@/components/common/form/Input";
+import ApplicationLogo from "@/shared/components/ApplicationLogo.tsx";
+import DangerAlert from "@/shared/modal/alert/DangerAlert";
+import { Button } from "@/shared/components/form/Button";
+import { Input } from "@/shared/components/form/Input";
 import { useAuth } from "@/contexts/AuthContext";
-import api from "@/services/ApiService";
+import api from "@/core/api/ApiService.ts";
 import { ErrorResponse } from "@/types/Error";
 import { SuccessResponse } from "@/types/Success";
 import { randomUsername } from "@/utils/Names";

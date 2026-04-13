@@ -1,7 +1,7 @@
-import DangerAlert from "@/components/modal/alert/DangerAlert";
-import InfoAlert from "@/components/modal/alert/InfoAlert";
-import SuccessAlert from "@/components/modal/alert/SuccessAlert";
-import WarningAlert from "@/components/modal/alert/WarningAlert";
+import DangerAlert from "@/shared/modal/alert/DangerAlert";
+import InfoAlert from "@/shared/modal/alert/InfoAlert";
+import SuccessAlert from "@/shared/modal/alert/SuccessAlert";
+import WarningAlert from "@/shared/modal/alert/WarningAlert";
 import { AnimatePresence } from "motion/react";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 
@@ -59,7 +59,7 @@ export const AlertProvider: FC<AlertProviderProps> = ({ children }) => {
 
   return (
     <AlertContext.Provider value={contextValue}>
-      <div className="antialiased bg-transparent w-full min-h-screen">
+      <div className="antialiased bg-transparent size-full">
         {children}
         <div className="fixed right-10 z-50 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out">
           <AnimatePresence>

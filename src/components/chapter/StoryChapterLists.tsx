@@ -1,14 +1,14 @@
 import useChapter from "@/hooks/useChapter";
-import LoadingCircle from "../LoadingCirlce";
+import Spinner from "../../shared/components/Spinner.tsx";
 import { useRef, useState } from "react";
 import { PaginateParams } from "@/types/Pagination";
 import { formatDateWithTime } from "@/utils/Dates";
-import { Button } from "../common/form/Button";
+import { Button } from "@/shared/components/form/Button";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Chapter } from "@/types/Chapter";
 import { ChapterStatus } from "@/types/Enums";
 import { useAlert } from "@/contexts/AlertContext";
-import { ModalRef } from "../modal/Modal.tsx";
+import { ModalRef } from "../../shared/components/Modal.tsx";
 import { AnimatePresence, motion } from "motion/react";
 import WarningConfirmationModal from "../modal/WarningConfirmationModal.tsx";
 
@@ -148,7 +148,7 @@ export default function StoryChapterLists({ storyId }: StoryChapterListsProps) {
 
       {loading ? (
         <div className="flex justify-center items-center min-h-20">
-          <LoadingCircle />
+          <Spinner />
         </div>
       ) : chapters.length > 0 ? (
         chapters.map((chapter) => (

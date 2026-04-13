@@ -1,9 +1,9 @@
-import Book from "@/components/book/Book.tsx";
+import Book from "@/features/books/Book.tsx";
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
-import withHover from "../withHover";
-import LoadingCircle from "@/components/LoadingCirlce.tsx";
-import {Book as BookType, BookParams} from "@/types/Book.ts";
+import withHover from "../../shared/components/withHover.tsx";
+import Spinner from "@/shared/components/Spinner.tsx";
+import {BookDetail as BookType, BookParams} from "@/features/books/types/Book.ts";
 import useGetUserBooks from "@/api/books/useGetUserBooks.ts";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 
@@ -31,7 +31,7 @@ export default function WorksSection() {
     <>
       <div className="w-full h-full grid grid-cols-6 gap-4 grid-flow-row px-16 py-6">
         {loading && !data?.content ? (
-          <LoadingCircle />
+          <Spinner />
         ) : !loading && books.length > 0 ? (
           data?.content.map((book) => (
             <Link

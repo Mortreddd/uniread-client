@@ -1,8 +1,8 @@
-import withHover from "@/components/withHover";
+import withHover from "@/shared/components/withHover.tsx";
 import Genre from "./Genre";
 import { genres as mockGenres } from "./MockGenre";
 import { Link } from "react-router-dom";
-import { Genre as GenreType } from "@/types/Book";
+import { Genre as GenreType } from "@/features/books/types/Book.ts";
 
 interface GenreProps {
   genres: GenreType[] | null;

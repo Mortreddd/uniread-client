@@ -1,7 +1,7 @@
 import { forwardRef, memo, Ref, useState } from "react";
-import Modal, { ModalProps, ModalRef } from "./Modal.tsx";
+import Modal, { ModalProps, ModalRef } from "../../shared/components/Modal.tsx";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { Button } from "../common/form/Button.tsx";
+import { Button } from "@/shared/components/form/Button.tsx";
 
 interface WarningConfirmationModalProps extends ModalProps {
   onConfirm: () => Promise<void>;

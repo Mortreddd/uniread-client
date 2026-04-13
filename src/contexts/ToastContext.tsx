@@ -1,8 +1,7 @@
-import Layout from "@/components/Layout";
-import DangerToast from "@/components/toast/DangerToast";
-import InfoToast from "@/components/toast/InfoToast";
-import SuccessToast from "@/components/toast/SuccessToast";
-import WarningToast from "@/components/toast/WarningToast";
+import DangerToast from "@/shared/toast/DangerToast";
+import InfoToast from "@/shared/toast/InfoToast";
+import SuccessToast from "@/shared/toast/SuccessToast";
+import WarningToast from "@/shared/toast/WarningToast";
 import { AnimatePresence } from "motion/react";
 import {
   createContext,
@@ -33,7 +32,7 @@ interface ToastProviderProps extends PropsWithChildren {}
 export function ToastProvider({ children }: ToastProviderProps) {
   // array of messages to be shown
   const [toasts, setToasts] = useState<{ message: string; type: ToastType }[]>(
-    []
+    [],
   );
 
   useEffect(() => {
@@ -57,27 +56,25 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
   return (
     <ToastContext.Provider value={{ showToast }}>
-      <Layout>
-        {children} {/* app content scrolls normally */}
-        {/* Toast overlay, fixed and scroll-independent */}
-        <div className="fixed inset-0 pointer-events-none z-50">
-          <div className="absolute bottom-10 right-10 space-y-5 pointer-events-auto w-fit">
-            <AnimatePresence>
-              {toasts.map(({ message, type }, index) => {
-                if (type === "error")
-                  return <DangerToast key={index}>{message}</DangerToast>;
-                if (type === "info")
-                  return <InfoToast key={index}>{message}</InfoToast>;
-                if (type === "success")
-                  return <SuccessToast key={index}>{message}</SuccessToast>;
-                if (type === "warning")
-                  return <WarningToast key={index}>{message}</WarningToast>;
-                return null;
-              })}
-            </AnimatePresence>
-          </div>
+      {children} {/* app content scrolls normally */}
+      {/* Toast overlay, fixed and scroll-independent */}
+      <div className="fixed inset-0 pointer-events-none z-40">
+        <div className="absolute bottom-10 right-10 space-y-5 pointer-events-auto w-fit">
+          <AnimatePresence>
+            {toasts.map(({ message, type }, index) => {
+              if (type === "error")
+                return <DangerToast key={index}>{message}</DangerToast>;
+              if (type === "info")
+                return <InfoToast key={index}>{message}</InfoToast>;
+              if (type === "success")
+                return <SuccessToast key={index}>{message}</SuccessToast>;
+              if (type === "warning")
+                return <WarningToast key={index}>{message}</WarningToast>;
+              return null;
+            })}
+          </AnimatePresence>
         </div>
-      </Layout>
+      </div>
     </ToastContext.Provider>
   );
 }

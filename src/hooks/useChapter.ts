@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { ErrorResponse } from "@/types/Error.ts";
 import { useCallback, useEffect, useState } from "react";
-import api from "@/services/ApiService.ts";
+import api from "@/core/api/ApiService.ts";
 import { Chapter } from "@/types/Chapter.ts";
 import useGetBookChapters from "@/api/chapters/useGetBookChapters.ts";
 import { PaginateParams } from "@/types/Pagination.ts";

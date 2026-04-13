@@ -1,5 +1,5 @@
-import Banner, { BannerProps } from "@/components/Banner.tsx";
-import { Genre } from "@/types/Book.ts";
+import Banner, { BannerProps } from "@/shared/components/Banner.tsx";
+import { Genre } from "@/features/books/types/Book.ts";
 import { cn } from "@/utils/ClassNames.ts";
 import { memo } from "react";
 

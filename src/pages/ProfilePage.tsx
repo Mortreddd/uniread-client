@@ -1,5 +1,5 @@
 import ProfileContainer from "@/components/profile/ProfileContainer";
-import Footer from "@/components/Footer.tsx";
+import Footer from "@/shared/components/Footer.tsx";
 import { useAuth } from "@/contexts/AuthContext.tsx";
 import AuthenticatedNavbar from "@/components/common/navbar/AuthenticatedNavbar";
 
