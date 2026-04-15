@@ -1,11 +1,13 @@
 import { User } from "@/types/User.ts";
-import { BookStatus, Reaction } from "../../../types/Enums.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
+import { Reaction } from "@/types/Enums";
+import { Gender } from "@/features/users/types/User";
 
-export enum Gender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER",
+export enum BookStatus {
+  DRAFT = "DRAFT",
+  PUBLISHED = "PUBLISHED",
+  HIATUS = "HIATUS",
+  COMPLETED = "COMPLETED",
 }
 
 export interface BookAuthor {
@@ -15,7 +17,6 @@ export interface BookAuthor {
   lastName: string;
   gender: Gender;
   avatarUrl: string;
-
 }
 export interface BookDetail {
   id: string;
@@ -49,7 +50,6 @@ export interface Tag {
   createdAt: string;
   updatedAt: string;
 }
-
 
 export interface BookComment {
   id: string;
@@ -88,7 +88,10 @@ export interface BookParams extends PaginateParams {
 }
 
 type MutableFieldType = "title" | "description" | "matured";
-export interface CreateBookFormProps extends Pick<BookDetail, MutableFieldType> {
+export interface CreateBookFormProps extends Pick<
+  BookDetail,
+  MutableFieldType
+> {
   photo: File | null;
   genreIds: number[];
 }

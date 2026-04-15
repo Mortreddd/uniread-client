@@ -56,7 +56,6 @@ function Sidebar({ children }: SidebarProps, ref: Ref<SidebarRef>) {
             animate={{ x: 0 }}
             exit={{ x: -260 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            // CHANGE: Changed w-fit to w-64 to match desktop and prevent stretching
             className="fixed top-0 left-0 h-full min-h-0 w-60 bg-white dark:bg-gray-800 z-50 md:hidden shadow-xl"
           >
             {children}
@@ -64,7 +63,7 @@ function Sidebar({ children }: SidebarProps, ref: Ref<SidebarRef>) {
         )}
       </AnimatePresence>
 
-      <aside className="hidden md:block min-h-0 md:min-w-60 md:max-w-fit h-full border-r border-gray-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900">
+      <aside className="hidden md:flex flex-col min-h-0 md:min-w-60 md:max-w-fit h-full border-r border-gray-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900">
         {children}
       </aside>
     </>

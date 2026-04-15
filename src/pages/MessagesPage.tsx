@@ -49,54 +49,56 @@ export default function MessagesPages() {
 
   return (
     <AppLayout>
-      <section className="flex size-full relative dark:bg-slate-800 bg-slate-100">
+      <section className="flex flex-1 min-h-0 relative dark:bg-slate-800 bg-slate-100">
         {/* Automatic expandable sidebar and responsive */}
-        <Sidebar ref={sidebarRef}>
-          <div className="p-2 flex flex-col lg:flex-row w-full h-full overflow-y-auto">
-            <ul className={"flex flex-row lg:flex-col w-fit"}>
-              {sidebarOptions.map(({ label, icon }, key) => (
-                <li key={key}>
-                  <Button
-                    variant={"transparent"}
-                    className={
-                      "flex items-center flex-col lg:flex-row justify-start w-full"
-                    }
-                  >
-                    {icon}
-                    <span className="lg:hidden text-black text-tiny md:text-xs dark:text-white font-sans inline-block">
-                      {label}
-                    </span>
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <div className="relative flex flex-col overflow-y-hidden flex-1 min-h-0">
-              <h1 className="text-base mt-2 font-sans font-semibold md:text-xl text-black/80 dark:text-white/80">
-                Inbox
-              </h1>
-              <div className="my-2 shrink-0">
-                <Input
-                  id={"search-friends"}
-                  type={"search"}
-                  variant={"primary"}
-                  withSearch={true}
-                  className="w-full"
-                  placeholder="Search..."
-                />
-              </div>
-              <div className="flex flex-col h-full w-full overflow-y-auto">
-                {DUMMY_CONVERSATIONS.map((chat, key) => (
-                  <div
-                    key={key}
-                    className="min-w-44 w-full max-w-60 md:max-w-72 lg:max-w-80 shrink-0"
-                  >
-                    <ChatPreview chat={chat} />
-                  </div>
+        <div className="flex flex-col shrink-0">
+          <Sidebar ref={sidebarRef}>
+            <div className="p-2 flex flex-col lg:flex-row w-full h-full overflow-y-auto">
+              <ul className={"flex flex-row lg:flex-col w-fit"}>
+                {sidebarOptions.map(({ label, icon }, key) => (
+                  <li key={key}>
+                    <Button
+                      variant={"transparent"}
+                      className={
+                        "flex items-center flex-col lg:flex-row justify-start w-full"
+                      }
+                    >
+                      {icon}
+                      <span className="lg:hidden text-black text-tiny md:text-xs dark:text-white font-sans inline-block">
+                        {label}
+                      </span>
+                    </Button>
+                  </li>
                 ))}
+              </ul>
+              <div className="relative flex flex-col overflow-y-hidden flex-1 min-h-0">
+                <h1 className="text-base mt-2 font-sans font-semibold md:text-xl text-black/80 dark:text-white/80">
+                  Inbox
+                </h1>
+                <div className="my-2 shrink-0">
+                  <Input
+                    id={"search-friends"}
+                    type={"search"}
+                    variant={"primary"}
+                    withSearch={true}
+                    className="w-full"
+                    placeholder="Search..."
+                  />
+                </div>
+                <div className="flex flex-col h-full w-full overflow-y-auto">
+                  {DUMMY_CONVERSATIONS.map((chat, key) => (
+                    <div
+                      key={key}
+                      className="min-w-44 w-full max-w-60 md:max-w-72 lg:max-w-80 shrink-0"
+                    >
+                      <ChatPreview chat={chat} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </Sidebar>
+          </Sidebar>
+        </div>
         <div className="flex-1 relative flex flex-col">
           {/* Auto hide button option for mobile */}
           <div className="flex items-center md:hidden bg-transparent">
@@ -119,7 +121,7 @@ export default function MessagesPages() {
               />
             </Button>
           </div>
-          <div className="flex-1 min-h-0 bg-transparent/80 h-full">
+          <div className="flex-1 relative flex flex-col min-w-0">
             <ActiveChat />
           </div>
         </div>

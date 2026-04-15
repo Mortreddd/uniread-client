@@ -35,7 +35,7 @@ const buttonVariants = cva(
         transparent:
           "bg-transparent hover:bg-transparent/30 text-gray-600 dark:text-gray-300 dark:hover:bg-gray-700/30",
         inactivePrimary:
-          "border border-primary text-primary bg-transparent hover:bg-primary/10",
+          "border border-primary text-primary bg-transparent hover:bg-primary/10 dark:border-primary-dark dark:text-primary-dark dark:hover:bg-primary-dark/10",
         custom: "",
       },
       size: {

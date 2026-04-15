@@ -5,14 +5,15 @@ import { InputHTMLAttributes } from "react";
 const radioVariant = cva("", {
   variants: {
     variant: {
-      primary: "text-primary focus:ring-primary accent-primary",
+      primary:
+        "text-primary dark:text-primary-dark focus:ring-primary dark:focus:ring-primary-dark accent-primary dark:accent-primary",
       default: "text-gray-700",
       none: "",
     },
     radioSize: {
-      sm: "w-3 h-3",
-      md: "w-4 h-4",
-      lg: "w-5 h-5",
+      sm: "size-3 md:size-4",
+      md: "size-4 md:size-5",
+      lg: "size-5 md:size-6",
       xl: "w-6 h-6",
       none: "",
     },
@@ -24,7 +25,8 @@ const radioVariant = cva("", {
 });
 
 interface RadioProps
-  extends InputHTMLAttributes<HTMLInputElement>,
+  extends
+    InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof radioVariant> {}
 
 /**

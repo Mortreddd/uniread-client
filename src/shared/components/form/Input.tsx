@@ -33,9 +33,9 @@ const inputVariant = cva(
       },
       inputSize: {
         xs: "px-1 py-0.5 text-tiny md:text-xs",
-        sm: "px-1.5 py-1 text-xs",
-        md: "px-1.5 py-1 md:px-2 md:py-1.5 text-base",
-        lg: "px-4 py-2 text-lg",
+        sm: "px-1.5 py-1 text-xs md:text-sm",
+        md: "px-1.5 py-1 md:px-2 md:py-1.5 text-sm md:text-base",
+        lg: "px-2 py-1.5 md:px-3 md:py-2 text-base md:text-lg",
       },
       disabled: {
         true: "bg-gray-100 border-gray-400 cursor-not-allowed opacity-70",

@@ -5,7 +5,7 @@ import { HTMLAttributes } from "react";
 export interface BannerProps
   extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof bannerVariant> {}
 const bannerVariant = cva(
-  "rounded-full font-sans py-1 px-3 whitespace-nowrap transition-all duration-200 ease-in-out cursor-pointer tracking-wide text-sm md:text-base inline-flex items-center gap-1 md:gap-2",
+  "rounded-full py-1 px-3 whitespace-nowrap transition-all duration-200 ease-in-out cursor-pointer tracking-wide inline-flex items-center gap-1 md:gap-2",
   {
     variants: {
       variant: {
