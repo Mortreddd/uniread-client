@@ -12,10 +12,10 @@ import {
 
 function ActiveChat() {
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="flex-1 flex flex-col overflow-hidden">
       <ChatHeader />
 
-      <div className="flex-1 min-h-0 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4">
         <ChatMessages />
       </div>
 
@@ -70,7 +70,7 @@ function ChatMessages() {
 
 function ChatMessageCreation() {
   return (
-    <div className="w-full shrink-0 bg-gray-100 dark:bg-slate-900 flex items-center md:p-3 p-2">
+    <div className="w-full shrink-0 bg-gray-100 dark:bg-slate-900 flex items-center md:p-3 p-2 border border-solid">
       <div className="flex items-center bg-gray-100 dark:bg-slate-900 w-full">
         <Button variant={"transparent"} className={"rounded-full shrink-0"}>
           <PlusIcon

@@ -3,11 +3,6 @@ export enum ChapterStatus {
   PUBLISHED = "PUBLISHED",
 }
 
-export enum BookStatus {
-  DRAFT = "DRAFT",
-  PUBLISHED = "PUBLISHED",
-}
-
 export enum Reaction {
   LIKE = "LIKE",
   LOVE = "LOVE",
