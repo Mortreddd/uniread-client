@@ -1,10 +1,10 @@
 import { Button } from "@/shared/components/form/Button";
 import { Link } from "react-router-dom";
 import { ChatConversationPreview } from "./types/Chat";
-import { formatShortenDate } from "@/utils/Dates";
 import Badge from "@/shared/components/Badge";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import SeperatorDot from "@/shared/components/SeperatorDot";
+import { Formatters } from "@/utils/formatters";
 
 interface ChatPreviewProps {
   chat: ChatConversationPreview;
@@ -49,7 +49,7 @@ export default function ChatPreview({ chat }: ChatPreviewProps) {
           </p>
           <SeperatorDot className={"text-xs lg:text-sm mx-1 lg:mx-1.5"} />
           <time className="text-extratiny md:text-xs lg:text-sm text-gray-500 flex-shrink-0 ml-2">
-            {formatShortenDate(new Date(chat.lastMessageAt))}
+            {Formatters.Date.formatShortenDate(new Date(chat.lastMessageAt))}
           </time>
         </div>
       </Link>
