@@ -17,7 +17,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-primary hover:bg-primary/80 text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80",
+          "bg-primary hover:bg-primary/80 text-white dark:text-white dark:bg-primary-dark dark:hover:bg-primary-dark/80",
         secondary:
           "bg-gray-500 hover:bg-gray-600 text-white dark:bg-gray-700 dark:hover:bg-gray-800",
         danger:
@@ -35,7 +35,7 @@ const buttonVariants = cva(
         transparent:
           "bg-transparent hover:bg-transparent/30 text-gray-600 dark:text-gray-300 dark:hover:bg-gray-700/30",
         inactivePrimary:
-          "border border-primary text-primary bg-transparent hover:bg-primary/10 dark:border-primary-dark dark:text-primary-dark dark:hover:bg-primary-dark/10",
+          "border border-primary text-primary dark:text-primary-dark bg-transparent hover:bg-primary/10 dark:border-primary-dark dark:text-primary-dark dark:hover:bg-primary-dark/10",
         custom: "",
       },
       size: {

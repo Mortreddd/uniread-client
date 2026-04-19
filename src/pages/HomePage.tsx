@@ -7,7 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import mountainsImage from "@/assets/mountains.png";
 import Banner from "@/shared/components/Banner";
-import ReadCount from "@/shared/components/ReadCount";
+import ReadCount from "@/features/books/components/ReadCount.tsx";
 import LikeCount from "@/shared/components/LikeCount";
 import CollaboratorCount from "@/shared/components/CollaboratorCount";
 import sampleAuthor from "@/assets/author-0.png";

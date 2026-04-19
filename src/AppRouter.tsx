@@ -14,7 +14,7 @@ import ReadingPage from "./pages/ReadingPage.tsx";
 import ViewChapter from "./components/chapter/ViewChapter.tsx";
 import BasePage from "./pages/settings/BasePage.tsx";
 import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
-import BookDetailPage from "./pages/BookDetailPage.tsx";
+import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
 
 /**
  *
@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
   // Book Info Page
   {
     path: "/books/:bookId",
-    element: <BookDetailPage />,
+    element: <BookDetailsPage />,
   },
   {
     path: "/books/:bookId/chapters",

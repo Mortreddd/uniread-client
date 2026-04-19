@@ -1,4 +1,4 @@
-import { User } from "@/types/User.ts";
+import { User, UserProfile } from "@/types/User.ts";
 import { PaginateParams } from "@/types/Pagination.ts";
 import { Reaction } from "@/types/Enums";
 import { Gender } from "@/features/users/types/User";
@@ -34,6 +34,7 @@ export interface BookDetail {
   matured: boolean;
   genres: Genre[];
   isAddedToLibrary: boolean;
+  isFollowingAuthor: boolean;
   createdAt: string;
 }
 
@@ -59,6 +60,24 @@ export interface BookComment {
   rating: number;
   content: string;
   reactions: BookCommentReactor[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface UserCommentor extends Omit<
+  UserProfile,
+  "id" | "gender" | "fullName"
+> {}
+export interface BookCommentPreview {
+  id: string;
+  bookId: string;
+  user: UserCommentor;
+  parentBookComment: BookComment | null;
+  content: string;
+  totalReaction: number;
+  authUserReaction: Reaction | null;
+  replies: BookCommentPreview[];
+  replyCount: number;
   createdAt: string;
   updatedAt: string;
 }

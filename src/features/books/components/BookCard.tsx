@@ -28,6 +28,7 @@ export default function BookCard({ book }: BookCardProps) {
           </p>
         </div>
         <div className="flex items-center mt-1 gap-0.5">
+          {/* Average rating */}
           <div className="inline-flex items-center">
             <StarIcon
               fill={"currentColor"}
@@ -37,6 +38,8 @@ export default function BookCard({ book }: BookCardProps) {
               4.6
             </p>
           </div>
+
+          {/* Total Reads */}
           <div className="inline-flex items-center">
             <EyeIcon
               className={"text-gray-600 dark:text-gray-400 size-2 mr-0.5"}

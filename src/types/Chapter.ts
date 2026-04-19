@@ -18,6 +18,19 @@ export interface Chapter {
   paragraphs?: Paragraph[];
 }
 
+export interface ChapterPreview {
+  id: string;
+  bookId: string;
+  title: string;
+  averageRating: number;
+  totalRating: number;
+  readCount: number;
+  totalLikes: number;
+  likesCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ChapterLike {
   id: string;
   users: User[];
