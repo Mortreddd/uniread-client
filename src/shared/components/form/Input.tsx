@@ -101,7 +101,7 @@ export const Input = memo(
             ref={ref}
             type={inputType}
             disabled={isDisabled}
-            className="w-full bg-transparent outline-none border-none p-0 placeholder:text-gray-300 dark:placeholder:text-gray-600 disabled:cursor-not-allowed"
+            className="w-full bg-transparent text-xs sm:text-sm md:text-base outline-none border-none p-0 placeholder:text-gray-300 dark:placeholder:text-gray-600 disabled:cursor-not-allowed"
           />
 
           {isPassword &&

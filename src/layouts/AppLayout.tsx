@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
+import Footer from "@/shared/components/Footer";
 import AppNavbar from "@/shared/components/navbar/AppNavbar";
 import MainNavbar from "@/shared/components/navbar/MainNavbar";
 import { PropsWithChildren } from "react";
@@ -15,6 +16,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
         {isLoggedIn() ? <AppNavbar /> : <MainNavbar />}
       </header>
       <div className={"flex-1 flex flex-col min-h-0"}>{children}</div>
+      <footer className="bg-gray-200 dark:bg-slate-800 w-full min-h-0">
+        <Footer />
+      </footer>
     </Layout>
   );
 }

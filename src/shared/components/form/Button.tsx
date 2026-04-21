@@ -35,11 +35,11 @@ const buttonVariants = cva(
         transparent:
           "bg-transparent hover:bg-transparent/30 text-gray-600 dark:text-gray-300 dark:hover:bg-gray-700/30",
         inactivePrimary:
-          "border border-primary text-primary dark:text-primary-dark bg-transparent hover:bg-primary/10 dark:border-primary-dark dark:text-primary-dark dark:hover:bg-primary-dark/10",
+          "border border-primary text-primary  bg-transparent hover:bg-primary/10 dark:border-primary-dark dark:text-primary-dark dark:hover:bg-primary-dark/10",
         custom: "",
       },
       size: {
-        default: "px-3 py-1.5 md:py-2 md:px-4",
+        default: "px-3 py-1 md:py-2 md:px-4",
         sm: "px-2 py-1 text-sm",
         md: "px-4 py-2 text-base",
         lg: "px-6 py-3 text-lg",

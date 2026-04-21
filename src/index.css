@@ -7,6 +7,7 @@
   --font-newsreader: "Newsreader", serif;
   --text-tiny: 0.625rem;
   --text-extratiny: 0.5rem;
+  --text-nano: 0.375rem;
 }
 
 .no-scrollbar {
