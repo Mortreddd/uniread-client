@@ -4,7 +4,6 @@ import AboutPage from "@/pages/AboutPage";
 import MessagesPage from "@/pages/MessagesPage";
 import LibraryPage from "@/pages/LibraryPage";
 import BooksPage from "@/features/books/pages/BooksPage.tsx";
-import AuthorPage from "./pages/AuthorPage";
 import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
 import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
 import EditChapter from "./components/chapter/partial/EditChapter.tsx";
@@ -15,6 +14,7 @@ import ViewChapter from "./components/chapter/ViewChapter.tsx";
 import BasePage from "./pages/settings/BasePage.tsx";
 import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
+import AuthorsPage from "./features/users/pages/AuthorsPage.tsx";
 
 /**
  *
@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
   // Author Page
   {
     path: "/authors",
-    element: <AuthorPage />,
+    element: <AuthorsPage />,
   },
   {
     path: "/chats",
