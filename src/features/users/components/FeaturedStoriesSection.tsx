@@ -8,18 +8,33 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import FeaturedUser from "./FeaturedUser";
+import { motion } from "motion/react";
 
 export default function FeaturedStoriesSection() {
   return (
-    <div className="size-full max-w-full overflow-hidden">
-      <h1 className="text-lg md:text-xl lg:text-xl font-newsletter font-bold text-black dark:text-white mb-1 md:mb-2.5">
+    <motion.div
+      initial={{
+        translateY: -10,
+        opacity: 0,
+      }}
+      animate={{
+        translateY: 0,
+        opacity: 1,
+        transition: {
+          ease: "backInOut",
+          duration: 0.4,
+        },
+      }}
+      className="size-full overflow-hidden max-w-full"
+    >
+      <h1 className="text-lg md:text-xl lg:text-xl font-newsreader font-bold text-black dark:text-white mb-1 md:mb-2.5">
         Featured Authors
       </h1>
       <p className="text-xs md:text-sm lg:text-base text-gray-700 dark:text-gray-200 mb-2 md:3">
         Meet the architects of worlds and masters of prose
       </p>
       {/* Featured Book Section */}
-      <div className="w-full flex items-center h-32 sm:h-40 md:h-48 lg:h-60 gap-2 md:gap-3 overflow-x-auto no-scrollbar mask-x-from-95% px-3 mb-4 md:mb-5">
+      <div className="w-full flex items-center h-32 sm:h-40 md:h-48 lg:h-60 gap-2 md:gap-3 overflow-x-auto no-scrollbar mask-x-from-95% px-3 md:px-6 mb-4 md:mb-5 max-w-full">
         <div
           className={`aspect-[16/9] shrink-0 rounded lg:rounded-lg h-full overflow-hidden relative`}
         >
@@ -30,13 +45,13 @@ export default function FeaturedStoriesSection() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#181c22] to-transparent"></div>
           <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 space-y-1 md:space-y-1.5">
-            <span className="size-fit text-nano sm:text-extratiny md:text-tiny px-1.5 py-0.5 bg-amber-600 text-gray-300 rounded shadow">
+            <span className="size-fit text-nano sm:text-extratiny md:text-tiny lg:text-xs font-medium px-1.5 py-0.5 bg-amber-600 text-gray-300 rounded shadow">
               Editor's Choice
             </span>
             <h1 className="text-xs sm:text-sm md:text-base lg:text-lg text-white font-serif font-bold">
               Evelyn Thorne
             </h1>
-            <p className="text-extratiny md:text-tiny lg:text-xs font-sans text-gray-300 line-clamp-2 md:line-clamp-3 tracking-tight">
+            <p className="text-extratiny md:text-tiny lg:text-sm font-sans text-gray-300 line-clamp-2 font-medium md:line-clamp-3 tracking-tight">
               Best selling author of 'The Whispering Pines' series. Exploring
               the interactions of folklore and urban decay.
             </p>
@@ -64,13 +79,13 @@ export default function FeaturedStoriesSection() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#181c22] to-transparent"></div>
           <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 space-y-1 md:space-y-1.5">
-            <span className="size-fit text-nano sm:text-extratiny md:text-tiny px-1.5 py-0.5 bg-blue-600 text-gray-300 rounded shadow">
+            <span className="size-fit text-nano sm:text-extratiny md:text-tiny lg:text-xs font-medium px-1.5 py-0.5 bg-blue-600 text-gray-300 rounded shadow">
               Rising Star
             </span>
             <h1 className="text-xs sm:text-sm md:text-base lg:text-lg text-white font-serif font-bold">
               Marcus Vance
             </h1>
-            <p className="text-extratiny md:text-tiny lg:text-xs font-sans text-gray-300 line-clamp-2 md:line-clamp-3 tracking-tight">
+            <p className="text-extratiny md:text-tiny lg:text-sm font-sans text-gray-300 line-clamp-2 font-medium md:line-clamp-3 tracking-tight">
               Redefining hard science fiction for the modern age with his
               'Circuit Soul' trilogy.
             </p>
@@ -100,16 +115,16 @@ export default function FeaturedStoriesSection() {
         />
       </div>
       <div className="grid grid-cols-12 gap-4 md:gap-3">
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6 md:col-span-4 lg:col-span-3">
           <FeaturedUser />
         </div>
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6 md:col-span-4 lg:col-span-3">
           <FeaturedUser />
         </div>
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6 md:col-span-4 lg:col-span-3">
           <FeaturedUser />
         </div>
-        <div className="col-span-6 md:col-span-4">
+        <div className="col-span-6 md:col-span-4 lg:col-span-3">
           <FeaturedUser />
         </div>
       </div>
@@ -126,6 +141,6 @@ export default function FeaturedStoriesSection() {
           </Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

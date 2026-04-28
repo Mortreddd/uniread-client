@@ -44,7 +44,7 @@ export default function FeaturedUser() {
       </div>
       <Button
         className={
-          "text-tiny text-white md:text-sm rounded md:rounded-lg w-full"
+          "text-tiny text-white md:text-sm lg:text-base rounded md:rounded-lg w-full"
         }
       >
         Follow

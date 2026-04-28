@@ -15,6 +15,7 @@ import BasePage from "./pages/settings/BasePage.tsx";
 import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
 import AuthorsPage from "./features/users/pages/AuthorsPage.tsx";
+import AuthorProfilePage from "./features/users/pages/AuthorProfilePage.tsx";
 
 /**
  *
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
   {
     path: "/authors",
     element: <AuthorsPage />,
+  },
+  {
+    path: "/authors/:username",
+    element: <AuthorProfilePage />,
   },
   {
     path: "/chats",

@@ -21,10 +21,6 @@ function Sidebar({ children }: SidebarProps, ref: Ref<SidebarRef>) {
     setOpen(false);
   }
 
-  function handleOpen() {
-    setOpen(true);
-  }
-
   useImperativeHandle(ref, () => {
     return {
       open() {

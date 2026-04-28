@@ -52,7 +52,7 @@ export default function Home() {
   ];
   return (
     <AppLayout>
-      <section className="w-full px-6 max-w-7xl mx-auto flex h-fit flex-col-reverse items-center gap-16 md:flex-row py-14 md:py-20 border border-solid border-red-700">
+      <section className="w-full px-6 max-w-7xl mx-auto flex h-fit flex-col-reverse items-center gap-16 md:flex-row py-14 md:py-20">
         <article className="md:w-1/2">
           <p className="text-amber-500 font-bold tracking-widest font-serif uppercase text-shadow-xs text-wrap text-xs">
             A NEW ERA OF STORYTELLING
@@ -267,7 +267,7 @@ export default function Home() {
           "w-full px-6 md:px-20 py-8 md:py-20 relative bg-white/80 dark:bg-gray-700/80"
         }
       >
-        <h1 className="font-newsletter text-3xl md:text-4xl text-black/80 dark:text-white/80 text-center mb-3 md:mb-5">
+        <h1 className="font-newsreader text-3xl md:text-4xl text-black/80 dark:text-white/80 text-center mb-3 md:mb-5">
           The Storytellers
         </h1>
         <p className="font-sans font-thin text-base md:text-lg text-black/80 dark:text-white/80 text-center mb-5 md:mb-8">
