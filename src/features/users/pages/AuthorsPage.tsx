@@ -6,10 +6,12 @@ import {
   ArrowTrendingUpIcon,
   CheckBadgeIcon,
   SparklesIcon,
-  UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 import FeaturedStoriesSection from "../components/FeaturedStoriesSection";
+import EditorsChoiceSection from "../components/EditorsChoiceSection";
+import { AnimatePresence } from "motion/react";
+import NotFoundSection from "@/shared/components/NotFoundSection";
 
 export default function AuthorsPage() {
   const sidebarRef = useRef<SidebarRef>(null);
@@ -20,21 +22,19 @@ export default function AuthorsPage() {
       id: 1,
       icon: <CheckBadgeIcon className={"size-4 md:size-5 text-inherit"} />,
       label: "Verified Only",
+      element: <FeaturedStoriesSection />,
     },
     {
       id: 2,
-      icon: <UserPlusIcon className={"size-4 md:size-5 text-inherit"} />,
-      label: "Following",
+      icon: <ArrowTrendingUpIcon className={"size-4 md:size-5 text-inherit"} />,
+      label: "Rising Stars",
+      element: <NotFoundSection />,
     },
     {
       id: 3,
-      icon: <ArrowTrendingUpIcon className={"size-4 md:size-5 text-inherit"} />,
-      label: "Rising Stars",
-    },
-    {
-      id: 4,
       icon: <SparklesIcon className={"size-4 md:size-5 text-inherit"} />,
       label: "Editor's Choice",
+      element: <EditorsChoiceSection />,
     },
   ];
   return (
@@ -69,18 +69,24 @@ export default function AuthorsPage() {
             </div>
           </Sidebar>
         </div>
-        <div className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0 max-w-5xl">
-          <Button
-            onClick={() => sidebarRef.current?.open()}
-            className={
-              "inline-flex w-fit md:hidden items-center font-sans text-tiny rounded mb-1"
-            }
-          >
-            <AdjustmentsVerticalIcon className={"size-3 text-white"} />
-            <span className={"text-white"}>Filters</span>
-          </Button>
-          <div className="relative flex-1 min-w-0">
-            <FeaturedStoriesSection />
+        <div className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0">
+          <div className="max-w-7xl mx-auto w-full">
+            <Button
+              onClick={() => sidebarRef.current?.open()}
+              className={
+                "inline-flex w-fit md:hidden items-center font-sans text-tiny rounded mb-1"
+              }
+            >
+              <AdjustmentsVerticalIcon className={"size-3 text-white"} />
+              <span className={"text-white"}>Filters</span>
+            </Button>
+            <div className="relative flex-1 min-w-0 h-full">
+              <AnimatePresence mode={"wait"}>
+                {filterItems.map(
+                  ({ id, element }) => selectedFilter === id && element,
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>

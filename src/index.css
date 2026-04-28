@@ -3,6 +3,7 @@
 @theme {
   --color-primary: #491232;
   --color-primary-dark: #7a1f4d;
+  --color-on-surface: #181c22;
   --font-salsa: "Salsa", "cursive";
   --font-newsreader: "Newsreader", serif;
   --text-tiny: 0.625rem;
@@ -56,6 +57,18 @@
   &:nth-child(5) {
     animation-delay: 300ms;
   }
+}
+
+@utility text-extratiny {
+  font-size: var(--text-extratiny);
+}
+
+@utility text-tiny {
+  font-size: var(--text-tiny);
+}
+
+@utility text-nano {
+  font-size: var(--text-nano);
 }
 
 @layer utilities {

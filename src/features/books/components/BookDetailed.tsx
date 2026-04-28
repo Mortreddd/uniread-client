@@ -6,6 +6,7 @@ import {
   NumberedListIcon,
   PlusIcon,
 } from "@heroicons/react/24/outline";
+import GenreBadge from "./GenreBadge";
 
 interface BookDetailProps {
   book: BookDetail;
@@ -66,19 +67,12 @@ export default function BookDetailed({ book }: BookDetailProps) {
           </p>
           <div className={"inline-flex items-center gap-2"}>
             {book.genres.map(({ id, name }) => (
-              <span
-                key={id}
-                className={
-                  "max-w-fit text-extratiny rounded text-wrap py-0.5 px-1 md:py-1 md:px-1.5 bg-gray-200 dark:bg-slate-700 text-gray-600 font-semibold dark:text-gray-300"
-                }
-              >
-                {name}
-              </span>
+              <GenreBadge key={id} name={name} />
             ))}
           </div>
         </div>
         <div className="flex items-center justify-between p-1.5 md:p-2">
-          <div className="flex gap-1.5 md:gap-2 items-center">
+          <div className="flex gap-1.5 md:gap-2 items-center flex-nowrap">
             <p className="text-gray-600 dark:text-gray-400 font-sans inline-flex items-center">
               <HeartIcon
                 fill={"currentColor"}
