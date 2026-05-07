@@ -25,7 +25,7 @@ export default function BookDetailed({ book }: BookDetailProps) {
         <img
           src={book.coverPhoto}
           alt={book.title}
-          className={"w-auto max-w-32 lg:max-w-52 h-full object-cover"}
+          className={"w-auto max-w-32 md:max-w-36 h-full object-cover"}
         />
       </a>
       <div className={"flex-1 p-2 lg:p-3 flex flex-col justify-between"}>
@@ -72,7 +72,7 @@ export default function BookDetailed({ book }: BookDetailProps) {
           </div>
         </div>
         <div className="flex items-center justify-between p-1.5 md:p-2">
-          <div className="flex gap-1.5 md:gap-2 items-center flex-nowrap">
+          <div className="flex gap-1.5 md:gap-2 items-center flex-wrap">
             <p className="text-gray-600 dark:text-gray-400 font-sans inline-flex items-center">
               <HeartIcon
                 fill={"currentColor"}

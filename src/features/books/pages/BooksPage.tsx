@@ -43,7 +43,7 @@ export default function BooksPage() {
     <AppLayout>
       <section
         className={
-          "flex flex-col size-full relative dark:bg-slate-800 bg-slate-100 p-5 md:p-6 lg:p-10"
+          "size-full relative dark:bg-slate-800 bg-slate-100 p-5 md:p-6 lg:p-10"
         }
       >
         <Input
@@ -65,7 +65,7 @@ export default function BooksPage() {
                 )
               }
               variant={`${isGenreSelected(genre.id) ? "primary" : "inactivePrimary"}`}
-              className={"text-nowrap rounded"}
+              className={"text-nowrap rounded shrink-0"}
             >
               {genre.name}
             </Button>
