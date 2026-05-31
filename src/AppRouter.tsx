@@ -16,6 +16,8 @@ import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
 import AuthorsPage from "./features/users/pages/AuthorsPage.tsx";
 import AuthorProfilePage from "./features/users/pages/AuthorProfilePage.tsx";
+import AuthorDashboardPage from "./features/users/pages/AuthorDashboardPage.tsx";
+import AuthorDashboardSection from "./features/users/pages/AuthorDashboardSection.tsx";
 
 /**
  *
@@ -83,6 +85,17 @@ export const router = createBrowserRouter([
     element: <LibraryPage />,
   },
 
+  {
+    path: "/dashboard",
+    element: <AuthorDashboardPage />,
+    children: [
+      {
+        index: true,
+        path: "/dashboard",
+        element: <AuthorDashboardSection />,
+      },
+    ],
+  },
   // Workspace Page
   {
     path: "/workspace",

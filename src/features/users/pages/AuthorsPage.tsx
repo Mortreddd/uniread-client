@@ -39,7 +39,7 @@ export default function AuthorsPage() {
   ];
   return (
     <AppLayout>
-      <section className="flex flex-1 min-h-0 relative">
+      <div className="flex flex-1 min-h-0 relative">
         <div className="flex flex-col shrink-0">
           <Sidebar ref={sidebarRef}>
             <div className="h-full bg-gray-200 dark:bg-slate-800 font-sans text-gray-600 dark:text-gray-200 p-3 md:p-4 lg:p-5">
@@ -69,7 +69,7 @@ export default function AuthorsPage() {
             </div>
           </Sidebar>
         </div>
-        <div className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0">
+        <section className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0">
           <div className="max-w-7xl mx-auto w-full">
             <Button
               onClick={() => sidebarRef.current?.open()}
@@ -88,8 +88,8 @@ export default function AuthorsPage() {
               </AnimatePresence>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </AppLayout>
   );
 }

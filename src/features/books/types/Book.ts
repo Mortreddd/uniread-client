@@ -7,6 +7,7 @@ export enum BookStatus {
   DRAFT = "DRAFT",
   PUBLISHED = "PUBLISHED",
   HIATUS = "HIATUS",
+  ONGOING = "ONGOING",
   COMPLETED = "COMPLETED",
 }
 
