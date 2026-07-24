@@ -98,7 +98,7 @@ function Modal({ className, children }: ModalProps, ref: Ref<ModalRef>) {
                 ease: "easeInOut",
               },
             }}
-            className={`fixed inset-x-0 top-10 mx-auto w-fit max-w-3xl min- bg-white dark:bg-slate-900 rounded-lg shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto ${className}`}
+            className={`fixed inset-x-0 top-10 mx-auto w-fit md:max-w-xl lg:max-w-3xl bg-white dark:bg-slate-900 rounded-lg shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto ${className}`}
             onClick={(e) => e.stopPropagation()}
           >
             {children}

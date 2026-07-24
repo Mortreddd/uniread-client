@@ -17,8 +17,12 @@ import author2 from "@/assets/author-2.png";
 import author3 from "@/assets/author-3.png";
 import author4 from "@/assets/author-4.png";
 import AppLayout from "@/layouts/AppLayout";
+import { useLayout } from "@/contexts/LayoutContext";
 
-export default function Home() {
+export default function HomePage() {
+  const { setHasSidebar } = useLayout();
+  setHasSidebar(false);
+
   const authors = [
     {
       id: 1,

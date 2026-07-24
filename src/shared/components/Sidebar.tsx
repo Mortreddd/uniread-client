@@ -1,36 +1,9 @@
+import { useSidebar } from "@/contexts/SidebarContext";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  forwardRef,
-  HTMLAttributes,
-  Ref,
-  useImperativeHandle,
-  useState,
-} from "react";
+import { forwardRef, HTMLAttributes, PropsWithChildren } from "react";
 
-export interface SidebarRef {
-  open: () => void;
-  close: () => void;
-}
-
-interface SidebarProps extends HTMLAttributes<HTMLElement> {}
-
-function Sidebar({ children }: SidebarProps, ref: Ref<SidebarRef>) {
-  const [open, setOpen] = useState(false);
-
-  function handleClose() {
-    setOpen(false);
-  }
-
-  useImperativeHandle(ref, () => {
-    return {
-      open() {
-        setOpen(true);
-      },
-      close() {
-        setOpen(false);
-      },
-    };
-  }, []);
+function Sidebar({ children }: PropsWithChildren) {
+  const { open, closeSidebar } = useSidebar();
 
   return (
     <>
@@ -42,7 +15,7 @@ function Sidebar({ children }: SidebarProps, ref: Ref<SidebarRef>) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleClose}
+            onClick={closeSidebar}
           />
         )}
         {open && (

@@ -14,7 +14,7 @@ import {
   WifiIcon,
 } from "@heroicons/react/24/outline";
 import Tab from "@/shared/components/Tab";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { Gender } from "../types/User";
 
@@ -29,6 +29,9 @@ import { BookStatus } from "@/features/books/types/Book";
 import { Button } from "@/shared/components/form/Button";
 import AuthorCreationBook from "@/features/books/components/AuthorCreationBook";
 import AuthorCollaborationBook from "@/features/books/components/AuthorCollaborationBook";
+import { ModalRef } from "@/shared/components/Modal";
+import AuthorFollowersModal from "../components/modals/AuthorFollowersModal";
+import AuthorFollowingsModal from "../components/modals/AuthorFollowingsModal";
 
 export default function AuthorProfilePage() {
   return (
@@ -52,8 +55,12 @@ export default function AuthorProfilePage() {
 
 function AuthorProfileSection() {
   const isFollowingAuthor = false;
+  const followerModalRef = useRef<ModalRef>(null);
+  const followingModalRef = useRef<ModalRef>(null);
   return (
     <div className="relative rounded md:rounded-lg overflow-hidden">
+      <AuthorFollowersModal ref={followerModalRef} />
+      <AuthorFollowingsModal ref={followingModalRef} />
       <div className="relative bg-gray-200 dark:bg-slate-800 ">
         <div className="w-full overflow-hidden h-32 md:h-52 lg:h-60 mask-b-from-black mask-b-from-90% mask-b-to-transparent">
           <img
@@ -63,12 +70,22 @@ function AuthorProfileSection() {
           />
         </div>
         <div className="flex justify-between items-end px-4 py-2 md:px-6 md:py-3.5 md:p-6 lg:px-8 -mt-8 md:-mt-16">
-          <img
-            src={gojoProfile}
-            alt="gojo-satoru"
-            className="z-10 object-cover object-center size-16 md:size-24 lg:size-28 rounded md:rounded-lg border border-primary dark:border-primary-dark"
-          />
-          <div className="inline-flex items-center">
+          <div className="flex-1 flex min-w-0 items-end">
+            <img
+              src={gojoProfile}
+              alt="gojo-satoru"
+              className="z-10 object-cover object-center size-16 md:size-24 lg:size-28 rounded md:rounded-lg border border-primary dark:border-primary-dark"
+            />
+            <div className="relative space-y-1 md:space-2 ml-2">
+              <h6 className="text-xs md:text-base lg:text-lg text-gray-800 dark:text-gray-200 font-sans font-semibold truncate tracking-wide line-clamp-1">
+                Emmanuel Male
+              </h6>
+              <p className="text-extratiny md:text-xs lg:text-base font-thin text-gray-700 dark:text-gray-100 font-sans">
+                @emmanuelmale
+              </p>
+            </div>
+          </div>
+          <div className="inline-flex shrink-0 items-center">
             {isFollowingAuthor ? (
               <FollowButton onFollow={() => {}} />
             ) : (
@@ -78,29 +95,47 @@ function AuthorProfileSection() {
         </div>
       </div>
       <div className="flex items-center py-1 md:py-2 bg-gray-300 dark:bg-slate-700">
-        <div className="flex-1 space-y-1">
-          <h6 className="text-sky-300 font-sans text-sm md:text-xl text-center">
-            {Formatters.Number.formatRelativeNumber(12)}
-          </h6>
-          <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-extratiny md:text-xs text-center">
-            Stories
-          </p>
+        <div className="flex-1 flex justify-center">
+          <Button variant={"transparent"} className={"space-y-1"}>
+            <h6 className="text-sky-300 font-sans text-xs md:text-lg">
+              {Formatters.Number.formatRelativeNumber(12)}
+            </h6>
+            <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-tiny md:text-xs">
+              Stories
+            </p>
+          </Button>
         </div>
-        <div className="flex-1 space-y-1">
-          <h6 className="text-sky-300 font-sans text-sm md:text-xl text-center">
-            {Formatters.Number.formatRelativeNumber(8421)}
-          </h6>
-          <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-extratiny md:text-xs text-center">
-            Followers
-          </p>
+        <div className="flex-1 flex justify-center">
+          <Button
+            className="space-y-1"
+            variant={"transparent"}
+            onClick={() => {
+              followerModalRef.current?.open();
+            }}
+          >
+            <h6 className="text-sky-300 font-sans text-xs md:text-lg">
+              {Formatters.Number.formatRelativeNumber(8421)}
+            </h6>
+            <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-tiny md:text-xs">
+              Followers
+            </p>
+          </Button>
         </div>
-        <div className="flex-1 space-y-1">
-          <h6 className="text-sky-300 font-sans text-sm md:text-xl text-center">
-            {Formatters.Number.formatRelativeNumber(243)}
-          </h6>
-          <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-extratiny md:text-xs text-center">
-            Followings
-          </p>
+        <div className="flex-1 flex justify-center">
+          <Button
+            className={"space-y-1"}
+            variant={"transparent"}
+            onClick={() => {
+              followingModalRef.current?.open();
+            }}
+          >
+            <h6 className="text-sky-300 font-sans text-xs md:text-lg">
+              {Formatters.Number.formatRelativeNumber(243)}
+            </h6>
+            <p className="text-gray-800 dark:text-gray-200 font-sans uppercase text-tiny md:text-xs">
+              Followings
+            </p>
+          </Button>
         </div>
       </div>
     </div>
@@ -193,7 +228,12 @@ function AuthorCreationsSection() {
           </AnimatePresence>
           <div className="col-span-1 md:col-span-2 place-items-center">
             {authorBooks.length > 0 && (
-              <Button variant={"transparent"}>Load More Projects</Button>
+              <Button
+                variant={"transparent"}
+                className={"text-extratiny md:text-xs"}
+              >
+                Load More Projects
+              </Button>
             )}
           </div>
         </Tab.Content>

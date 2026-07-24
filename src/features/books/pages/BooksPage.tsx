@@ -41,7 +41,7 @@ export default function BooksPage() {
 
   return (
     <AppLayout>
-      <section
+      <div
         className={
           "size-full relative dark:bg-slate-800 bg-slate-100 p-5 md:p-6 lg:p-10"
         }
@@ -309,7 +309,7 @@ export default function BooksPage() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </AppLayout>
   );
 }

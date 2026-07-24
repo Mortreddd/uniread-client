@@ -4,20 +4,16 @@ import AboutPage from "@/pages/AboutPage";
 import MessagesPage from "@/pages/MessagesPage";
 import LibraryPage from "@/pages/LibraryPage";
 import BooksPage from "@/features/books/pages/BooksPage.tsx";
-import SetupUsernamePage from "./pages/auth/SetupUsernamePage";
-import WriteChapterPage from "@/pages/books/WriteChapterPage.tsx";
-import EditChapter from "./components/chapter/partial/EditChapter.tsx";
-import WorkspacePage from "./pages/workspace/WorkspacePage.tsx";
-import UserDashboard from "./pages/workspace/UserDashboard.tsx";
 import ReadingPage from "./pages/ReadingPage.tsx";
 import ViewChapter from "./components/chapter/ViewChapter.tsx";
-import BasePage from "./pages/settings/BasePage.tsx";
-import ProfileSettings from "./pages/settings/ProfileSettings.tsx";
 import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
 import AuthorsPage from "./features/users/pages/AuthorsPage.tsx";
 import AuthorProfilePage from "./features/users/pages/AuthorProfilePage.tsx";
 import AuthorDashboardPage from "./features/users/pages/AuthorDashboardPage.tsx";
-import AuthorDashboardSection from "./features/users/pages/AuthorDashboardSection.tsx";
+import AuthorDashboardSection from "./features/users/components/AuthorDashboardSection.tsx";
+import SettingsPage from "./features/users/pages/SettingsPage.tsx";
+import SettingsProfilePage from "./features/users/pages/SettingsProfilePage.tsx";
+import SettingsAccountPage from "./features/users/pages/SettingsAccountPage.tsx";
 
 /**
  *
@@ -30,11 +26,6 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
-  },
-  // Setting up username
-  {
-    path: "/authentication/setup-username",
-    element: <SetupUsernamePage />,
   },
   {
     path: "/books",
@@ -96,40 +87,23 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // Workspace Page
-  {
-    path: "/workspace",
-    element: <WorkspacePage />,
-    children: [
-      {
-        index: true,
-        element: <UserDashboard />,
-      },
-    ],
-  },
-  {
-    path: "/workspace/stories/:bookId",
-    element: <WriteChapterPage />,
-    children: [
-      {
-        path: "chapters/:chapterId",
-        element: <EditChapter />,
-      },
-    ],
-  },
 
   {
     path: "/settings",
-    element: <BasePage />,
+    element: <SettingsPage />,
     children: [
       {
         path: "/settings",
-        element: <ProfileSettings />,
+        element: <SettingsProfilePage />,
         index: true,
       },
       {
         path: "/settings/profile",
-        element: <ProfileSettings />,
+        element: <SettingsProfilePage />,
+      },
+      {
+        path: "/settings/account",
+        element: <SettingsAccountPage />,
       },
     ],
   },
