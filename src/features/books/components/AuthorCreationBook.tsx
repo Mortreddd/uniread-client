@@ -78,13 +78,13 @@ export default function AuthorCreationBook({ book }: { book: BookDetail }) {
             </p>
           </div>
         </div>
-        <div className="inline-flex items-center group">
-          <p className="font-bold text-tiny md:text-xs lg:text-sm text-sky-700 group-hover:text-sky-800 dark:text-sky-300 dark:group-hover:text-sky-200 group-hover:text-shadow-lg group-hover:-translate-y-1 translate-y-0 transition-all duration-200 ease-in-out uppercase">
+        <div className="inline-flex items-center group gap-1">
+          <p className="font-bold text-extratiny md:text-xs lg:text-sm text-sky-700 group-hover:text-sky-800 dark:text-sky-300 dark:group-hover:text-sky-200 group-hover:text-shadow-lg group-hover:-translate-y-1 translate-y-0 transition-all duration-200 ease-in-out uppercase">
             View Details
           </p>
           <ArrowUpRightIcon
             className={
-              "size-3 md:size-4 lg:size-5 text-sky-700 group-hover:text-sky-800 dark:text-sky-300 dark:group-hover:text-sky-200 transition-all-duration-200 ease-in-out uppercase group-hover:-translate-y-1 group-hover:translate-x-1 translate-0 transition-all duration-200"
+              "size-2 md:size-4 lg:size-5 text-sky-700 group-hover:text-sky-800 dark:text-sky-300 dark:group-hover:text-sky-200 transition-all-duration-200 ease-in-out uppercase group-hover:-translate-y-1 group-hover:translate-x-1 translate-0 transition-all duration-200"
             }
           />
         </div>

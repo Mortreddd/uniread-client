@@ -8,6 +8,8 @@ import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
 import { ToastProvider } from "@/contexts/ToastContext.tsx";
 import { AlertProvider } from "./contexts/AlertContext.tsx";
+import { SidebarProvider } from "./contexts/SidebarContext.tsx";
+import { LayoutProvider } from "./contexts/LayoutContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
@@ -17,7 +19,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <AuthProvider>
           {/* <NotificationProvider> */}
           {/* <MessageProvider> */}
-          <RouterProvider router={router}></RouterProvider>
+          <LayoutProvider>
+            <SidebarProvider>
+              <RouterProvider router={router}></RouterProvider>
+            </SidebarProvider>
+          </LayoutProvider>
           {/* </MessageProvider> */}
           {/* </NotificationProvider> */}
         </AuthProvider>

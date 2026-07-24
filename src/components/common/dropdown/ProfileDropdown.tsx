@@ -1,5 +1,5 @@
 import Icon from "@/shared/components/Icon.tsx";
-import { Link } from "react-router-dom"; // Use Link for internal navigation
+import { Link } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence, motion } from "motion/react";
@@ -10,27 +10,42 @@ import { ModalRef } from "@/shared/components/Modal.tsx";
 
 export default function ProfileDropdown() {
   const [open, setOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null); // Reference for the whole container
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null); // Add button ref
   const notificaitonModalRef = useRef<ModalRef>(null);
   const { logout } = useAuth();
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node;
+
+      // Check if click is outside the dropdown container AND not on the button
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
       ) {
         setOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownRef]);
 
-  const handleLogout = () => {
+    // Use capture phase to catch events before they bubble
+    document.addEventListener("mousedown", handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside, true);
+    };
+  }, []); // Remove dependency on dropdownRef
+
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the outside click handler from immediately closing
+    setOpen((prev) => !prev);
+  };
+
+  const closeDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setOpen(false);
-    logout();
   };
 
   const menuItems = [
@@ -44,7 +59,8 @@ export default function ProfileDropdown() {
   return (
     <div className="relative inline-block" ref={dropdownRef}>
       <motion.button
-        onClick={() => setOpen(!open)}
+        ref={buttonRef}
+        onClick={toggleDropdown}
         className="inline-flex items-center gap-2 px-5 py-2 text-left relative isolate text-lg font-medium font-serif text-black bg-transparent dark:text-white dark:bg-transparent/80"
       >
         <NotificationsModal ref={notificaitonModalRef} />
@@ -64,12 +80,16 @@ export default function ProfileDropdown() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
             className="absolute right-0 z-50 mt-2 text-start bg-white shadow-xl border border-gray-100 sm:w-60 w-72 rounded-lg overflow-hidden"
+            onClick={closeDropdown} // Close dropdown when clicking anywhere on the menu
           >
             {menuItems.map((item) => (
               <li key={item.href} className="relative group isolate">
                 <Link
                   to={item.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(false);
+                  }}
                   className="block px-5 py-2.5 text-gray-700 transition-colors group-hover:text-black group-hover:bg-gray-100"
                 >
                   {item.label}
@@ -80,7 +100,8 @@ export default function ProfileDropdown() {
             <li className="relative group isolate border-t border-gray-50">
               <button
                 className="w-full px-5 py-2.5 text-left text-gray-700 group-hover:text-black group-hover:bg-gray-100 transition-colors relative"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setOpen(false);
                   notificaitonModalRef.current?.open();
                 }}
@@ -93,7 +114,11 @@ export default function ProfileDropdown() {
             <li className="relative group isolate border-t border-gray-50">
               <button
                 className="w-full px-5 py-2.5 text-left text-gray-700 group-hover:text-white transition-colors relative"
-                onClick={handleLogout}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(false);
+                  logout();
+                }}
               >
                 <span className="relative z-10">Logout</span>
                 <span className="absolute inset-0 bg-red-600 opacity-0 group-hover:opacity-100 -z-10 transition-opacity" />

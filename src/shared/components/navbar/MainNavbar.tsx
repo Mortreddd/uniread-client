@@ -7,13 +7,18 @@ import LoginModal from "@/features/authentication/LoginModal.tsx";
 import ThemeToggle from "../ThemeToggle.tsx";
 import Dropdown from "../Dropdown.tsx";
 import {
+  Bars3Icon,
   ChatBubbleBottomCenterIcon,
   GlobeAltIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
+import { useSidebar } from "@/contexts/SidebarContext.tsx";
+import { useLayout } from "@/contexts/LayoutContext.tsx";
 
 export default function MainNavbar() {
   const loginModalRef = useRef<ModalRef>(null);
+  const { openSidebar } = useSidebar();
+  const { hasSidebar } = useLayout();
 
   const navigations = [
     {
@@ -49,6 +54,17 @@ export default function MainNavbar() {
     <nav className={"w-full shadow-lg bg-gray-100 dark:bg-slate-950"}>
       <div className="w-full max-w-7xl flex justify-between items-center py-2 md:py-4 px-3 md:px-5 mx-auto">
         <div className="relative inline-flex items-center gap-2 md:gap-3">
+          {hasSidebar && (
+            <Button
+              onClick={() => openSidebar()}
+              variant={"transparent"}
+              className={"md:hidden"}
+            >
+              <Bars3Icon
+                className={"size-3 text-gray-800 dark:text-gray-100"}
+              />
+            </Button>
+          )}
           <ApplicationLogo />
           <ul className={"hidden lg:inline-flex items-center gap-3 md:gap-4"}>
             {navigations.map(({ path, name }) => (

@@ -16,9 +16,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
         {isLoggedIn() ? <AppNavbar /> : <MainNavbar />}
       </header>
       <div className={"flex-1 flex flex-col min-h-0"}>{children}</div>
-      <footer className="bg-gray-200 dark:bg-slate-800 w-full min-h-0">
-        <Footer />
-      </footer>
     </Layout>
   );
 }

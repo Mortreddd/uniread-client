@@ -3,11 +3,11 @@ import { useSidebar } from "@/contexts/SidebarContext";
 import AppLayout from "@/layouts/AppLayout";
 import Footer from "@/shared/components/Footer";
 import Sidebar from "@/shared/components/Sidebar";
-import { BookOpenIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
+import { AdjustmentsVerticalIcon, UserIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence } from "motion/react";
 import { NavLink, Outlet } from "react-router-dom";
 
-export default function AuthorDashboardPage() {
+export default function SettingsPage() {
   const { closeSidebar } = useSidebar();
   const { setHasSidebar } = useLayout();
   setHasSidebar(true);
@@ -15,18 +15,19 @@ export default function AuthorDashboardPage() {
   const sidebarItems = [
     {
       id: 1,
-      label: "Dashboard",
-      href: "/dashboard",
-      icon: <Squares2X2Icon className={"size-4 md:size-5 text-inherit"} />,
+      label: "Profile",
+      href: "/settings/profile",
+      icon: <UserIcon className={"size-4 md:size-5 text-inherit"} />,
     },
     {
       id: 2,
-      label: "My Books",
+      label: "Account",
       href: "/dashboard/books",
-      icon: <BookOpenIcon className={"size-4 md:size-5 text-inherit"} />,
+      icon: (
+        <AdjustmentsVerticalIcon className={"size-4 md:size-5 text-inherit"} />
+      ),
     },
   ];
-
   return (
     <AppLayout>
       <div className="flex flex-1 min-h-0 relative">
@@ -60,9 +61,9 @@ export default function AuthorDashboardPage() {
             </div>
           </Sidebar>
         </div>
-        <section className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0">
+        <section className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0 bg-gray-100 dark:bg-slate-900 ">
           <div className="max-w-7xl mx-auto w-full">
-            <div className="relative flex-1 min-w-0 h-full">
+            <div className="relative flex-1 min-w-0 h-full ">
               <AnimatePresence mode="wait">
                 <Outlet />
               </AnimatePresence>
