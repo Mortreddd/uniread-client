@@ -12,7 +12,7 @@ export function useWebSocket({
   onConnect = () => {},
   onClose = () => {},
 }: WebsocketProps) {
-  const baseUrl = import.meta.env.VITE_BASE_URL as string;
+  const baseUrl = import.meta.env.VITE_WEBSOCKET_URL as string;
   const [connected, setConnected] = useState(false);
   const client = useRef<Client | null>(null);
 

@@ -1,46 +1,20 @@
-import ChatPreview, {
-  Message as MessageType,
-} from "@/features/chats/types/Chat.ts";
+import { ChatConversationPreview } from "@/features/chats/types/Chat.ts";
 import {
   createContext,
-  Dispatch,
   PropsWithChildren,
-  SetStateAction,
-  useCallback,
   useContext,
   useEffect,
-  useState,
+  useMemo,
 } from "react";
 import { useWebSocket } from "@/hooks/useWebsocket";
 import { useToast } from "./ToastContext";
-import { IMessage } from "@stomp/stompjs";
-import useGetUserConversations from "@/api/messages/useGetUserConversations";
-interface FriendMessagePayload {
-  receiverId: string;
-  message: string;
-}
-
-interface GroupMessagePayload {
-  conversationId: string;
-  message: string;
-}
-
-interface ConversationMessagePayload {
-  conversationId: string;
-  message: string;
-}
+import { useGetConversations } from "@/features/chats/hooks/useGetConversations";
+import { useQueryClient } from "@tanstack/react-query";
+import { Paginate } from "@/types/Pagination";
 
 interface MessageContextProps {
-  conversations: ChatPreview[];
-  setConversations: Dispatch<SetStateAction<ChatPreview[]>>;
-  sendGroupMessage: (payload: GroupMessagePayload) => void;
-  sendFriendMessage: (payload: FriendMessagePayload) => void;
-  sendConversationMessage: (payload: ConversationMessagePayload) => void;
-  messages: MessageType[];
-  setMessages: Dispatch<SetStateAction<MessageType[]>>;
+  conversations: ChatConversationPreview[];
   unreadCount: number;
-  markConversationAsRead: (conversationId: string) => void;
-  activeConversation: ChatPreview | null;
 }
 
 const MessageContext = createContext<MessageContextProps | undefined>(
@@ -66,130 +40,78 @@ interface MessageProviderProps extends PropsWithChildren {}
  * @constructor
  */
 function MessageProvider({ children }: MessageProviderProps) {
-  const [messages, setMessages] = useState<MessageType[]>([]);
-  const [conversations, setConversations] = useState<ChatPreview[]>([]);
+  const { data } = useGetConversations({
+    pageNo: 0,
+    pageSize: 10,
+  });
+
+  const queryClient = useQueryClient();
   const { showToast } = useToast();
-  const [unreadCount, setUnreadCount] = useState(0);
 
-  const { data } = useGetUserConversations({ pageNo: 0, pageSize: 20 });
-  const calculateUnreadCount = useCallback((convos: ChatPreview[]) => {
-    if (!convos) return 0;
-
-    const count = convos.reduce((acc, conv) => acc + conv.unreadCount, 0);
-    setUnreadCount(count);
-  }, []);
-
-  const [activeConversation, setActiveConversation] =
-    useState<ChatPreview | null>(null);
-
-  useEffect(() => {
-    if (data?.content) {
-      setConversations(data.content);
-      calculateUnreadCount(data.content);
-    }
+  const conversations = useMemo(() => {
+    if (!data?.content) return [];
+    return data.content;
   }, [data]);
 
-  const { connected, subscribe, publish } = useWebSocket({
+  const unreadCount = useMemo(() => {
+    return conversations.reduce(
+      (acc, conv) => acc + (conv.unreadCount ?? 0),
+      0,
+    );
+  }, [conversations]);
+
+  const { connected, subscribe } = useWebSocket({
     onConnect: () => showToast("Connected", "success"),
     onClose: () => showToast("Disconnected", "error"),
   });
 
   useEffect(() => {
     if (!connected) return;
-    const sub1 = subscribe(
-      "/user/queue/chat-notifications",
-      (message: IMessage) => {
-        const receivedConversation = JSON.parse(message.body) as ChatPreview;
-        setConversations((prev) => {
-          const filtered = prev.filter(
-            (conv) =>
-              conv.conversationId !== receivedConversation.conversationId,
+
+    const sub = subscribe("/user/queue/chats", (msg) => {
+      const incoming = JSON.parse(msg.body) as ChatConversationPreview;
+      console.log(incoming);
+      queryClient.setQueryData(
+        ["conversations"],
+        (old: Paginate<ChatConversationPreview[]>) => {
+          if (!old?.content) return old;
+
+          const index = old.content.findIndex(
+            (c) => c.conversationId === incoming.conversationId,
           );
 
-          const convos = [receivedConversation, ...filtered];
-          calculateUnreadCount(convos);
-          return convos;
-        });
-      },
-    );
+          let updatedContent;
 
-    return () => {
-      sub1?.unsubscribe();
-    };
-  }, [connected, subscribe]);
+          if (index !== -1) {
+            const updated = {
+              ...old.content[index],
+              ...incoming,
+            };
 
-  const sendFriendMessage = useCallback(
-    (payload: FriendMessagePayload) => {
-      if (!connected) return;
-      publish({
-        destination: "/app/chat/message",
-        body: payload,
-      });
-    },
-    [connected, publish],
-  );
+            updatedContent = [
+              updated,
+              ...old.content.filter((_, i) => i !== index),
+            ];
+          } else {
+            updatedContent = [incoming, ...old.content];
+          }
 
-  const sendGroupMessage = useCallback(
-    (payload: GroupMessagePayload) => {
-      if (!connected) return;
-      publish({
-        destination: "/app/chat/group",
-        body: payload,
-      });
-    },
-    [connected, publish],
-  );
-
-  const sendConversationMessage = useCallback(
-    (payload: ConversationMessagePayload) => {
-      if (!connected) return;
-
-      publish({
-        destination: `/app/chat.${payload.conversationId}.new`,
-        body: payload,
-      });
-    },
-    [connected, publish],
-  );
-
-  function markConversationAsRead(conversationId: string) {
-    if (!connected) return;
-
-    const subMapping = subscribe(`/app/chat.${conversationId}`, (message) => {
-      console.log("Subscribed to mapping and received unread messages");
-    });
-
-    const active = conversations.find(
-      (convo) => convo.conversationId === conversationId,
-    );
-    setActiveConversation(active || null);
-
-    setConversations((prev) => {
-      const updated = prev.map((conv) =>
-        conv.conversationId === conversationId
-          ? { ...conv, unreadCount: 0, hasNewMessage: false }
-          : conv,
+          return {
+            ...old,
+            content: updatedContent,
+          };
+        },
       );
-      calculateUnreadCount(updated);
-      return updated;
     });
 
-    return () => subMapping?.unsubscribe();
-  }
+    return () => sub?.unsubscribe();
+  }, [connected, subscribe, queryClient, showToast]);
 
   return (
     <MessageContext.Provider
       value={{
-        unreadCount,
-        markConversationAsRead,
         conversations,
-        setConversations,
-        sendFriendMessage,
-        sendGroupMessage,
-        sendConversationMessage,
-        messages,
-        setMessages,
-        activeConversation,
+        unreadCount,
       }}
     >
       {children}

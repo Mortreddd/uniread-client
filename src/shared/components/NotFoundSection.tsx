@@ -34,7 +34,9 @@ export default function NotFoundSection() {
             revision.
           </p>
           <Button className="mx-auto rounded">
-            <Link to={"/"}>Return to Home</Link>
+            <Link to={"/"} className={"text-tiny md:text-xs lg:text-sm"}>
+              Return to Home
+            </Link>
           </Button>
         </div>
       </div>

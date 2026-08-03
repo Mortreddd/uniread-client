@@ -1,5 +1,11 @@
 import { User } from "@/types/User.ts";
 
+export enum MessageType {
+  TEXT = "TEXT",
+  IMAGE = "IMAGE",
+  SYSTEM = "SYSTEM",
+}
+
 export interface Conversation {
   id: string;
   name: string;
@@ -10,6 +16,14 @@ export interface Conversation {
   createdAt: string;
 }
 
+export interface ConversationDetail {
+  id: string;
+  name: string;
+  isMuted: boolean;
+  isArchived: boolean;
+  isGroup: boolean;
+  lastMessage: Message | null;
+}
 export interface ChatConversationPreview extends Omit<
   Conversation,
   "participants" | "messages" | "id"
@@ -20,8 +34,7 @@ export interface ChatConversationPreview extends Omit<
   isMuted: boolean;
   isArchived: boolean;
   isGroup: boolean;
-  lastMessage: string;
-  lastMessageAt: string;
+  lastMessage: Message;
 }
 
 export interface ConversationDetail extends Omit<
@@ -47,27 +60,11 @@ export interface Participant {
 
 export interface Message {
   id: string;
-  sender: User;
-  conversationId: string;
-  message: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ConversationMessage {
-  id: string;
   conversationId: string;
   senderId: string;
+  type: MessageType;
   senderName: string;
   message: string;
   createdAt: string;
-  updatedAt: string;
-}
-
-export interface ConversationInfo {
-  id: string;
-}
-
-export interface ExistingConversation {
-  isGroup: boolean;
+  deliveredAt: string;
 }

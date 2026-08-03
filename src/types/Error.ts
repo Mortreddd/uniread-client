@@ -1,6 +1,10 @@
 export interface ErrorResponse {
-  code: number;
+  timestamp: string;
+  status: number;
+  error: string;
   message: string;
-  date: string;
-  description: string;
+  path: string;
+  errors?: Record<string, string>[];
+  fieldErrors?: Record<string, string>[];
+  globalErrors?: Record<string, string>[];
 }

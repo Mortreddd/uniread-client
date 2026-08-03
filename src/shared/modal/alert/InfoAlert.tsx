@@ -20,8 +20,7 @@ const infoAlertVariant = cva("", {
 
 type IconSize = "sm" | "md" | "lg" | "custom";
 interface InfoAlertProps
-  extends PropsWithChildren,
-    VariantProps<typeof infoAlertVariant> {
+  extends PropsWithChildren, VariantProps<typeof infoAlertVariant> {
   className?: string;
   iconSize?: IconSize;
 }
@@ -32,7 +31,10 @@ export default function InfoAlert({
   children,
 }: InfoAlertProps) {
   return (
-    <Alert variant={"info"} className={`flex items-center gap-2 ${className}`}>
+    <Alert
+      variant={"info"}
+      className={`flex items-center gap-2 ${className} p-2 md:p-3`}
+    >
       <InformationCircleIcon className={cn(infoAlertVariant({ iconSize }))} />
       {children}
     </Alert>

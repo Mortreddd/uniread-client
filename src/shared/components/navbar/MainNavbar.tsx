@@ -27,7 +27,7 @@ export default function MainNavbar() {
           className={"size-4 md:size-5 text-black/80 dark:text-white/80"}
         />
       ),
-      path: "/",
+      path: "/books",
       name: "Explore",
     },
     {
@@ -73,13 +73,15 @@ export default function MainNavbar() {
               </li>
             ))}
           </ul>
-          {/* Tablet View */}
           <Dropdown
-            className={"inline-flex lg:hidden items-center"}
+            className="inline-flex lg:hidden items-center"
+            variant="ghost"
+            size="sm"
+            hasArrowIcon={true}
             trigger={
               <p
                 className={
-                  "inline-flex text-xs md:text-base font-sans text-black dark:text-white"
+                  "text-xs md:text-sm lg:text-md text-gray-800 dark:text-gray-100"
                 }
               >
                 Browse
@@ -89,12 +91,11 @@ export default function MainNavbar() {
             {navigations.map(({ icon, path, name }, index) => (
               <Dropdown.Item
                 key={index}
-                className={
-                  "text-xs md:text-sm lg:text-base font-sans inline-flex items-center"
-                }
+                icon={icon}
+                href={path}
+                className="text-xs md:text-xs lg:text-sm"
               >
-                {icon}
-                <NavItem path={path} name={name} />
+                {name}
               </Dropdown.Item>
             ))}
           </Dropdown>

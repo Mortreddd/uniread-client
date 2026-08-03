@@ -1,6 +1,31 @@
+import { Gender } from "@/features/users/types/User";
+
+export enum Role {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
+
 export interface LoginForm {
   email: string;
   password: string;
+}
+
+export interface AuthUser {
+  id: string;
+  username: string;
+  email: string;
+  role: Role;
+  emailVerified: boolean;
+  profile: {
+    displayName: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    avatarUrl: string;
+    avatarPublicId: string;
+    gender: Gender;
+  };
 }
 
 export interface LoginResponse {
@@ -8,6 +33,15 @@ export interface LoginResponse {
   iat: number;
   accessToken: string;
   refreshToken: string;
+  success: boolean;
+  message: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+    role: Role;
+    emailVerified: boolean;
+  };
 }
 
 export interface UserRegistration {

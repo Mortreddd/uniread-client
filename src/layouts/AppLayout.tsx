@@ -1,6 +1,5 @@
 import Layout from "@/components/Layout";
 import { useAuth } from "@/contexts/AuthContext";
-import Footer from "@/shared/components/Footer";
 import AppNavbar from "@/shared/components/navbar/AppNavbar";
 import MainNavbar from "@/shared/components/navbar/MainNavbar";
 import { PropsWithChildren } from "react";

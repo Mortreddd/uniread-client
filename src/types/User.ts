@@ -1,14 +1,9 @@
-export enum Role {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  ADMIN = "ADMIN",
-  USER = "USER",
-}
+import { Role } from "./Auth";
 
 export interface User {
   id: string;
   email: string;
   username: string;
-  
   role: Role;
   emailVerifiedAt?: string | null;
   bannedAt: string;

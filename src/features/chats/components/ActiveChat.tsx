@@ -1,0 +1,292 @@
+import defaultProfile from "@/assets/profiles/default-profile.jpg";
+import { useWebSocket } from "@/hooks/useWebsocket";
+import { Button } from "@/shared/components/form/Button";
+import { Input } from "@/shared/components/form/Input";
+
+import {
+  ArrowLeftIcon,
+  FaceSmileIcon,
+  InformationCircleIcon,
+  PaperAirplaneIcon,
+  PhoneIcon,
+  PlusIcon,
+  VideoCameraIcon,
+} from "@heroicons/react/24/outline";
+import {
+  KeyboardEvent,
+  KeyboardEventHandler,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Link, useParams } from "react-router-dom";
+import { useGetConversationMessages } from "../hooks/useGetConversationMessages";
+import { Message as ConversationMessage, MessageType } from "../types/Chat";
+import { useAuth } from "@/contexts/AuthContext";
+import { cn } from "@/utils/ClassNames";
+import { useGetConversation } from "../hooks/useGetConversation";
+import { useQueryClient } from "@tanstack/react-query";
+
+function ActiveChat() {
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden">
+      <ChatHeader />
+
+      <div className="flex-1 overflow-y-auto p-4">
+        <ChatMessages />
+      </div>
+
+      <ChatMessageCreation />
+    </div>
+  );
+}
+
+function ChatHeader() {
+  const { conversationId } = useParams<{ conversationId: string }>();
+  const { data, isLoading, error } = useGetConversation({ conversationId });
+
+  return (
+    <div className="w-full flex shrink-0 justify-between items-center py-2 px-4 lg:py-3 lg:px-5 shadow-lg bg-gray-100 dark:bg-slate-900">
+      {isLoading && <HeaderSkeleton />}
+      {data && (
+        <>
+          <div className="inline-flex items-center gap-1.5">
+            <Link to={"/chats"}>
+              <ArrowLeftIcon
+                className={
+                  "size-5 text-gray-800 dark:text-gray-200 inline lg:hidden mr-2 cursor-pointer"
+                }
+              />
+            </Link>
+            <div className="inline-flex items-center">
+              <img
+                src={data.avatar ?? defaultProfile}
+                alt={"gojo satoru"}
+                className="size-10 md:size-12 lg:size-14 object-cover border border-primary rounded-full flex-shrink-0"
+              />
+
+              <div className="ml-4">
+                <h3 className="text-xs md:text-sm lg:text-base truncate dark:text-white mb-1.5">
+                  {data.name}
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div className="inline-flex justify-end items-center">
+            <Button variant={"transparent"} className={"rounded-full"}>
+              <PhoneIcon
+                className={
+                  "size-4 md:size-5 text-primary dark:text-primary-dark "
+                }
+              />
+            </Button>
+            <Button variant={"transparent"} className={"rounded-full"}>
+              <VideoCameraIcon
+                className={
+                  "size-4 md:size-5 text-primary dark:text-primary-dark "
+                }
+              />
+            </Button>
+            <Button variant={"transparent"} className={"rounded-full"}>
+              <InformationCircleIcon
+                className={
+                  "size-4 md:size-5 text-primary dark:text-primary-dark "
+                }
+              />
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function HeaderSkeleton() {
+  return (
+    <div className="size-full animate-pull bg-gray-300 dark:bg-slate-700 rounded-b"></div>
+  );
+}
+
+function ChatMessages() {
+  const { conversationId } = useParams<{ conversationId: string }>();
+
+  const { data, isLoading, error } = useGetConversationMessages({
+    conversationId,
+    pageNo: 0,
+    pageSize: 10,
+  });
+
+  const messages = useMemo(() => {
+    if (!data || data.empty || !data.content) return [];
+    return data.content;
+  }, [data]); // ✅ FIXED
+
+  const [loadedMessages, setLoadedMessages] = useState<ConversationMessage[]>(
+    [],
+  );
+
+  // ✅ sync when data loads
+  useEffect(() => {
+    setLoadedMessages(messages);
+  }, [messages]);
+
+  const { subscribe } = useWebSocket({});
+
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const sub = subscribe(`/topic/chats.${conversationId}`, (msg) => {
+      const parsed: ConversationMessage = JSON.parse(msg.body);
+
+      setLoadedMessages((prev) => {
+        const exists = prev.some((m) => m.id === parsed.id);
+        if (exists) return prev;
+
+        return [...prev, parsed];
+      });
+    });
+
+    return () => {
+      sub?.unsubscribe();
+    };
+  }, [conversationId, subscribe]);
+
+  return (
+    <div className="min-h-full space-y-3 lg:space-y-5 w-full">
+      {isLoading && <LoadingSection />}
+      {!data && error && <ErrorSection />}
+      {data && data.empty && <EmptySection />}
+      {loadedMessages.map((message) => (
+        <ConvoMessage key={message.id} message={message} />
+      ))}
+    </div>
+  );
+}
+interface ConvoMessageProps {
+  message: ConversationMessage;
+}
+function ConvoMessage({ message }: ConvoMessageProps) {
+  const { user } = useAuth();
+
+  const isSender = message.senderId === user?.id;
+
+  return (
+    <div
+      className={cn("w-full flex", isSender ? "justify-end" : "justify-start")}
+    >
+      <div
+        className={cn(
+          "max-w-[80%] w-fit px-3 py-2 text-sm md:text-base",
+          "rounded-lg",
+          isSender
+            ? "bg-primary dark:bg-primary-dark text-white rounded-br-none"
+            : "bg-gray-300 dark:bg-slate-700 text-gray-900 dark:text-gray-200 rounded-bl-none",
+        )}
+      >
+        <p>{message.message}</p>
+      </div>
+    </div>
+  );
+}
+
+function LoadingSection() {
+  return (
+    <div className="size-full animate-pulse bg-gray-200 dark:bg-slate-800"></div>
+  );
+}
+
+function ErrorSection() {
+  return (
+    <div className="size-full bg-transparent flex items-center justify-center">
+      <p className="text-xs md:text-sm lg:text-base font-sans text-gray-800 dark:text-gray-200 tracking-wide">
+        Unable to retrieve messages
+      </p>
+    </div>
+  );
+}
+
+function EmptySection() {
+  return (
+    <div className="size-full bg-transparent flex items-center justify-center">
+      <p className="text-xs md:text-sm lg:text-base font-sans text-gray-800 dark:text-gray-200 tracking-wide">
+        Start a new message
+      </p>
+    </div>
+  );
+}
+
+interface NewMessageRequest {
+  conversationId?: string;
+  messageType: MessageType;
+  content: string;
+}
+
+function ChatMessageCreation() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const { conversationId } = useParams<{ conversationId: string }>();
+
+  const [payload, setPayload] = useState<NewMessageRequest>({
+    conversationId,
+    messageType: MessageType.TEXT,
+    content: "",
+  });
+  const { publish } = useWebSocket({});
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
+  function handleSubmit() {
+    if (!payload.content.trim()) {
+      inputRef.current?.focus();
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    publish({
+      destination: "/app/send",
+      body: payload,
+    });
+    setPayload({ ...payload, content: "" });
+  }
+
+  return (
+    <div className="w-full shrink-0 bg-gray-100 dark:bg-slate-900 flex items-center md:p-3 p-2">
+      <div className="flex items-center bg-gray-100 dark:bg-slate-900 w-full">
+        <Button variant={"transparent"} className={"rounded-full shrink-0"}>
+          <PlusIcon
+            className={"size-4 md:size-5 text-primary dark:text-primary-dark"}
+          />
+        </Button>
+        <Button variant={"transparent"} className={"rounded-full shrink-0"}>
+          <FaceSmileIcon
+            className={"size-4 md:size-5 text-primary dark:text-primary-dark"}
+          />
+        </Button>
+        <Input
+          ref={inputRef}
+          className={"flex-1 w-full"}
+          value={payload.content}
+          onKeyDown={handleKeyDown}
+          onChange={(e) => setPayload({ ...payload, content: e.target.value })}
+          placeholder="Type a message..."
+        />
+        <Button
+          variant={"transparent"}
+          className={"rounded-full shrink-0"}
+          onClick={handleSubmit}
+        >
+          <PaperAirplaneIcon
+            className={"size-4 md:size-5 text-primary dark:text-primary-dark"}
+          />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export default memo(ActiveChat);

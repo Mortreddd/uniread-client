@@ -61,7 +61,7 @@ export const AlertProvider: FC<AlertProviderProps> = ({ children }) => {
     <AlertContext.Provider value={contextValue}>
       <div className="antialiased bg-transparent size-full">
         {children}
-        <div className="fixed right-10 z-50 bottom-10 transition-all w-fit duration-200 translate-x-5 ease-in-out">
+        <div className="fixed inset-x-1/2 z-50 top-10 transition-all w-fit duration-200 translate-x-5 ease-in-out">
           <AnimatePresence>
             {alertMessages.map(({ type, message }, index) => {
               switch (type) {

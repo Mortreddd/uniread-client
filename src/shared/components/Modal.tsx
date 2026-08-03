@@ -73,7 +73,7 @@ function Modal({ className, children }: ModalProps, ref: Ref<ModalRef>) {
             opacity: 0,
           }}
           className={
-            "fixed w-full h-screen max-h-screen bg-black/60 inset-0 z-50 backdrop-blur-xs transition-all duration-200 ease-in-out"
+            "fixed w-full h-screen max-h-screen flex items-center justify-center bg-black/60 inset-0 z-50 backdrop-blur-xs transition-all duration-200 ease-in-out"
           }
           onClick={handleClose}
         >
@@ -98,7 +98,7 @@ function Modal({ className, children }: ModalProps, ref: Ref<ModalRef>) {
                 ease: "easeInOut",
               },
             }}
-            className={`fixed inset-x-0 top-10 mx-auto w-fit md:max-w-xl lg:max-w-3xl bg-white dark:bg-slate-900 rounded-lg shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto ${className}`}
+            className={`relative mx-auto size-fit md:max-w-xl lg:max-w-3xl bg-white dark:bg-slate-900 rounded-lg shadow-lg p-4 md:p-6 max-h-[90vh] overflow-y-auto ${className}`}
             onClick={(e) => e.stopPropagation()}
           >
             {children}

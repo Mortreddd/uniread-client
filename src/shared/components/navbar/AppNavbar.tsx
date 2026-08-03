@@ -17,12 +17,16 @@ import {
   Bars3Icon,
 } from "@heroicons/react/24/outline";
 import UserAvatar from "../UserAvatar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { useLayout } from "@/contexts/LayoutContext";
+import { useAuth } from "@/contexts/AuthContext";
+import gojoProfile from "@/assets/profiles/gojo.jpg";
 
 export default function AppNavbar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { openSidebar } = useSidebar();
   const { hasSidebar } = useLayout();
@@ -30,7 +34,7 @@ export default function AppNavbar() {
   const navigations = [
     {
       icon: <GlobeAltIcon className="size-4 md:size-5" />,
-      path: "/",
+      path: "/books",
       name: "Explore",
     },
     {
@@ -75,8 +79,10 @@ export default function AppNavbar() {
         <ArrowRightOnRectangleIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />
       ),
       label: "Logout",
-      onClick: () => {
+      onClick: async () => {
         // Handle logout
+        await logout();
+        navigate("/", { replace: true });
         console.log("Logging out...");
       },
     },
@@ -112,6 +118,7 @@ export default function AppNavbar() {
             className="inline-flex lg:hidden items-center"
             variant="ghost"
             size="sm"
+            hasArrowIcon={true}
             trigger={
               <p
                 className={
@@ -168,25 +175,24 @@ export default function AppNavbar() {
               align="right"
               trigger={
                 <div className="relative">
-                  <UserAvatar />
+                  <UserAvatar img={user?.profile?.avatarUrl ?? gojoProfile} />
                 </div>
               }
               open={isProfileOpen}
               onOpenChange={setIsProfileOpen}
               closeOnItemClick={true}
-              className="rounded-full p-0 hover:bg-transparent"
+              className="rounded-full p-0 hover:bg-transparent hover:cursor-pointer"
             >
               {/* Profile Header */}
               <div className="px-3 py-2 border-b border-gray-200 dark:border-gray-700 mb-1">
                 <p className="text-xs md:text-sm lg:text-md font-semibold text-gray-900 dark:text-white">
-                  John Doe
+                  {user?.username ?? "Anonymous"}
                 </p>
                 <p className="text-tiny md:text-xs lg:text-sm text-gray-500 dark:text-gray-400">
-                  john@example.com
+                  {user?.email ?? "Anonymous"}
                 </p>
               </div>
 
-              {/* Profile Options */}
               {profileOptions.map(({ label, href, icon, onClick }, index) => (
                 <Dropdown.Item
                   key={index}
