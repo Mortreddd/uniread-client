@@ -2,47 +2,55 @@ import { cn } from "@/utils/ClassNames.ts";
 import { cva, VariantProps } from "class-variance-authority";
 import { LabelHTMLAttributes } from "react";
 
-const labelVariant = cva("", {
+const labelVariant = cva("font-sans tracking-wide transition-colors", {
   variants: {
     variant: {
+      default: "text-gray-700 dark:text-gray-300",
       primary: "text-primary",
-      default: "text-gray-700",
-      none: "",
+      muted: "text-gray-500 dark:text-gray-400",
+      error: "text-red-500",
     },
-    labelSize: {
-      sm: "text-sm",
-      md: "text-md",
-      lg: "text-lg",
-      xl: "text-xl",
-      "2xl": "text-2xl",
-      none: "",
+    size: {
+      sm: "text-xs",
+      md: "text-tiny md:text-xs lg:text-sm",
+      lg: "text-base",
+      xl: "text-lg",
+    },
+    disabled: {
+      true: "opacity-60 cursor-not-allowed",
+      false: "",
     },
   },
+  defaultVariants: {
+    variant: "default",
+    size: "md",
+    disabled: false,
+  },
 });
-interface LabelProps
-  extends LabelHTMLAttributes<HTMLLabelElement>,
-    VariantProps<typeof labelVariant> {}
 
-/**
- * The label component is used to render a label for an input element.
- * It can be used with any input element and will automatically associate the label with the input element.
- * @param {LabelProps} props - The props for the label component.
- * @returns {JSX.Element} - The label component.
- */
+interface LabelProps
+  extends
+    LabelHTMLAttributes<HTMLLabelElement>,
+    VariantProps<typeof labelVariant> {
+  required?: boolean;
+}
 
 export default function Label({
   className,
   variant,
-  labelSize,
+  size,
+  disabled,
+  required,
   children,
   ...props
 }: LabelProps) {
   return (
     <label
-      className={cn(labelVariant({ className, variant, labelSize }))}
+      className={cn(labelVariant({ variant, size, disabled }), className)}
       {...props}
     >
       {children}
+      {required && <span className="ml-1 text-red-500">*</span>}
     </label>
   );
 }

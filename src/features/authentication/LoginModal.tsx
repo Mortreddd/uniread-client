@@ -1,5 +1,5 @@
 import api from "@/core/api/ApiService.ts";
-import { LoginForm } from "@/types/Auth.ts";
+import { LoginForm, LoginResponse } from "@/types/Auth.ts";
 import { ErrorResponse } from "@/types/Error.ts";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { AxiosError } from "axios";
@@ -11,6 +11,7 @@ import { Button } from "@/shared/components/form/Button.tsx";
 import GoogleAuthButton from "@/shared/components/form/GoogleAuthButton.tsx";
 import { Input } from "@/shared/components/form/Input.tsx";
 import Modal, { ModalRef } from "../../shared/components/Modal.tsx";
+import { useLogin } from "./hooks/useLogin.ts";
 
 interface LoginModalProps {}
 
@@ -28,18 +29,28 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
     },
   });
 
+  const loginMutation = useLogin();
+
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    await api
-      .post("/auth/login", data)
-      .then(() => {
-        window.location.reload();
-      })
-      .catch((error: AxiosError<ErrorResponse>) => {
-        console.log(error);
-        setError("root", {
-          message: error.response?.data.message || "Unable to Login",
-        });
-      });
+    try {
+      await loginMutation.mutateAsync(data);
+      window.location.reload();
+    } catch (error) {
+      const err = error as AxiosError<ErrorResponse>;
+      const data = err.response?.data;
+
+      let message = "Unable to Login";
+
+      if (data?.message) {
+        message = data.message;
+      } else if (data?.fieldErrors?.length) {
+        message = Object.values(data.fieldErrors[0])[0];
+      } else if (data?.errors?.length) {
+        message = Object.values(data.errors[0])[0];
+      }
+
+      setError("root", { message });
+    }
   };
 
   return (
@@ -78,8 +89,9 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
                 {...register("email", {
                   required: "Email is required",
                 })}
+                inputSize={"lg"}
                 placeholder="Enter email"
-                variant={"primary"}
+                variant={"default"}
                 className="w-full"
               />
             </div>
@@ -89,8 +101,9 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
                   required: "Password is required",
                 })}
                 type="password"
+                inputSize={"lg"}
                 placeholder="Enter password"
-                variant={"primary"}
+                variant={"default"}
                 className="w-full"
               />
             </div>
@@ -145,7 +158,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
           <p className="text-sm md:text-base font-serif text-gray-800 dark:text-gray-200">
             Don't have an account?{" "}
             <a
-              href="/register"
+              href="/auth/register"
               className="text-primary transition-all duration-200 ease-in-out hover:text-primary/80 dark:text-primary-dark dark:hover:text-primary-dark/80"
             >
               Register

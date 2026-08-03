@@ -3,23 +3,24 @@ import AppLayout from "@/layouts/AppLayout";
 import { Button } from "@/shared/components/form/Button";
 import { ArrowLeftIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { useRef } from "react";
-import Sidebar, { SidebarRef } from "@/shared/components/Sidebar";
+import Sidebar from "@/shared/components/Sidebar";
 
-import ActiveChat from "@/features/chats/ActiveChat";
-import ConversationsList from "@/features/chats/ConversationsList";
+import ActiveChat from "@/features/chats/components/ActiveChat";
+import ConversationsList from "@/features/chats/components/ConversationsList";
+import { useLayout } from "@/contexts/LayoutContext";
+import { useSidebar } from "@/contexts/SidebarContext";
 
 export default function MessagesPages() {
-  // const { conversations } = useMessage();
-
-  const sidebarRef = useRef<SidebarRef>(null);
-  const navigate = useNavigate();
+  const { closeSidebar } = useSidebar();
+  const { setHasSidebar } = useLayout();
+  setHasSidebar(true);
 
   return (
     <AppLayout>
       <section className="flex flex-1 min-h-0 relative dark:bg-slate-800 bg-slate-100">
         {/* Automatic expandable sidebar and responsive */}
         <div className="flex flex-col shrink-0">
-          <Sidebar ref={sidebarRef}>
+          <Sidebar>
             <ConversationsList />
           </Sidebar>
         </div>

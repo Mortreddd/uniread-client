@@ -1,27 +1,32 @@
-import api from "@/core/api/ApiService.ts";
-import LoadingScreen from "@/pages/LoadingScreen";
-import { User } from "@/types/User";
+// AuthProvider.tsx
+import api from "@/core/api/ApiService";
+import LoadingScreen from "@/shared/components/LoadingScreen.";
+import { AuthUser, Role } from "@/types/Auth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createContext,
   PropsWithChildren,
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useCallback,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextProps {
-  logout: () => void;
+  logout: () => Promise<void>;
   isLoggedIn: () => boolean;
   isUser: boolean;
   isSuperAdmin: boolean;
   isAdmin: boolean;
-  user?: User | null;
+  user?: AuthUser | null;
+  handleProfileUpdate: () => void;
+  refetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-function useAuth() {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within AuthProvider");
@@ -29,51 +34,101 @@ function useAuth() {
   return context;
 }
 
-function AuthProvider({ children }: PropsWithChildren) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+const authKeys = {
+  all: ["auth"] as const,
+  me: () => [...authKeys.all, "me"] as const,
+};
 
-  // useEffect(() => {
-  //   api
-  //     .get("/users/me")
-  //     .then((res) => setUser(res.data))
-  //     .catch(() => setUser(null))
-  //     .finally(() => setLoading(false));
-  // }, []);
+export function AuthProvider({ children }: PropsWithChildren) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // In your logout function
+  const {
+    data: user,
+    isLoading,
+    refetch,
+  } = useQuery<AuthUser>({
+    queryKey: authKeys.me(),
+    queryFn: async () => {
+      const res = await api.get<AuthUser>("/me");
+      return res.data;
+    },
+    retry: (failureCount, error: any) => {
+      if (error.response?.status === 401) return false;
+      return failureCount < 3;
+    },
+    staleTime: 1000 * 60 * 5,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  useEffect(() => {
+    const handleSessionExpired = () => {
+      queryClient.setQueryData(authKeys.me(), null);
+      navigate("/");
+    };
+
+    window.addEventListener("auth:sessionExpired", handleSessionExpired);
+    return () => {
+      window.removeEventListener("auth:sessionExpired", handleSessionExpired);
+    };
+  }, [navigate, queryClient]);
+
+  let isLoggingOut = false;
   const logout = async () => {
     try {
-      setUser(null);
+      isLoggingOut = true;
 
-      await api.get("/auth/logout");
-    } catch (error) {
-      console.error("Logout error:", error);
+      await api.post("/auth/logout");
+
+      await queryClient.cancelQueries();
+
+      queryClient.setQueryData(["auth", "me"], null);
+      queryClient.removeQueries({ queryKey: ["auth", "me"] });
+
+      navigate("/", { replace: true });
     } finally {
-      window.location.href = "/";
+      isLoggingOut = false;
     }
   };
 
-  function isLoggedIn() {
-    // return user !== null;
-    return true;
-  }
+  const isLoggedIn = useCallback(() => {
+    return !!user;
+  }, [user]);
 
-  const value = useMemo(
+  const handleProfileUpdate = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: authKeys.me() });
+  }, [queryClient]);
+
+  const roleChecks = useMemo(
     () => ({
-      user,
-      isAdmin: true, // TODO: Implement actual role-based logic
-      isSuperAdmin: true, // TODO: Implement actual role-based logic
-      isUser: true, // TODO: Implement actual role-based logic
-      logout,
-      isLoggedIn,
+      isUser: user?.role === Role.USER,
+      isAdmin: user?.role === Role.ADMIN,
+      isSuperAdmin: user?.role === Role.SUPER_ADMIN,
     }),
     [user],
   );
 
-  // if (loading) return <LoadingScreen />;
+  const refetchUser = useCallback(async () => {
+    await refetch();
+  }, [refetch]);
+
+  const value = useMemo(
+    () => ({
+      user,
+      ...roleChecks,
+      logout,
+      isLoggedIn,
+      refetchUser,
+      handleProfileUpdate,
+    }),
+    [user, roleChecks, logout, isLoggedIn, refetchUser, handleProfileUpdate],
+  );
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-export { AuthProvider, useAuth };

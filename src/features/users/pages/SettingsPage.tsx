@@ -71,9 +71,9 @@ export default function SettingsPage() {
           </div>
         </section>
       </div>
-      <footer className="bg-gray-200 dark:bg-slate-800 w-full min-h-0">
+      {/* <footer className="bg-gray-200 dark:bg-slate-800 w-full min-h-0">
         <Footer />
-      </footer>
+      </footer> */}
     </AppLayout>
   );
 }

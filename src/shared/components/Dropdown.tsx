@@ -12,8 +12,26 @@ import {
   useCallback,
   useMemo,
   forwardRef,
+  createContext,
+  useContext,
 } from "react";
 import { useNavigate } from "react-router-dom";
+
+interface DropdownContextType {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  close: () => void;
+}
+
+const DropdownContext = createContext<DropdownContextType | null>(null);
+
+const useDropdownContext = () => {
+  const context = useContext(DropdownContext);
+  if (!context) {
+    throw new Error("Dropdown.Item must be used within a Dropdown component");
+  }
+  return context;
+};
 
 type AlignType = "right" | "left" | "middle";
 
@@ -28,7 +46,7 @@ interface DropdownProps
   onOpenChange?: (open: boolean) => void;
   closeOnItemClick?: boolean;
   closeOnOutsideClick?: boolean;
-  lazyMount?: boolean; // For performance optimization
+  lazyMount?: boolean;
 }
 
 const dropdownVariants = cva(
@@ -85,6 +103,11 @@ function Dropdown({
     [controlledOpen, onOpenChange],
   );
 
+  // Define the close function
+  const close = useCallback(() => {
+    setIsOpen(false);
+  }, [setIsOpen]);
+
   const toggleOpen = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -113,7 +136,6 @@ function Dropdown({
     };
   }, [handleClickOutside]);
 
-  // Memoized dropdown body content
   const dropdownBody = useMemo(
     () => (
       <DropdownBody align={align} open={isOpen}>
@@ -124,30 +146,34 @@ function Dropdown({
   );
 
   return (
-    <div ref={dropdownRef} className="relative inline-block">
-      <motion.button
-        ref={triggerRef}
-        onClick={toggleOpen}
-        className={cn(dropdownVariants({ variant, size }), className)}
-        type="button"
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-      >
-        {trigger}
-        {hasArrowIcon && (
-          <ChevronDownIcon
-            className={cn(
-              "size-3 md:size-4 lg:size-5 transition-all duration-200 ease-in-out",
-              isOpen && "rotate-180",
-            )}
-          />
-        )}
-      </motion.button>
+    <DropdownContext.Provider value={{ isOpen, setIsOpen, close }}>
+      <div ref={dropdownRef} className="relative inline-block">
+        <motion.button
+          ref={triggerRef}
+          onClick={toggleOpen}
+          className={cn(dropdownVariants({ variant, size }), className)}
+          type="button"
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+        >
+          {trigger}
+          {hasArrowIcon && (
+            <ChevronDownIcon
+              className={cn(
+                "size-3 md:size-4 lg:size-5 transition-all duration-200 ease-in-out text-gray-900 dark:text-gray-200",
+                isOpen && "rotate-180",
+              )}
+            />
+          )}
+        </motion.button>
 
-      {lazyMount ? isOpen && dropdownBody : dropdownBody}
-    </div>
+        {lazyMount ? isOpen && dropdownBody : dropdownBody}
+      </div>
+    </DropdownContext.Provider>
   );
 }
+
+// ... rest of the component (DropdownBody and DropdownItem remain the same)
 
 interface DropdownBodyProps extends PropsWithChildren {
   open: boolean;
@@ -191,9 +217,9 @@ interface DropdownItemProps
   onClick?: (e: React.MouseEvent) => void;
   disabled?: boolean;
   icon?: ReactNode;
-  href?: string; // Add href for link items
-  active?: boolean; // For active state
-  closeOnClick?: boolean; // Individual item override
+  href?: string;
+  active?: boolean;
+  closeOnClick?: boolean;
 }
 
 const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
@@ -212,40 +238,24 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
     ref,
   ) => {
     const navigate = useNavigate();
+    const dropdownContext = useDropdownContext();
 
     const handleClick = useCallback(
       (e: React.MouseEvent<HTMLButtonElement>) => {
         if (disabled) return;
 
-        // Handle navigation if href is provided
         if (href) {
           e.preventDefault();
-          if (typeof href === "string") {
-            // For react-router
-            navigate(href);
-            // OR for regular links:
-            // window.location.href = href;
-          }
+          navigate(href);
         }
 
-        // Close dropdown
-        const dropdownElement = e.currentTarget.closest(".relative");
-        const dropdownInstance = dropdownElement?.querySelector(
-          '[aria-expanded="true"]',
-        );
-
-        if (closeOnClick && dropdownInstance) {
-          const triggerButton = dropdownElement?.querySelector(
-            'button[aria-haspopup="true"]',
-          );
-          if (triggerButton) {
-            (triggerButton as HTMLButtonElement).click();
-          }
+        if (closeOnClick && dropdownContext) {
+          dropdownContext.close();
         }
 
         onClick?.(e);
       },
-      [disabled, closeOnClick, onClick, href, navigate],
+      [disabled, closeOnClick, onClick, href, navigate, dropdownContext],
     );
 
     const content = (
@@ -266,9 +276,9 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
       "text-gray-700 dark:text-gray-200",
       "hover:text-gray-900 dark:hover:text-white",
       "text-left",
-      "font-inherit", // Inherit font from parent
-      "border-0", // Remove default button border
-      "bg-transparent", // Remove default button background
+      "font-inherit",
+      "border-0",
+      "bg-transparent",
       "cursor-pointer",
       disabled && "opacity-50 cursor-not-allowed pointer-events-none",
       active &&
@@ -294,7 +304,6 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
 
 DropdownItem.displayName = "DropdownItem";
 
-// Sub-components for organization
 Dropdown.Body = DropdownBody;
 Dropdown.Item = DropdownItem;
 

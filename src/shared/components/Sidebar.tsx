@@ -1,8 +1,10 @@
 import { useSidebar } from "@/contexts/SidebarContext";
 import { AnimatePresence, motion } from "motion/react";
-import { forwardRef, HTMLAttributes, PropsWithChildren } from "react";
+import { forwardRef, PropsWithChildren } from "react";
 
-function Sidebar({ children }: PropsWithChildren) {
+type SidebarProps = PropsWithChildren;
+
+const Sidebar = forwardRef<HTMLElement, SidebarProps>(({ children }, ref) => {
   const { open, closeSidebar } = useSidebar();
 
   return (
@@ -18,14 +20,16 @@ function Sidebar({ children }: PropsWithChildren) {
             onClick={closeSidebar}
           />
         )}
+
         {open && (
           <motion.aside
+            ref={ref}
             key="sidebar-mobile-menu"
             initial={{ x: -260 }}
             animate={{ x: 0 }}
             exit={{ x: -260 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="fixed top-0 left-0 h-full min-h-0 w-60 bg-white dark:bg-gray-800 z-50 md:hidden shadow-xl"
+            className="fixed top-0 left-0 h-full w-60 z-50 md:hidden shadow-xl bg-white dark:bg-gray-800"
           >
             {children}
           </motion.aside>
@@ -37,6 +41,6 @@ function Sidebar({ children }: PropsWithChildren) {
       </aside>
     </>
   );
-}
+});
 
-export default forwardRef(Sidebar);
+export default Sidebar;
