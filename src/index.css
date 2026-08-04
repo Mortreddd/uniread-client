@@ -83,4 +83,29 @@
   }
 }
 
+@keyframes typing {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.animate-typing {
+  animation: typing 1.2s infinite;
+}
+
+.animate-typing.delay-150 {
+  animation-delay: 0.15s;
+}
+
+.animate-typing.delay-300 {
+  animation-delay: 0.3s;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
