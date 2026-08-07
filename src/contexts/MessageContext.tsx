@@ -70,9 +70,9 @@ function MessageProvider({ children }: MessageProviderProps) {
 
     const sub = subscribe("/user/queue/chats", (msg) => {
       const incoming = JSON.parse(msg.body) as ChatConversationPreview;
-      console.log(incoming);
-      queryClient.setQueryData(
-        ["conversations"],
+
+      queryClient.setQueriesData(
+        { queryKey: ["conversations"] },
         (old: Paginate<ChatConversationPreview[]>) => {
           if (!old?.content) return old;
 
@@ -86,6 +86,7 @@ function MessageProvider({ children }: MessageProviderProps) {
             const updated = {
               ...old.content[index],
               ...incoming,
+              unreadCount: (old.content[index].unreadCount || 0) + 1,
             };
 
             updatedContent = [
@@ -105,8 +106,7 @@ function MessageProvider({ children }: MessageProviderProps) {
     });
 
     return () => sub?.unsubscribe();
-  }, [connected, subscribe, queryClient, showToast]);
-
+  }, [connected, subscribe, queryClient]);
   return (
     <MessageContext.Provider
       value={{

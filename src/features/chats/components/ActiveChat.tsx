@@ -13,6 +13,7 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/outline";
 import {
+  ChangeEvent,
   KeyboardEvent,
   KeyboardEventHandler,
   memo,
@@ -28,6 +29,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/utils/ClassNames";
 import { useGetConversation } from "../hooks/useGetConversation";
 import { useQueryClient } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "motion/react";
 
 function ActiveChat() {
   return (
@@ -121,13 +123,12 @@ function ChatMessages() {
   const messages = useMemo(() => {
     if (!data || data.empty || !data.content) return [];
     return data.content;
-  }, [data]); // ✅ FIXED
+  }, [data]);
 
   const [loadedMessages, setLoadedMessages] = useState<ConversationMessage[]>(
     [],
   );
 
-  // ✅ sync when data loads
   useEffect(() => {
     setLoadedMessages(messages);
   }, [messages]);
@@ -140,6 +141,7 @@ function ChatMessages() {
     const sub = subscribe(`/topic/chats.${conversationId}`, (msg) => {
       const parsed: ConversationMessage = JSON.parse(msg.body);
 
+      if (!parsed?.message.trim()) return;
       setLoadedMessages((prev) => {
         const exists = prev.some((m) => m.id === parsed.id);
         if (exists) return prev;
@@ -154,14 +156,17 @@ function ChatMessages() {
   }, [conversationId, subscribe]);
 
   return (
-    <div className="min-h-full space-y-3 lg:space-y-5 w-full">
-      {isLoading && <LoadingSection />}
-      {!data && error && <ErrorSection />}
-      {data && data.empty && <EmptySection />}
-      {loadedMessages.map((message) => (
-        <ConvoMessage key={message.id} message={message} />
-      ))}
-    </div>
+    <AnimatePresence>
+      <div className="min-h-full flex flex-col justify-end p-2 w-full gap-y-2">
+        {isLoading && <LoadingSection />}
+        {!data && error && <ErrorSection />}
+        {data && data.empty && <EmptySection />}
+        {loadedMessages.map((message) => (
+          <ConvoMessage key={message.id} message={message} />
+        ))}
+        <ShowTyping />
+      </div>
+    </AnimatePresence>
   );
 }
 interface ConvoMessageProps {
@@ -218,7 +223,6 @@ function EmptySection() {
 }
 
 interface NewMessageRequest {
-  conversationId?: string;
   messageType: MessageType;
   content: string;
 }
@@ -229,7 +233,6 @@ function ChatMessageCreation() {
   const { conversationId } = useParams<{ conversationId: string }>();
 
   const [payload, setPayload] = useState<NewMessageRequest>({
-    conversationId,
     messageType: MessageType.TEXT,
     content: "",
   });
@@ -240,18 +243,32 @@ function ChatMessageCreation() {
       handleSubmit();
     }
   };
+
+  function handleOnTyping(e: ChangeEvent<HTMLInputElement>) {
+    setPayload({ ...payload, content: e.target.value });
+
+    publish({
+      destination: `/app/chats/${conversationId}/typing`,
+      body: { typing: e.target.value.trim() !== "" } as { typing: boolean },
+    });
+  }
+
   function handleSubmit() {
     if (!payload.content.trim()) {
       inputRef.current?.focus();
       return;
     }
 
+    const messageToSend = { ...payload };
+
     queryClient.invalidateQueries({ queryKey: ["conversations"] });
+
     publish({
-      destination: "/app/send",
-      body: payload,
+      destination: `/app/chats/${conversationId}/send`,
+      body: messageToSend,
     });
-    setPayload({ ...payload, content: "" });
+
+    setPayload((prev) => ({ ...prev, content: "" }));
   }
 
   return (
@@ -271,9 +288,10 @@ function ChatMessageCreation() {
           ref={inputRef}
           className={"flex-1 w-full"}
           value={payload.content}
+          autoComplete={"off"}
           onKeyDown={handleKeyDown}
-          onChange={(e) => setPayload({ ...payload, content: e.target.value })}
-          placeholder="Type a message..."
+          onChange={handleOnTyping}
+          placeholder="Send a message..."
         />
         <Button
           variant={"transparent"}
@@ -286,6 +304,70 @@ function ChatMessageCreation() {
         </Button>
       </div>
     </div>
+  );
+}
+function ShowTyping() {
+  const { conversationId } = useParams<{ conversationId: string }>();
+  const { subscribe } = useWebSocket({});
+  const { user } = useAuth();
+
+  const [someoneTyping, setSomeoneTyping] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!user || !conversationId) return;
+
+    const sub = subscribe(
+      `/topic/chats.${conversationId}.typing`,
+      (message) => {
+        const response = JSON.parse(message.body) as {
+          userId: string;
+          isTyping: boolean;
+          timestamp: string;
+        };
+
+        if (response.userId === user.id) return;
+
+        if (response.isTyping) {
+          setSomeoneTyping(true);
+
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+          timeoutRef.current = setTimeout(() => {
+            setSomeoneTyping(false);
+          }, 2500);
+        } else {
+          setSomeoneTyping(false);
+        }
+      },
+    );
+
+    return () => {
+      sub?.unsubscribe();
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [subscribe, user, conversationId]);
+
+  if (!someoneTyping) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -4, y: 4 }}
+      animate={{
+        opacity: 1,
+        x: 0,
+        y: 0,
+        transition: { ease: "easeInOut", duration: 0.3 },
+      }}
+      exit={{ opacity: 0, x: -4, y: 4 }}
+      className="w-full flex justify-start"
+    >
+      <div className="bg-gray-300 dark:bg-slate-700 rounded-lg rounded-bl-none px-3 py-2 flex items-center gap-1">
+        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing"></span>
+        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-150"></span>
+        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-300"></span>
+      </div>
+    </motion.div>
   );
 }
 

@@ -11,6 +11,7 @@ import SeperatorDot from "@/shared/components/SeperatorDot";
 import { Formatters } from "@/utils/formatters";
 import { memo } from "react";
 import Dropdown from "@/shared/components/Dropdown";
+import defaultProfile from "@/assets/profiles/default-profile.jpg";
 
 interface ChatPreviewProps {
   chat: ChatConversationPreview;
@@ -37,7 +38,7 @@ function ChatPreview({ chat }: ChatPreviewProps) {
       } hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-all duration-200 ease-in-out w-full`}
     >
       <img
-        src={chat.avatar}
+        src={chat.avatar ?? defaultProfile}
         alt={chat.name}
         className="size-10 object-cover border border-primary rounded-full flex-shrink-0 mr-2"
       />
@@ -60,11 +61,11 @@ function ChatPreview({ chat }: ChatPreviewProps) {
           )}
         </div>
         <div className="flex justify-between items-baseline w-fit">
-          <p className="text-xs lg:text-xs text-gray-500 truncate w-fit">
+          <p className="text-xs text-gray-500 truncate w-fit">
             {chat.lastMessage.message}
           </p>
           <SeperatorDot className={"text-tiny lg:text-xs mx-1 lg:mx-1.5"} />
-          <time className="text-extratiny lg:text-xs text-gray-500 flex-shrink-0 ml-2">
+          <time className="text-xs text-gray-500 flex-shrink-0 ml-2">
             {Formatters.Date.formatShortenDate(
               new Date(chat.lastMessage.deliveredAt),
             )}
