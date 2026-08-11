@@ -59,3 +59,9 @@ export const getConversationMessages: (
 
   return response.data;
 };
+
+export const deleteConversation: (chatId: string) => Promise<void> = async (
+  chatId: string,
+) => {
+  return api.delete(`/conversations/${chatId}`);
+};
