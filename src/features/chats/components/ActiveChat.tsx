@@ -15,7 +15,6 @@ import {
 import {
   ChangeEvent,
   KeyboardEvent,
-  KeyboardEventHandler,
   memo,
   useEffect,
   useMemo,
@@ -30,6 +29,9 @@ import { cn } from "@/utils/ClassNames";
 import { useGetConversation } from "../hooks/useGetConversation";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
+import { useIsVisible } from "@/shared/hooks/useIsVisible";
+import { PaginateParams } from "@/types/Pagination";
+import { Formatters } from "@/utils/formatters";
 
 function ActiveChat() {
   return (
@@ -47,8 +49,7 @@ function ActiveChat() {
 
 function ChatHeader() {
   const { conversationId } = useParams<{ conversationId: string }>();
-  const { data, isLoading, error } = useGetConversation({ conversationId });
-
+  const { data, isLoading } = useGetConversation({ conversationId });
   return (
     <div className="w-full flex shrink-0 justify-between items-center py-2 px-4 lg:py-3 lg:px-5 shadow-lg bg-gray-100 dark:bg-slate-900">
       {isLoading && <HeaderSkeleton />}
@@ -64,7 +65,7 @@ function ChatHeader() {
             </Link>
             <div className="inline-flex items-center">
               <img
-                src={data.avatar ?? defaultProfile}
+                src={data.avatarPhoto ?? defaultProfile}
                 alt={"gojo satoru"}
                 className="size-10 md:size-12 lg:size-14 object-cover border border-primary rounded-full flex-shrink-0"
               />
@@ -112,23 +113,41 @@ function HeaderSkeleton() {
 }
 
 function ChatMessages() {
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const isActiveReader = useIsVisible(bottomRef);
   const { conversationId } = useParams<{ conversationId: string }>();
-
+  const [params, setParams] = useState<PaginateParams>({
+    pageNo: 0,
+    pageSize: 20,
+  });
   const { data, isLoading, error } = useGetConversationMessages({
     conversationId,
-    pageNo: 0,
-    pageSize: 10,
+    ...params,
   });
 
   const messages = useMemo(() => {
     if (!data || data.empty || !data.content) return [];
-    return data.content;
+    return data.content.reverse();
   }, [data]);
 
   const [loadedMessages, setLoadedMessages] = useState<ConversationMessage[]>(
     [],
   );
 
+  useEffect(() => {
+    if (!bottomRef.current) return;
+
+    bottomRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [bottomRef.current]);
+
+  useEffect(() => {
+    if (!isActiveReader) return;
+
+    setParams({ ...params, pageSize: params.pageSize ?? 0 + 20 });
+  }, [isActiveReader]);
   useEffect(() => {
     setLoadedMessages(messages);
   }, [messages]);
@@ -155,15 +174,38 @@ function ChatMessages() {
     };
   }, [conversationId, subscribe]);
 
+  const oneHourAgo = Date.now() - 60 * 60 * 1000;
+
   return (
     <AnimatePresence>
-      <div className="min-h-full flex flex-col justify-end p-2 w-full gap-y-2">
+      <div className="min-h-full w-full">
         {isLoading && <LoadingSection />}
         {!data && error && <ErrorSection />}
         {data && data.empty && <EmptySection />}
-        {loadedMessages.map((message) => (
-          <ConvoMessage key={message.id} message={message} />
-        ))}
+        <div className="size-full flex flex-col p-2 justify-end gap-y-2 overflow-y-auto">
+          {loadedMessages.map((message, index) => {
+            const previousMessage = loadedMessages[index - 1];
+
+            const currentTime = new Date(message.createdAt).getTime();
+
+            const previousTime = previousMessage
+              ? new Date(previousMessage.createdAt).getTime()
+              : null;
+
+            const showTimeIndicator =
+              !previousTime || currentTime - previousTime >= 60 * 60 * 1000;
+
+            return (
+              <div key={message.id}>
+                {showTimeIndicator && <TimeIndicator message={message} />}
+
+                <ConvoMessage message={message} />
+              </div>
+            );
+          })}
+
+          <div ref={bottomRef} className="hidden" />
+        </div>
         <ShowTyping />
       </div>
     </AnimatePresence>
@@ -196,6 +238,22 @@ function ConvoMessage({ message }: ConvoMessageProps) {
   );
 }
 
+function TimeIndicator({ message }: { message: ConversationMessage }) {
+  return (
+    <div className="flex items-center w-full my-2">
+      <div className="border-t border-gray-300 dark:border-gray-600 flex-1" />
+
+      <time
+        dateTime={message.createdAt}
+        className="w-fit px-3 lg:px-5 text-extratiny lg:text-tiny text-gray-500 dark:text-gray-400"
+      >
+        {Formatters.Date.formatShortDateWithTime(new Date(message.createdAt))}
+      </time>
+
+      <div className="border-t border-gray-300 dark:border-gray-600 flex-1" />
+    </div>
+  );
+}
 function LoadingSection() {
   return (
     <div className="size-full animate-pulse bg-gray-200 dark:bg-slate-800"></div>
@@ -228,6 +286,7 @@ interface NewMessageRequest {
 }
 
 function ChatMessageCreation() {
+  const { user } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { conversationId } = useParams<{ conversationId: string }>();
@@ -249,7 +308,10 @@ function ChatMessageCreation() {
 
     publish({
       destination: `/app/chats/${conversationId}/typing`,
-      body: { typing: e.target.value.trim() !== "" } as { typing: boolean },
+      body: {
+        typing: e.target.value.trim() !== "",
+        userAvatar: user?.profile.avatarUrl,
+      } as { typing: boolean; userAvatar: string },
     });
   }
 
@@ -306,12 +368,18 @@ function ChatMessageCreation() {
     </div>
   );
 }
+
+type TypingState = {
+  userId: string;
+  isTyping: boolean;
+  avatarPhoto?: string;
+} | null;
 function ShowTyping() {
   const { conversationId } = useParams<{ conversationId: string }>();
   const { subscribe } = useWebSocket({});
   const { user } = useAuth();
 
-  const [someoneTyping, setSomeoneTyping] = useState(false);
+  const [someoneTyping, setSomeoneTyping] = useState<TypingState>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -322,6 +390,7 @@ function ShowTyping() {
       (message) => {
         const response = JSON.parse(message.body) as {
           userId: string;
+          avatarPhoto?: string;
           isTyping: boolean;
           timestamp: string;
         };
@@ -329,15 +398,21 @@ function ShowTyping() {
         if (response.userId === user.id) return;
 
         if (response.isTyping) {
-          setSomeoneTyping(true);
+          setSomeoneTyping({
+            avatarPhoto: response.avatarPhoto ?? defaultProfile,
+            userId: response.userId,
+            isTyping: true,
+          });
 
           if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
           timeoutRef.current = setTimeout(() => {
-            setSomeoneTyping(false);
+            setSomeoneTyping((prev) =>
+              prev ? { ...prev, isTyping: false } : null,
+            );
           }, 2500);
         } else {
-          setSomeoneTyping(false);
+          setSomeoneTyping(null);
         }
       },
     );
@@ -362,10 +437,18 @@ function ShowTyping() {
       exit={{ opacity: 0, x: -4, y: 4 }}
       className="w-full flex justify-start"
     >
-      <div className="bg-gray-300 dark:bg-slate-700 rounded-lg rounded-bl-none px-3 py-2 flex items-center gap-1">
-        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing"></span>
-        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-150"></span>
-        <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-300"></span>
+      <div className="w-full flex justify-start items-end gap-2">
+        <img
+          src={someoneTyping.avatarPhoto || defaultProfile}
+          alt="avatar"
+          className="w-6 h-6 rounded-full object-cover"
+        />
+
+        <div className="bg-gray-300 dark:bg-slate-700 rounded-lg rounded-bl-none px-3 py-2 flex items-center gap-1">
+          <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing"></span>
+          <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-150"></span>
+          <span className="w-2 h-2 bg-gray-600 dark:bg-gray-300 rounded-full animate-typing delay-300"></span>
+        </div>
       </div>
     </motion.div>
   );

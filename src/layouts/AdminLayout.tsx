@@ -1,0 +1,20 @@
+import Layout from "@/components/Layout";
+import { useAuth } from "@/contexts/AuthContext";
+import AppNavbar from "@/shared/components/navbar/AppNavbar";
+import MainNavbar from "@/shared/components/navbar/MainNavbar";
+import { PropsWithChildren } from "react";
+
+interface AdminLayoutProps extends PropsWithChildren {}
+
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const { isLoggedIn } = useAuth();
+
+  return (
+    <Layout>
+      <header className={"w-full max-h-fit relative shadow-xs z-10"}>
+        {isLoggedIn() ? <AppNavbar /> : <MainNavbar />}
+      </header>
+      <div className={"flex-1 flex flex-col min-h-0"}>{children}</div>
+    </Layout>
+  );
+}

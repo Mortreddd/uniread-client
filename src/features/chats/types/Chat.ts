@@ -9,38 +9,44 @@ export enum MessageType {
 export interface Conversation {
   id: string;
   name: string;
-  avatar: string;
+  avatarPhoto?: string;
+  avatarPublicId?: string;
   isGroup: boolean;
-  participants?: Participant[];
-  messages?: Message[];
   createdAt: string;
 }
 
 export interface ConversationDetail {
-  id: string;
-  name: string;
-  isMuted: boolean;
-  isArchived: boolean;
-  isGroup: boolean;
-  lastMessage: Message | null;
-}
-export interface ChatConversationPreview extends Omit<
-  Conversation,
-  "participants" | "messages" | "id"
-> {
   conversationId: string;
-  unreadCount: number;
-  hasNewMessage: boolean;
+  name: string;
+  avatarPhoto?: string;
+  avatarPublicId?: string;
   isMuted: boolean;
   isArchived: boolean;
   isGroup: boolean;
-  lastMessage: Message;
+
+  lastMessageText?: string;
+  lastMessageAt?: string;
+  lastSenderName?: string;
+  lastSenderId?: string;
 }
 
-export interface ConversationDetail extends Omit<
-  ChatConversationPreview,
-  "lastMessage" | "lastMessageAt"
-> {}
+export interface ChatConversationPreview {
+  conversationId: string;
+  name: string;
+  avatarPhoto?: string;
+  avatarPublicId?: string;
+  isMuted: boolean;
+  isArchived: boolean;
+  isGroup: boolean;
+
+  unreadCount: number;
+  hasNewMessage: boolean;
+
+  lastMessageText?: string;
+  lastMessageAt?: string;
+  lastSenderName?: string;
+  lastSenderId?: string;
+}
 
 export enum ParticipantRole {
   OWNER = "OWNER",
