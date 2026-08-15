@@ -25,15 +25,15 @@ function DesktopView() {
 
   return (
     <section className="flex flex-1 min-h-0 relative dark:bg-slate-800 bg-slate-100">
-      <div className="flex flex-col shrink-0">
+      <div className="flex flex-col shrink-0 min-h-0 min-w-0">
         <Sidebar>
           <ConversationsList />
         </Sidebar>
       </div>
-      <div className="flex-1 relative flex flex-col">
-        <div className="flex-1 relative flex flex-col min-w-0">
+      <div className="flex-1 relative flex flex-col min-h-0 min-w-0">
+        <div className="flex-1 relative flex flex-col min-h-0 min-w-0">
           {isMatch ? (
-            <div className="flex-1 min-w-0 flex justify-center items-center">
+            <div className="flex-1 min-w-0 min-h-0 flex justify-center items-center">
               <h1 className="text-2xl font-serif font-medium text-gray-700 tracking-tight dark:text-gray-200">
                 No selected conversation
               </h1>

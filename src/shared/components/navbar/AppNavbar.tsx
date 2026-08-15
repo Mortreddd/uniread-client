@@ -15,10 +15,11 @@ import {
   UsersIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import UserAvatar from "../UserAvatar";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,6 +56,7 @@ export default function AppNavbar() {
       label: "Profile",
       href: "/profile",
     },
+
     {
       icon: <PencilIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />,
       label: "Workspace",
@@ -87,6 +89,23 @@ export default function AppNavbar() {
       },
     },
   ];
+
+  const hasAdminAccess = useMemo(() => {
+    return user?.hasAdminAccess ?? false;
+  }, [user]);
+
+  const filteredProfileOptions = hasAdminAccess
+    ? [
+        {
+          icon: (
+            <ShieldCheckIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />
+          ),
+          label: "Switch to Admin",
+          href: "/admin",
+        },
+        ...profileOptions,
+      ]
+    : profileOptions;
 
   return (
     <nav className="w-full shadow-lg bg-gray-100 dark:bg-slate-950">
@@ -193,17 +212,19 @@ export default function AppNavbar() {
                 </p>
               </div>
 
-              {profileOptions.map(({ label, href, icon, onClick }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  icon={icon}
-                  href={href}
-                  onClick={onClick}
-                  className="text-tiny md:text-xs lg:text-sm"
-                >
-                  {label}
-                </Dropdown.Item>
-              ))}
+              {filteredProfileOptions.map(
+                ({ label, href, icon, onClick }, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    icon={icon}
+                    href={href}
+                    onClick={onClick}
+                    className="text-tiny md:text-xs lg:text-sm"
+                  >
+                    {label}
+                  </Dropdown.Item>
+                ),
+              )}
             </Dropdown>
           </li>
         </ul>

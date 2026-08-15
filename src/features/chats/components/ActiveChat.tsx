@@ -35,14 +35,18 @@ import { Formatters } from "@/utils/formatters";
 
 function ActiveChat() {
   return (
-    <div className="flex-1 flex flex-col overflow-hidden">
-      <ChatHeader />
+    <div className="flex-1 flex flex-col min-h-0 min-w-0 relative overflow-hidden">
+      <div className="shrink-0 min-h-0 relative shadow-lg">
+        <ChatHeader />
+      </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto min-h-0 p-4 no-scrollbar">
         <ChatMessages />
       </div>
 
-      <ChatMessageCreation />
+      <div className="shrink-0 relative min-h-0">
+        <ChatMessageCreation />
+      </div>
     </div>
   );
 }
@@ -51,7 +55,7 @@ function ChatHeader() {
   const { conversationId } = useParams<{ conversationId: string }>();
   const { data, isLoading } = useGetConversation({ conversationId });
   return (
-    <div className="w-full flex shrink-0 justify-between items-center py-2 px-4 lg:py-3 lg:px-5 shadow-lg bg-gray-100 dark:bg-slate-900">
+    <div className="w-full flex justify-between items-center bg-gray-100 dark:bg-slate-900 py-2 px-4 lg:py-3 lg:px-5">
       {isLoading && <HeaderSkeleton />}
       {data && (
         <>
@@ -174,15 +178,13 @@ function ChatMessages() {
     };
   }, [conversationId, subscribe]);
 
-  const oneHourAgo = Date.now() - 60 * 60 * 1000;
-
   return (
     <AnimatePresence>
-      <div className="min-h-full w-full">
+      <div className="flex-1 w-full flex flex-col min-h-0">
         {isLoading && <LoadingSection />}
         {!data && error && <ErrorSection />}
         {data && data.empty && <EmptySection />}
-        <div className="size-full flex flex-col p-2 justify-end gap-y-2 overflow-y-auto">
+        <div className="flex-1 flex flex-col p-2 justify-end gap-y-2 overflow-y-auto min-h-0">
           {loadedMessages.map((message, index) => {
             const previousMessage = loadedMessages[index - 1];
 
@@ -256,13 +258,13 @@ function TimeIndicator({ message }: { message: ConversationMessage }) {
 }
 function LoadingSection() {
   return (
-    <div className="size-full animate-pulse bg-gray-200 dark:bg-slate-800"></div>
+    <div className="flex-1 animate-pulse bg-gray-200 dark:bg-slate-800"></div>
   );
 }
 
 function ErrorSection() {
   return (
-    <div className="size-full bg-transparent flex items-center justify-center">
+    <div className="flex-1 bg-transparent flex items-center justify-center">
       <p className="text-xs md:text-sm lg:text-base font-sans text-gray-800 dark:text-gray-200 tracking-wide">
         Unable to retrieve messages
       </p>
@@ -272,7 +274,7 @@ function ErrorSection() {
 
 function EmptySection() {
   return (
-    <div className="size-full bg-transparent flex items-center justify-center">
+    <div className="flex-1 bg-transparent flex items-center justify-center">
       <p className="text-xs md:text-sm lg:text-base font-sans text-gray-800 dark:text-gray-200 tracking-wide">
         Start a new message
       </p>
@@ -334,7 +336,7 @@ function ChatMessageCreation() {
   }
 
   return (
-    <div className="w-full shrink-0 bg-gray-100 dark:bg-slate-900 flex items-center md:p-3 p-2">
+    <div className="w-full bg-gray-100 dark:bg-slate-900 flex items-center md:p-3 p-2">
       <div className="flex items-center bg-gray-100 dark:bg-slate-900 w-full">
         <Button variant={"transparent"} className={"rounded-full shrink-0"}>
           <PlusIcon
@@ -435,7 +437,7 @@ function ShowTyping() {
         transition: { ease: "easeInOut", duration: 0.3 },
       }}
       exit={{ opacity: 0, x: -4, y: 4 }}
-      className="w-full flex justify-start"
+      className="w-full flex justify-start shrink-0"
     >
       <div className="w-full flex justify-start items-end gap-2">
         <img

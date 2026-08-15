@@ -60,7 +60,7 @@ export default function ConversationsList() {
   }, [menu.chat]);
 
   return (
-    <div className="flex flex-col lg:flex-row w-full h-full overflow-y-auto">
+    <div className="flex flex-col h-full overflow-hidden">
       <div className="relative flex flex-col overflow-y-hidden flex-1 min-h-0 px-3">
         <h1 className="text-base mt-2 font-sans font-semibold md:text-xl text-black/80 dark:text-white/80">
           Inbox
@@ -82,13 +82,16 @@ export default function ConversationsList() {
             </div>
           )}
         </div>
-        <div className="flex flex-col h-full w-full overflow-y-auto gap-1">
+        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto gap-1">
           {isLoading && <LoadingSkeleton />}
           {!data && error && <ErrorSection />}
           {data && data.content.length === 0 && <EmptySection />}
           {data &&
             data.content.map((chat) => (
-              <div key={chat.conversationId} className="min-w-44 w-full">
+              <div
+                key={chat.conversationId}
+                className="min-w-44 w-full shrink-0"
+              >
                 <ChatPreview chat={chat} onOpenMenu={handleOpenMenu} />
               </div>
             ))}
