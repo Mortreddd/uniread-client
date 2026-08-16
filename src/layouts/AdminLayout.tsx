@@ -1,20 +1,86 @@
 import Layout from "@/components/Layout";
-import { useAuth } from "@/contexts/AuthContext";
-import AppNavbar from "@/shared/components/navbar/AppNavbar";
-import MainNavbar from "@/shared/components/navbar/MainNavbar";
-import { PropsWithChildren } from "react";
+import { useLayout } from "@/contexts/LayoutContext";
+import { useSidebar } from "@/contexts/SidebarContext";
+
+import AdminNavbar from "@/shared/components/navbar/AdminNavbar";
+import Sidebar from "@/shared/components/Sidebar";
+import {
+  BookOpenIcon,
+  CubeTransparentIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
+import { PropsWithChildren, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 interface AdminLayoutProps extends PropsWithChildren {}
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const { isLoggedIn } = useAuth();
+  const { setHasSidebar } = useLayout();
+  const { closeSidebar } = useSidebar();
+  const sidebarOptions = [
+    {
+      id: 1,
+      href: "/admin",
+      icon: <CubeTransparentIcon className={"size-3 md:size-4 text-inherit"} />,
+      label: "Dashboard",
+    },
+    {
+      id: 2,
+      href: "/admin/users",
+      icon: <UsersIcon className={"size-3 md:size-4 text-inherit"} />,
+      label: "User Management",
+    },
+    {
+      id: 3,
+      href: "/admin/books",
+      icon: <BookOpenIcon className={"size-3 md:size-4 text-inherit"} />,
+      label: "Book Approvals",
+    },
+  ];
 
+  useEffect(() => {
+    setHasSidebar(true);
+  }, []);
   return (
     <Layout>
-      <header className={"w-full max-h-fit relative shadow-xs z-10"}>
-        {isLoggedIn() ? <AppNavbar /> : <MainNavbar />}
-      </header>
-      <div className={"flex-1 flex flex-col min-h-0"}>{children}</div>
+      <div className="flex flex-1 min-h-0 min-w-0 w-full">
+        <aside className="shrink-0 min-h-0">
+          <Sidebar>
+            <div className="py-2 md:py-3 flex justify-center">
+              <a
+                href="/admin"
+                className="text-lg md:text-xl text-center lg:text-2xl font-bold text-primary dark:text-primary-dark"
+              >
+                UniRead
+              </a>
+            </div>
+            <ul className="space-y-0.5 lg:space-y-1 p-2 md:p-3">
+              {sidebarOptions.map((option, key) => (
+                <li key={key}>
+                  <NavLink
+                    onClick={() => closeSidebar()}
+                    to={option.href}
+                    className={({ isActive }) =>
+                      `gap-1.5 flex text-extratiny md:text-tiny lg:text-sm items-center p-1.5 md:p-2 cursor-pointer rounded transition-all duration-200 ease-in-out text-white ${isActive ? "bg-primary dark:bg-primary-dark hover:bg-primary/60 dark:hover:bg-primary-dark/60 " : "bg-primary/60 dark:bg-primary-dark/60 hover:bg-primary dark:hover:bg-primary-dark"}`
+                    }
+                  >
+                    {option.icon}
+                    <span className={"text-inherit"}>{option.label}</span>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </Sidebar>
+        </aside>
+
+        <section className="flex-1 min-w-0 min-h-0 flex flex-col">
+          <header className="w-full min-w-0 shrink-0 relative shadow-xs z-10">
+            <AdminNavbar />
+          </header>
+
+          <div className="flex-1 min-h-0 min-w-0 flex flex-col">{children}</div>
+        </section>
+      </div>
     </Layout>
   );
 }

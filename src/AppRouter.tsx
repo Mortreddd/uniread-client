@@ -16,6 +16,7 @@ import RegisterPage from "./features/authentication/pages/RegisterPage.tsx";
 import VerifyEmailPage from "./features/authentication/pages/VerifyEmailPage.tsx";
 import RootLayout from "./RootLayout.tsx";
 import ActiveChat from "./features/chats/components/ActiveChat.tsx";
+import AdminDashboardPage from "./features/admin/pages/AdminDashboardPage.tsx";
 
 /**
  *
@@ -102,6 +103,16 @@ export const router = createBrowserRouter([
           {
             path: "/settings/account",
             element: <SettingsAccountPage />,
+          },
+        ],
+      },
+      {
+        path: "/admin",
+        element: <AdminDashboardPage />,
+        children: [
+          {
+            path: "/admin/dashboard",
+            element: <AdminDashboardPage />,
           },
         ],
       },
