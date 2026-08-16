@@ -29,14 +29,14 @@ const Sidebar = forwardRef<HTMLElement, SidebarProps>(({ children }, ref) => {
             animate={{ x: 0 }}
             exit={{ x: -260 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="fixed top-0 left-0 h-full w-60 z-50 md:hidden shadow-xl bg-white dark:bg-gray-800"
+            className="fixed top-0 left-0 h-full w-60 z-50 md:hidden shadow-xl bg-gray-200 dark:bg-gray-800"
           >
             {children}
           </motion.aside>
         )}
       </AnimatePresence>
 
-      <aside className="hidden md:flex flex-col min-h-0 md:min-w-60 md:max-w-fit h-full border-r border-gray-200 dark:border-gray-700 bg-slate-50 dark:bg-gray-900">
+      <aside className="hidden md:flex flex-col min-h-0 md:min-w-60 md:max-w-fit h-full border-r border-gray-200 dark:border-gray-700 bg-gray-200/70 dark:bg-gray-950/30">
         {children}
       </aside>
     </>

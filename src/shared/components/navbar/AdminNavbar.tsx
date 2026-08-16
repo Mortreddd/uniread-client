@@ -1,54 +1,30 @@
-import ThemeToggle from "../ThemeToggle";
-import { Button } from "../form/Button";
-import { Input } from "../form/Input";
+import { useAuth } from "@/contexts/AuthContext";
 import Dropdown from "../Dropdown";
-import ApplicationLogo from "../ApplicationLogo";
-import {
-  BellIcon,
-  BuildingLibraryIcon,
-  ChatBubbleBottomCenterIcon,
-  Cog6ToothIcon,
-  EnvelopeIcon,
-  GlobeAltIcon,
-  PencilIcon,
-  UserIcon,
-  UsersIcon,
-  ArrowRightOnRectangleIcon,
-  Bars3Icon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/outline";
 import UserAvatar from "../UserAvatar";
-import { Link, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import gojoProfile from "@/assets/profiles/gojo.jpg";
+import { useNavigate } from "react-router-dom";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { useLayout } from "@/contexts/LayoutContext";
-import { useAuth } from "@/contexts/AuthContext";
-import gojoProfile from "@/assets/profiles/gojo.jpg";
+import { useMemo, useState } from "react";
+import { Button } from "../form/Button";
+import {
+  Bars3Icon,
+  BellIcon,
+  Cog6ToothIcon,
+  PencilIcon,
+  ShieldCheckIcon,
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import ThemeToggle from "../ThemeToggle";
+import { Input } from "../form/Input";
+import { ArrowRightOnRectangleIcon } from "@heroicons/react/20/solid";
 
-export default function AppNavbar() {
+export default function AdminNavbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { openSidebar } = useSidebar();
   const { hasSidebar } = useLayout();
-
-  const navigations = [
-    {
-      icon: <GlobeAltIcon className="size-4 md:size-5" />,
-      path: "/books",
-      name: "Explore",
-    },
-    {
-      icon: <UsersIcon className="size-4 md:size-5" />,
-      path: "/authors",
-      name: "Authors",
-    },
-    {
-      icon: <ChatBubbleBottomCenterIcon className="size-4 md:size-5" />,
-      path: "/community",
-      name: "Community",
-    },
-  ];
 
   const profileOptions = [
     {
@@ -61,13 +37,6 @@ export default function AppNavbar() {
       icon: <PencilIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />,
       label: "Workspace",
       href: "/workspace",
-    },
-    {
-      icon: (
-        <BuildingLibraryIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />
-      ),
-      label: "Library",
-      href: "/library",
     },
     {
       icon: (
@@ -123,13 +92,10 @@ export default function AppNavbar() {
               />
             </Button>
           )}
-          <ApplicationLogo />
           <ul className="hidden lg:inline-flex items-center gap-3 md:gap-4">
-            {navigations.map(({ path, name }) => (
-              <li key={name} className="inline-flex items-center">
-                <NavItem path={path} name={name} />
-              </li>
-            ))}
+            <li className="hidden md:inline-flex">
+              <Input withSearch={true} placeholder="Search..." />
+            </li>
           </ul>
 
           {/* Mobile Navigation Dropdown */}
@@ -147,37 +113,13 @@ export default function AppNavbar() {
                 Browse
               </p>
             }
-          >
-            {navigations.map(({ icon, path, name }, index) => (
-              <Dropdown.Item
-                key={index}
-                icon={icon}
-                href={path}
-                className="text-xs md:text-xs lg:text-sm"
-              >
-                {name}
-              </Dropdown.Item>
-            ))}
-          </Dropdown>
+          ></Dropdown>
         </div>
 
         {/* Right side - Actions */}
         <ul className="inline-flex justify-end items-center gap-2 md:gap-3">
-          <li className="hidden md:inline-flex">
-            <Input withSearch={true} placeholder="Search..." />
-          </li>
           <li>
             <ThemeToggle />
-          </li>
-          <li>
-            <Button
-              variant="transparent"
-              className="rounded-full border border-gray-300 dark:border-gray-600 p-1 md:p-2 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <Link to="/chats">
-                <EnvelopeIcon className="size-4 md:size-5" />
-              </Link>
-            </Button>
           </li>
           <li>
             <Button
@@ -230,16 +172,5 @@ export default function AppNavbar() {
         </ul>
       </div>
     </nav>
-  );
-}
-
-function NavItem({ path, name }: { path: string; name: string }) {
-  return (
-    <a
-      href={path}
-      className="text-xs md:text-sm lg:text-md font-sans w-full group px-3 py-2 text-left transition-colors duration-200 ease-in-out text-gray-800 hover:text-gray-900 dark:text-gray-100 dark:hover:text-gray-200 hover:text-shadow-lg"
-    >
-      {name}
-    </a>
   );
 }
