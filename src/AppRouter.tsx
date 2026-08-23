@@ -17,6 +17,8 @@ import VerifyEmailPage from "./features/authentication/pages/VerifyEmailPage.tsx
 import RootLayout from "./RootLayout.tsx";
 import ActiveChat from "./features/chats/components/ActiveChat.tsx";
 import AdminDashboardPage from "./features/admin/pages/AdminDashboardPage.tsx";
+import UserManagementPage from "./features/admin/pages/UserManagementPage.tsx";
+import AdminLayout from "./layouts/AdminLayout.tsx";
 
 /**
  *
@@ -108,11 +110,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <AdminDashboardPage />,
+        element: <AdminLayout />,
         children: [
           {
-            path: "/admin/dashboard",
+            index: true,
             element: <AdminDashboardPage />,
+          },
+          {
+            path: "users",
+            element: <UserManagementPage />,
           },
         ],
       },
