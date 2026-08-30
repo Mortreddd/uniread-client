@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/layouts/Layout";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useSidebar } from "@/contexts/SidebarContext";
 

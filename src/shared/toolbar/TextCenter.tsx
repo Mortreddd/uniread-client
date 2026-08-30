@@ -1,23 +1,20 @@
-import { VariantProps } from "class-variance-authority";
-import { HTMLAttributes } from "react";
-import { Button, buttonVariants } from "@/shared/components/form/Button.tsx";
+import { Button, ButtonProps } from "@/shared/components/form/Button.tsx";
 import { Bars2Icon } from "@heroicons/react/24/outline";
 
-interface TextCenterProps
-  extends HTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
 export default function TextCenter({
   variant = "transparent",
   className,
   ...rest
-}: TextCenterProps) {
+}: ButtonProps) {
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
+      className={`p-1 md:p-1.5 lg:p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
-      <Bars2Icon className="h-5 w-5 text-gray-800" />
+      <Bars2Icon
+        className={"size-4 md:size-5 text-gray-800 dark:text-gray-200"}
+      />
     </Button>
   );
 }

@@ -13,7 +13,6 @@ import {
 } from "react";
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
 import { useAlert } from "@/contexts/AlertContext";
-import { upload } from "@/shared/services/file-upload.service";
 import { useUpdateAvatar } from "../../hooks/useUpdateAvatar";
 
 interface AvatarPhotoModalProps {
@@ -75,23 +74,13 @@ function AvatarPhotoModal(
 
   async function handleUpdate() {
     if (selectedFile) {
-      const { secure_url, public_id } = await upload(
-        "/me/profile/avatar",
-        selectedFile,
-        { type: "avatar" },
-      );
+      var { photoUrl } = await updateAvatarMutation.mutateAsync({
+        avatar: selectedFile,
+      });
+      onUpdate(photoUrl);
 
-      if (secure_url && public_id) {
-        updateAvatarMutation.mutate({
-          url: secure_url,
-          publicId: public_id,
-        });
-
-        onUpdate(secure_url);
-
-        showAlert("Profile photo updated successfully", "success");
-        modalRef.current?.close();
-      }
+      showAlert("Profile photo updated successfully", "success");
+      modalRef.current?.close();
     }
   }
 

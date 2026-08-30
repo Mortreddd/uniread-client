@@ -29,7 +29,7 @@ export interface BookDetail {
   readCount: number;
   coverPhoto: string;
   totalLikes: number;
-  totalChapters: number; // Only published chapters if not author and include the
+  totalChapters: number;
   status: BookStatus;
   completed: boolean;
   matured: boolean;
@@ -43,14 +43,6 @@ export interface Genre {
   id: number;
   name: string;
   description: string;
-}
-
-export interface Tag {
-  id: number;
-  name: string;
-  book: BookDetail;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface BookComment {
@@ -90,33 +82,4 @@ export interface BookCommentReactor {
   reaction: Reaction;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface BookLike {
-  id: string;
-  book: BookDetail;
-  user: User;
-  reaction: Reaction;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BookParams extends PaginateParams {
-  genres?: number[];
-  status?: BookStatus;
-  deletedAt?: string;
-}
-
-type MutableFieldType = "title" | "description" | "matured";
-export interface CreateBookFormProps extends Pick<
-  BookDetail,
-  MutableFieldType
-> {
-  photo: File | null;
-  genreIds: number[];
-}
-
-export interface CreateReviewFormProps {
-  rating: number;
-  content: string;
 }

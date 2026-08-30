@@ -113,7 +113,7 @@ function UsersMonitoringTable() {
           />
         </div>
       </div>
-      <UserTable users={userMonitoring} />)
+      <UserTable users={userMonitoring} />
     </div>
   );
 }

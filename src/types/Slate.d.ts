@@ -15,9 +15,10 @@ export interface CustomText {
   link?: string;
 }
 
-type Alignment = "left" | "center" | "right" | "justify"
+type Alignment = "left" | "center" | "right" | "justify";
 
 type ElementType =
+  | "p"
   | "h1"
   | "h2"
   | "h3"
@@ -37,7 +38,7 @@ type ElementType =
 
 export interface CustomElement {
   type: ElementType;
-  align?: Alignment
+  align?: Alignment;
   children: CustomText[];
 }
 

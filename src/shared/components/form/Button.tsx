@@ -14,7 +14,7 @@ const buttonAnimations: Variants = {
   disabled: { opacity: 0.5, scale: 1, cursor: "not-allowed" },
 };
 
-interface ButtonProps
+export interface ButtonProps
   extends
     Omit<HTMLMotionProps<"button">, "ref">,
     VariantProps<typeof buttonVariants> {
