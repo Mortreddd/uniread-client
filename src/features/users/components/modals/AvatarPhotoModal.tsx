@@ -117,6 +117,7 @@ function AvatarPhotoModal(
           <Button
             variant="dark"
             className="rounded flex-1"
+            disabled={updateAvatarMutation.isPending}
             onClick={handleCancel}
           >
             <span className="text-tiny md:text-xs lg:text-sm">Cancel</span>

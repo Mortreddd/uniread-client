@@ -7,6 +7,8 @@ import Sidebar from "@/shared/components/Sidebar";
 import {
   BookOpenIcon,
   CubeTransparentIcon,
+  RectangleGroupIcon,
+  SparklesIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
@@ -33,6 +35,18 @@ export default function AdminLayout() {
       href: "/admin/books",
       icon: <BookOpenIcon className="size-3 md:size-4 text-inherit" />,
       label: "Book Approvals",
+    },
+    {
+      id: 4,
+      href: "/admin/genres",
+      icon: <RectangleGroupIcon className="size-3 md:size-4 text-inherit" />,
+      label: "Genre Management",
+    },
+    {
+      id: 5,
+      href: "/admin/tags",
+      icon: <SparklesIcon className="size-3 md:size-4 text-inherit" />,
+      label: "Tag Management",
     },
   ];
 

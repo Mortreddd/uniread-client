@@ -21,6 +21,8 @@ import AdminLayout from "./layouts/AdminLayout.tsx";
 import AuthorDashboard from "./features/users/pages/AuthorDashboard.tsx";
 import BookDashboard from "./features/users/pages/BookDashboard.tsx";
 import CreateBook from "./features/users/pages/CreateBook.tsx";
+import GenreManagementPage from "./features/admin/pages/GenreManagementPage.tsx";
+import TagManagementPage from "./features/admin/pages/TagManagementPage.tsx";
 
 /**
  *
@@ -127,6 +129,14 @@ export const router = createBrowserRouter([
           {
             path: "users",
             element: <UserManagementPage />,
+          },
+          {
+            path: "genres",
+            element: <GenreManagementPage />,
+          },
+          {
+            path: "tags",
+            element: <TagManagementPage />,
           },
         ],
       },

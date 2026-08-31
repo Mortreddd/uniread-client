@@ -19,6 +19,7 @@ interface InputProps
   withUsername?: boolean;
   label?: string;
   error?: string;
+  showLimitIndicator?: boolean;
 }
 
 const inputVariant = cva(
@@ -69,12 +70,15 @@ export const Input = memo(
         label,
         error,
         id,
+        showLimitIndicator = false,
         onChange,
+        value,
         ...props
       },
       ref,
     ) => {
       const [showPassword, setShowPassword] = useState<boolean>(false);
+      const [charCount, setCharCount] = useState<number>(0);
       const generatedId = useId();
       const inputId = id || generatedId;
 
@@ -82,28 +86,40 @@ export const Input = memo(
       const isPassword = type === "password";
       const inputType = isPassword && showPassword ? "text" : type;
 
+      const currentCount = typeof value === "string" ? value.length : charCount;
+      const isNearLimit = currentCount > limit * 0.9;
+      const isAtLimit = currentCount >= limit;
+
       const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (limit && e.target.value.length > limit) {
+        const newValue = e.target.value;
+        const newLength = newValue.length;
+
+        if (limit && newLength > limit) {
           e.preventDefault();
           return;
         }
+
+        setCharCount(newLength);
+
         if (!regexPattern) {
           onChange?.(e);
           return;
         }
 
         try {
-          const pattern = new RegExp(regexPattern);
-          const value = e.target.value;
-          if (pattern.test(value) || value === "") {
+          const rawValue = e.target.value;
+          const pattern = new RegExp(`^[${regexPattern}]*$`);
+
+          if (rawValue === "" || pattern.test(rawValue)) {
             onChange?.(e);
+          } else {
+            e.preventDefault();
           }
         } catch (error) {
           console.warn("Invalid regex pattern:", regexPattern);
           onChange?.(e);
         }
       };
-
       const togglePasswordVisibility = () => {
         setShowPassword((v) => !v);
       };
@@ -180,6 +196,20 @@ export const Input = memo(
               </button>
             )}
           </div>
+          {showLimitIndicator && (
+            <div className="flex justify-end mt-1">
+              <span
+                className={cn(
+                  "text-xs transition-colors duration-200",
+                  isAtLimit && "text-red-500 font-medium",
+                  isNearLimit && !isAtLimit && "text-yellow-500",
+                  !isNearLimit && "text-gray-400 dark:text-gray-500",
+                )}
+              >
+                {currentCount} / {limit}
+              </span>
+            </div>
+          )}
         </div>
       );
     },

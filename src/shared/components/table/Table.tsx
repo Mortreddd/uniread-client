@@ -16,7 +16,7 @@ export default function Table<T>({
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full border-collapse table-auto">
-        <thead className={"rounded"}>
+        <thead className={"rounded border-gray-300 dark:border-slate-700"}>
           <tr>
             {columns.map((column) => (
               <th
@@ -41,7 +41,10 @@ export default function Table<T>({
             </tr>
           ) : (
             data.map((item) => (
-              <tr key={getRowKey(item)}>
+              <tr
+                key={getRowKey(item)}
+                className={"odd:bg-gray-200/70 dark:odd:bg-slate-800/70"}
+              >
                 {columns.map((column) => (
                   <td
                     key={column.key}

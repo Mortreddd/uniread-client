@@ -27,16 +27,23 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-white dark:bg-primary-dark",
-        secondary: "bg-gray-500 text-white dark:bg-gray-700",
-        danger: "bg-red-500 text-white dark:bg-red-700",
-        warning: "bg-yellow-500 text-white dark:bg-yellow-700",
-        success: "bg-green-500 text-white dark:bg-green-700",
-        info: "bg-blue-500 text-white dark:bg-blue-700",
-        light: "bg-gray-100 text-black dark:bg-gray-300",
-        ghost: "bg-transparent text-white dark:text-gray-300",
-        dark: "bg-gray-800 text-white dark:bg-gray-900",
-        transparent: "bg-transparent text-gray-600 dark:text-gray-300",
+        primary:
+          "bg-primary text-white dark:bg-primary-dark disabled:bg-primary/70 dark:disabled:bg-primary/70 text-white/70",
+        secondary:
+          "bg-gray-500 text-white dark:bg-gray-700 disabled:bg-gray-500/70 dark:disabled:bg-gray-500/70 disabled:text-white/70",
+        danger:
+          "bg-red-500 text-white dark:bg-red-700 disabled:bg-red-500/70 dark:disabled:bg-red-500/70 disabled:text-white/70",
+        warning:
+          "bg-yellow-500 text-white dark:bg-yellow-700 disabled:bg-yellow-700/70 dark:disabled:bg-yellow-700/70 disabled:text-white/70",
+        success:
+          "bg-green-500 text-white dark:bg-green-700 disabled:bg-green-500/70 dark:disabled:bg-green-700/70 disabled:text-white/70",
+        info: "bg-blue-500 text-white dark:bg-blue-700 disabled:bg-blue-500/70 dark:disabled:bg-blue-500/70 disabled:text-white/70",
+        light:
+          "bg-gray-100 text-black dark:bg-gray-300 disabled:bg-gray-100/70 dark:disabled:bg-gray-300/70 disabled:text-black/70",
+        ghost:
+          "bg-transparent text-white dark:text-gray-300 disabled:bg-transparent/70 dark:disabled:text-gray-300/70 disabled:text-white/70",
+        dark: "bg-gray-800 text-white dark:bg-gray-900 disabled:bg-gray-800/70 dark:disabled:bg-gray-900/70 disabled:text-white/70",
+        transparent: "bg-transparent text-gray-600 dark:text-gray-300 ",
         inactivePrimary:
           "border border-primary dark:border-primary-dark text-primary dark:text-primary-dark bg-transparent",
         custom: "",
