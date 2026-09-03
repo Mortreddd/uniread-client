@@ -1,22 +1,19 @@
 import DecreasedStats from "@/features/users/components/DecreasedStats";
 import IncreasedStats from "@/features/users/components/IncreasedStats";
-import AdminLayout from "@/layouts/AdminLayout";
 import { Formatters } from "@/utils/formatters";
 import { BookOpenIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 
 export default function AdminDashboardPage() {
   return (
-    <AdminLayout>
-      <main className="p-5 lg:p-10 relative flex flex-col flex-1 min-h-0">
-        <h1 className="text-gray-800 font-newsreader text-lg lg:text-2xl md:text-xl dark:text-gray-200 tracking-tight">
-          Platform Overview
-        </h1>
-        <p className="text-xs md:text-sm lg:text-base font-sans text-gray-700 dark:text-gray-300 mb-3 lg:mb-5">
-          High-level metrics and recent activity
-        </p>
-        <AdminDashboardStats />
-      </main>
-    </AdminLayout>
+    <main className="p-5 lg:p-10 relative flex flex-col flex-1 min-h-0">
+      <h1 className="text-gray-800 font-newsreader text-lg lg:text-2xl md:text-xl dark:text-gray-200 tracking-tight">
+        Platform Overview
+      </h1>
+      <p className="text-xs md:text-sm lg:text-base font-sans text-gray-700 dark:text-gray-300 mb-3 lg:mb-5">
+        High-level metrics and recent activity
+      </p>
+      <AdminDashboardStats />
+    </main>
   );
 }
 

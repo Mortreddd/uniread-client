@@ -1,24 +1,20 @@
 import { UnderlineIcon } from "@heroicons/react/24/outline";
-import { Button, buttonVariants } from "@/shared/components/form/Button.tsx";
-import { HTMLAttributes } from "react";
-import { VariantProps } from "class-variance-authority";
-
-interface UnderlineProps
-  extends HTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+import { Button, ButtonProps } from "@/shared/components/form/Button.tsx";
 
 export default function Underline({
   variant = "transparent",
   className,
   ...rest
-}: UnderlineProps) {
+}: ButtonProps) {
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
+      className={`p-1 md:p-1.5 lg:p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
-      <UnderlineIcon className="h-5 w-5 text-gray-800" />
+      <UnderlineIcon
+        className={"size-4 md:size-5 text-gray-800 dark:text-gray-200"}
+      />
     </Button>
   );
 }

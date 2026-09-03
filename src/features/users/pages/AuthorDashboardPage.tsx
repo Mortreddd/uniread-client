@@ -1,7 +1,6 @@
 import { useLayout } from "@/contexts/LayoutContext";
 import { useSidebar } from "@/contexts/SidebarContext";
 import AppLayout from "@/layouts/AppLayout";
-import Footer from "@/shared/components/Footer";
 import Sidebar from "@/shared/components/Sidebar";
 import { BookOpenIcon, Squares2X2Icon } from "@heroicons/react/24/outline";
 import { AnimatePresence } from "motion/react";
@@ -60,7 +59,7 @@ export default function AuthorDashboardPage() {
             </div>
           </Sidebar>
         </div>
-        <section className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0">
+        <section className="flex-1 p-3 md:p-5 lg:p-7 flex flex-col min-w-0 overflow-y-auto">
           <div className="max-w-7xl mx-auto w-full">
             <div className="relative flex-1 min-w-0 h-full">
               <AnimatePresence mode="wait">
@@ -70,9 +69,6 @@ export default function AuthorDashboardPage() {
           </div>
         </section>
       </div>
-      <footer className="bg-gray-200 dark:bg-slate-800 w-full min-h-0">
-        <Footer />
-      </footer>
     </AppLayout>
   );
 }

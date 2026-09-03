@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/layouts/Layout";
 import api from "@/core/api/ApiService";
 import { Button } from "@/shared/components/form/Button";
 import {

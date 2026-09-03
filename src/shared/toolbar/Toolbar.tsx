@@ -1,6 +1,6 @@
 import { useSlate } from "slate-react";
 import { Editor, Element, Transforms } from "slate";
-import {MarkAlign, MarkElement, MarkKey} from "@/types/Slate";
+import { MarkAlign, MarkElement, MarkKey } from "@/types/Slate";
 import Bold from "./Bold.tsx";
 import Italic from "./Italic.tsx";
 import Underline from "./Underline.tsx";
@@ -15,21 +15,25 @@ import H2 from "./H2.tsx";
 import H3 from "./H3.tsx";
 import TextCenter from "./TextCenter.tsx";
 
+const ACTIVE_ELEMENT =
+  "hover:bg-gray-400 bg-gray-300 dark:hover:bg-slate-600 dark:bg-slate-700";
+const INACTIVE_ELEMENT =
+  "hover:bg-gray-300 bg-transparent dark:hover:bg-slate-700 dark:bg-transparent";
 const isAlignmentActive = (editor: Editor, format: MarkAlign) => {
   const [match] = Editor.nodes(editor, {
     match: (n) => Element.isElement(n) && n.align === format,
   });
   return !!match;
-}
+};
 
 const toggleAlignment = (editor: Editor, format: MarkAlign) => {
   const isActive = isAlignmentActive(editor, format);
   Transforms.setNodes(
-      editor,
-      { align: isActive ? "left" : format},
-      { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
-  )
-}
+    editor,
+    { align: isActive ? "left" : format },
+    { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) },
+  );
+};
 
 const isBlockActive = (editor: Editor, format: MarkElement) => {
   const [match] = Editor.nodes(editor, {
@@ -45,7 +49,7 @@ const toggleBlock = (editor: Editor, format: MarkElement) => {
   Transforms.setNodes(
     editor,
     { type: isActive ? "paragraph" : format },
-    { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) }
+    { match: (n) => Element.isElement(n) && Editor.isBlock(editor, n) },
   );
 };
 
@@ -69,20 +73,20 @@ export default function Toolbar({ className }: ToolbarProps) {
   const editor = useSlate();
 
   function getActiveMarkAlignmentStyle(editor: Editor, format: MarkAlign) {
-    return isAlignmentActive(editor, format) ? "bg-gray-200 hover:bg-gray-300" : "hover:bg-gray-200 bg-transparent";
+    return isAlignmentActive(editor, format)
+      ? ACTIVE_ELEMENT
+      : INACTIVE_ELEMENT;
   }
   function getActiveMarkElementStyle(editor: Editor, format: MarkElement) {
-    return isBlockActive(editor, format)
-      ? "bg-gray-200 hover:bg-gray-300"
-      : "hover:bg-gray-200 bg-transparent";
+    return isBlockActive(editor, format) ? ACTIVE_ELEMENT : INACTIVE_ELEMENT;
   }
 
   function getActiveMarkStyle(editor: Editor, format: MarkKey): string {
-    return isMarkActive(editor, format) ? "bg-gray-200 hover:bg-gray-300" : "hover:bg-gray-200 bg-transparent";
+    return isMarkActive(editor, format) ? ACTIVE_ELEMENT : INACTIVE_ELEMENT;
   }
   return (
-    <div className={`relative inline-block ${className}`}>
-      <div className="flex items-center space-x-2">
+    <div className={`relative ${className}`}>
+      <div className="flex items-center">
         <Bold
           className={cn(getActiveMarkStyle(editor, "bold" as MarkKey))}
           onClick={(e) => {
@@ -134,7 +138,7 @@ export default function Toolbar({ className }: ToolbarProps) {
         />
         <TextLeft
           className={cn(
-              getActiveMarkAlignmentStyle(editor, "left" as MarkAlign)
+            getActiveMarkAlignmentStyle(editor, "left" as MarkAlign),
           )}
           onClick={(e) => {
             e.preventDefault();
@@ -143,7 +147,7 @@ export default function Toolbar({ className }: ToolbarProps) {
         />
         <TextRight
           className={cn(
-              getActiveMarkAlignmentStyle(editor, "right" as MarkAlign)
+            getActiveMarkAlignmentStyle(editor, "right" as MarkAlign),
           )}
           onClick={(e) => {
             e.preventDefault();
@@ -152,7 +156,7 @@ export default function Toolbar({ className }: ToolbarProps) {
         />
         <TextCenter
           className={cn(
-              getActiveMarkAlignmentStyle(editor, "center" as MarkAlign)
+            getActiveMarkAlignmentStyle(editor, "center" as MarkAlign),
           )}
           onClick={(e) => {
             e.preventDefault();
@@ -161,7 +165,7 @@ export default function Toolbar({ className }: ToolbarProps) {
         />
         <TextJustify
           className={cn(
-              getActiveMarkAlignmentStyle(editor, "justify" as MarkAlign)
+            getActiveMarkAlignmentStyle(editor, "justify" as MarkAlign),
           )}
           onClick={(e) => {
             e.preventDefault();

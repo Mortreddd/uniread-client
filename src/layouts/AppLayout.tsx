@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/layouts/Layout";
 import { useAuth } from "@/contexts/AuthContext";
 import AppNavbar from "@/shared/components/navbar/AppNavbar";
 import MainNavbar from "@/shared/components/navbar/MainNavbar";

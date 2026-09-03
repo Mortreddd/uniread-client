@@ -60,7 +60,7 @@ export default function AppNavbar() {
     {
       icon: <PencilIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />,
       label: "Workspace",
-      href: "/workspace",
+      href: "/dashboard",
     },
     {
       icon: (

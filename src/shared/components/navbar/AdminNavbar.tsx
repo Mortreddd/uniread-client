@@ -13,6 +13,7 @@ import {
   Cog6ToothIcon,
   PencilIcon,
   ShieldCheckIcon,
+  UserCircleIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import ThemeToggle from "../ThemeToggle";
@@ -59,22 +60,16 @@ export default function AdminNavbar() {
     },
   ];
 
-  const hasAdminAccess = useMemo(() => {
-    return user?.hasAdminAccess ?? false;
-  }, [user]);
-
-  const filteredProfileOptions = hasAdminAccess
-    ? [
-        {
-          icon: (
-            <ShieldCheckIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />
-          ),
-          label: "Switch to Admin",
-          href: "/admin",
-        },
-        ...profileOptions,
-      ]
-    : profileOptions;
+  const filteredProfileOptions = [
+    {
+      icon: (
+        <UserCircleIcon className="size-4 md:size-5 lg:size-6 flex-shrink-0" />
+      ),
+      label: "Switch to User",
+      href: "/",
+    },
+    ...profileOptions,
+  ];
 
   return (
     <nav className="w-full shadow-lg bg-gray-100 dark:bg-slate-950">
@@ -97,23 +92,6 @@ export default function AdminNavbar() {
               <Input withSearch={true} placeholder="Search..." />
             </li>
           </ul>
-
-          {/* Mobile Navigation Dropdown */}
-          <Dropdown
-            className="inline-flex lg:hidden items-center"
-            variant="ghost"
-            size="sm"
-            hasArrowIcon={true}
-            trigger={
-              <p
-                className={
-                  "text-xs md:text-sm lg:text-md text-gray-800 dark:text-gray-100"
-                }
-              >
-                Browse
-              </p>
-            }
-          ></Dropdown>
         </div>
 
         {/* Right side - Actions */}

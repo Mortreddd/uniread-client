@@ -1,24 +1,20 @@
-import { HTMLAttributes } from "react";
-import { Button, buttonVariants } from "@/shared/components/form/Button.tsx";
-import { VariantProps } from "class-variance-authority";
+import { Button, ButtonProps } from "@/shared/components/form/Button.tsx";
 import { StrikethroughIcon } from "@heroicons/react/24/outline";
-
-interface Strikethrough
-  extends HTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
 
 export default function Strikethrough({
   variant = "transparent",
   className,
   ...rest
-}: Strikethrough) {
+}: ButtonProps) {
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
+      className={`p-1 md:p-1.5 lg:p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
-      <StrikethroughIcon className="h-5 w-5 text-gray-800" />
+      <StrikethroughIcon
+        className={"size-4 md:size-5 text-gray-800 dark:text-gray-200"}
+      />
     </Button>
   );
 }

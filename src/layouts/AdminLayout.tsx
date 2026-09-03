@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/layouts/Layout";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useSidebar } from "@/contexts/SidebarContext";
 
@@ -7,34 +7,46 @@ import Sidebar from "@/shared/components/Sidebar";
 import {
   BookOpenIcon,
   CubeTransparentIcon,
+  RectangleGroupIcon,
+  SparklesIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-import { PropsWithChildren, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 
-interface AdminLayoutProps extends PropsWithChildren {}
-
-export default function AdminLayout({ children }: AdminLayoutProps) {
+export default function AdminLayout() {
   const { setHasSidebar } = useLayout();
   const { closeSidebar } = useSidebar();
   const sidebarOptions = [
     {
       id: 1,
       href: "/admin",
-      icon: <CubeTransparentIcon className={"size-3 md:size-4 text-inherit"} />,
+      icon: <CubeTransparentIcon className="size-3 md:size-4 text-inherit" />,
       label: "Dashboard",
     },
     {
       id: 2,
       href: "/admin/users",
-      icon: <UsersIcon className={"size-3 md:size-4 text-inherit"} />,
+      icon: <UsersIcon className="size-3 md:size-4 text-inherit" />,
       label: "User Management",
     },
     {
       id: 3,
       href: "/admin/books",
-      icon: <BookOpenIcon className={"size-3 md:size-4 text-inherit"} />,
+      icon: <BookOpenIcon className="size-3 md:size-4 text-inherit" />,
       label: "Book Approvals",
+    },
+    {
+      id: 4,
+      href: "/admin/genres",
+      icon: <RectangleGroupIcon className="size-3 md:size-4 text-inherit" />,
+      label: "Genre Management",
+    },
+    {
+      id: 5,
+      href: "/admin/tags",
+      icon: <SparklesIcon className="size-3 md:size-4 text-inherit" />,
+      label: "Tag Management",
     },
   ];
 
@@ -58,14 +70,22 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               {sidebarOptions.map((option, key) => (
                 <li key={key}>
                   <NavLink
-                    onClick={() => closeSidebar()}
                     to={option.href}
+                    end={option.href === "/admin"}
+                    onClick={() => closeSidebar()}
                     className={({ isActive }) =>
-                      `gap-1.5 flex text-extratiny md:text-tiny lg:text-sm items-center p-1.5 md:p-2 cursor-pointer rounded transition-all duration-200 ease-in-out text-white ${isActive ? "bg-primary dark:bg-primary-dark hover:bg-primary/60 dark:hover:bg-primary-dark/60 " : "bg-primary/60 dark:bg-primary-dark/60 hover:bg-primary dark:hover:bg-primary-dark"}`
+                      `gap-1.5 flex text-extratiny md:text-tiny lg:text-sm items-center
+     p-1.5 md:p-2 cursor-pointer rounded
+     transition-all duration-200 ease-in-out text-white
+     ${
+       isActive
+         ? "bg-primary dark:bg-primary-dark hover:bg-primary/60 dark:hover:bg-primary-dark/60"
+         : "bg-primary/60 dark:bg-primary-dark/60 hover:bg-primary dark:hover:bg-primary-dark"
+     }`
                     }
                   >
                     {option.icon}
-                    <span className={"text-inherit"}>{option.label}</span>
+                    <span>{option.label}</span>
                   </NavLink>
                 </li>
               ))}
@@ -78,7 +98,9 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <AdminNavbar />
           </header>
 
-          <div className="flex-1 min-h-0 min-w-0 flex flex-col">{children}</div>
+          <div className="flex-1 min-h-0 min-w-0 flex flex-col">
+            <Outlet />
+          </div>
         </section>
       </div>
     </Layout>

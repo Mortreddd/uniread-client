@@ -6,7 +6,6 @@ import BookDetailsPage from "./features/books/pages/BookDetailsPage.tsx";
 import AuthorsPage from "./features/users/pages/AuthorsPage.tsx";
 import AuthorProfilePage from "./features/users/pages/AuthorProfilePage.tsx";
 import AuthorDashboardPage from "./features/users/pages/AuthorDashboardPage.tsx";
-import AuthorDashboardSection from "./features/users/components/AuthorDashboardSection.tsx";
 import SettingsPage from "./features/users/pages/SettingsPage.tsx";
 import SettingsProfilePage from "./features/users/pages/SettingsProfilePage.tsx";
 import SettingsAccountPage from "./features/users/pages/SettingsAccountPage.tsx";
@@ -17,6 +16,13 @@ import VerifyEmailPage from "./features/authentication/pages/VerifyEmailPage.tsx
 import RootLayout from "./RootLayout.tsx";
 import ActiveChat from "./features/chats/components/ActiveChat.tsx";
 import AdminDashboardPage from "./features/admin/pages/AdminDashboardPage.tsx";
+import UserManagementPage from "./features/admin/pages/UserManagementPage.tsx";
+import AdminLayout from "./layouts/AdminLayout.tsx";
+import AuthorDashboard from "./features/users/pages/AuthorDashboard.tsx";
+import BookDashboard from "./features/users/pages/BookDashboard.tsx";
+import CreateBook from "./features/users/pages/CreateBook.tsx";
+import GenreManagementPage from "./features/admin/pages/GenreManagementPage.tsx";
+import TagManagementPage from "./features/admin/pages/TagManagementPage.tsx";
 
 /**
  *
@@ -81,8 +87,15 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            path: "/dashboard",
-            element: <AuthorDashboardSection />,
+            element: <AuthorDashboard />,
+          },
+          {
+            path: "books",
+            element: <BookDashboard />,
+          },
+          {
+            path: "books/new",
+            element: <CreateBook />,
           },
         ],
       },
@@ -92,27 +105,38 @@ export const router = createBrowserRouter([
         element: <SettingsPage />,
         children: [
           {
-            path: "/settings",
-            element: <SettingsProfilePage />,
             index: true,
-          },
-          {
-            path: "/settings/profile",
             element: <SettingsProfilePage />,
           },
           {
-            path: "/settings/account",
+            path: "profile",
+            element: <SettingsProfilePage />,
+          },
+          {
+            path: "account",
             element: <SettingsAccountPage />,
           },
         ],
       },
       {
         path: "/admin",
-        element: <AdminDashboardPage />,
+        element: <AdminLayout />,
         children: [
           {
-            path: "/admin/dashboard",
+            index: true,
             element: <AdminDashboardPage />,
+          },
+          {
+            path: "users",
+            element: <UserManagementPage />,
+          },
+          {
+            path: "genres",
+            element: <GenreManagementPage />,
+          },
+          {
+            path: "tags",
+            element: <TagManagementPage />,
           },
         ],
       },

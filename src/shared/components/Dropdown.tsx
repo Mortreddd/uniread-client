@@ -103,7 +103,6 @@ function Dropdown({
     [controlledOpen, onOpenChange],
   );
 
-  // Define the close function
   const close = useCallback(() => {
     setIsOpen(false);
   }, [setIsOpen]);
@@ -281,8 +280,7 @@ const DropdownItem = forwardRef<HTMLLIElement, DropdownItemProps>(
       "bg-transparent",
       "cursor-pointer",
       disabled && "opacity-50 cursor-not-allowed pointer-events-none",
-      active &&
-        "bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary-light",
+      active && "bg-primary dark:bg-primary-dark text-gray-200",
       className,
     );
 

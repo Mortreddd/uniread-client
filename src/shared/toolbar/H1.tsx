@@ -1,24 +1,18 @@
-import { HTMLAttributes } from "react";
-import { Button, buttonVariants } from "@/shared/components/form/Button.tsx";
+import { Button, ButtonProps } from "@/shared/components/form/Button.tsx";
 import { H1Icon } from "@heroicons/react/24/outline";
-import { VariantProps } from "class-variance-authority";
-
-interface H1Props
-  extends HTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
 
 export default function H1({
   variant = "transparent",
   className,
   ...rest
-}: H1Props) {
+}: ButtonProps) {
   return (
     <Button
       variant={variant}
-      className={`p-2 hover:bg-gray-200 rounded-sm ${className}`}
+      className={`p-1 md:p-1.5 lg:p-2 hover:bg-gray-200 rounded-sm ${className}`}
       {...rest}
     >
-      <H1Icon className={"h-5 w-5 text-gray-800"} />
+      <H1Icon className={"size-4 md:size-5 text-gray-800 dark:text-gray-200"} />
     </Button>
   );
 }
