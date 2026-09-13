@@ -30,7 +30,7 @@ const buttonVariants = cva(
         primary:
           "bg-primary text-white dark:bg-primary-dark disabled:bg-primary/70 dark:disabled:bg-primary/70 text-white/70",
         secondary:
-          "bg-gray-500 text-white dark:bg-gray-700 disabled:bg-gray-500/70 dark:disabled:bg-gray-500/70 disabled:text-white/70",
+          "bg-gray-500 text-white dark:bg-gray-700 disabled:bg-gray-500/70 dark:disabled:bg-gray-500/30 disabled:text-white/70",
         danger:
           "bg-red-500 text-white dark:bg-red-700 disabled:bg-red-500/70 dark:disabled:bg-red-500/70 disabled:text-white/70",
         warning:
@@ -72,7 +72,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <motion.button
         ref={ref}
         disabled={loading || disabled}
-        // Bind Motion Variants
         variants={buttonAnimations}
         initial="initial"
         whileHover={loading || disabled ? "disabled" : "hover"}
@@ -80,7 +79,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         {...props}
       >
-        {/* Example: Animate content if loading */}
         <motion.span
           animate={{ opacity: loading ? 0 : 1 }}
           className="flex items-center gap-2"
@@ -94,7 +92,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {/* You can replace this with a Spinner icon */}
             <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           </motion.div>
         )}

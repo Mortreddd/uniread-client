@@ -146,11 +146,16 @@ function ProfileDetails({ profile }: { profile: UserProfileDetails }) {
     handleSubmit,
     control,
     reset,
+    setValue,
     setError,
     formState: { isDirty, errors },
   } = useForm<UpdateProfileRequest>({
     defaultValues: {
-      ...profile,
+      displayName: profile.displayName || "",
+      firstName: profile.firstName || "",
+      lastName: profile.lastName || "",
+      gender: profile.gender || Gender.OTHER,
+      bio: profile.bio || "",
     },
   });
 
@@ -262,13 +267,17 @@ function ProfileDetails({ profile }: { profile: UserProfileDetails }) {
         </h3>
         <TextArea
           className="w-full text-tiny md:text-xs lg:text-sm"
+          showLimitIndicator={true}
+          limit={250}
           rows={1}
-          {...register("bio")}
+          {...register("bio", {
+            max: 250,
+          })}
+          onChange={(e) => {
+            setValue("bio", e.target.value, { shouldDirty: true });
+          }}
           error={errors?.bio?.message}
         />
-        <p className="text-gray-700 dark:text-gray-300 font-semibold text-extratiny md:text-tiny lg:text-xs">
-          Maximum 250 characters. You can use Markdown to format your bio.
-        </p>
       </div>
 
       {isDirty && (

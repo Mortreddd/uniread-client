@@ -5,8 +5,8 @@ import { useAlert } from "@/contexts/AlertContext";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Label from "@/shared/components/form/Label";
 import { Input } from "@/shared/components/form/Input";
-import { TagDetail } from "../../types/Tag";
-import { useCreateTagMutation } from "../../hooks/useTag";
+import { TagDetail } from "../../../../shared/types/Tag";
+import { useCreateTagMutation } from "../../../../shared/hooks/useTag";
 
 interface AddTagModalProps {
   onCreate: (tag: TagDetail) => void;

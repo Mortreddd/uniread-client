@@ -1,6 +1,6 @@
 import { TableColumn } from "@/shared/components/types/Table";
 import Table from "@/shared/components/table/Table";
-import { GenreDetail } from "../types/Genre";
+import { GenreDetail } from "../../../shared/types/Genre";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 import { ModalRef } from "@/shared/components/Modal";

@@ -5,9 +5,9 @@ import TagDetailTable from "../components/TagDetailTable";
 import { useMemo, useRef, useState } from "react";
 import { ModalRef } from "@/shared/components/Modal";
 import AddTagModal from "../components/modals/AddTagModal";
-import { useGetTagDetails } from "../hooks/useTag";
+import { useGetTagDetails } from "../../../shared/hooks/useTag";
 import { PaginateParams } from "@/types/Pagination";
-import { TagDetail } from "../types/Tag";
+import { TagDetail } from "../../../shared/types/Tag";
 
 export default function TagManagementPage() {
   return (

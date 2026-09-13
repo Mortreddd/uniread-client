@@ -15,9 +15,8 @@ export interface AuthUser {
   id: string;
   username: string;
   email: string;
-  role: Role;
-  hasAdminAccess: boolean;
   emailVerified: boolean;
+  hasAdminAccess: boolean;
   profile: {
     displayName: string;
     firstName: string;

@@ -1,12 +1,10 @@
 import { AuthProvider } from "./contexts/AuthContext.tsx";
-import { MessageProvider } from "./contexts/MessageContext.tsx";
-import { NotificationProvider } from "./contexts/NotificationContext.tsx";
 import GoogleAuthProvider from "./provider/google/GoogleAuthProvider.tsx";
 import { ToastProvider } from "@/contexts/ToastContext.tsx";
 import { AlertProvider } from "./contexts/AlertContext.tsx";
 import { SidebarProvider } from "./contexts/SidebarContext.tsx";
 import { LayoutProvider } from "./contexts/LayoutContext.tsx";
-import { Outlet } from "react-router-dom";
+import App from "./App.tsx";
 
 export default function RootLayout() {
   return (
@@ -14,15 +12,11 @@ export default function RootLayout() {
       <ToastProvider>
         <AlertProvider>
           <AuthProvider>
-            {/* <NotificationProvider> */}
-            <MessageProvider>
-              <LayoutProvider>
-                <SidebarProvider>
-                  <Outlet />
-                </SidebarProvider>
-              </LayoutProvider>
-            </MessageProvider>
-            {/* </NotificationProvider> */}
+            <LayoutProvider>
+              <SidebarProvider>
+                <App />
+              </SidebarProvider>
+            </LayoutProvider>
           </AuthProvider>
         </AlertProvider>
       </ToastProvider>

@@ -1,59 +1,50 @@
-import { cn } from "@/utils/ClassNames.ts";
+import { cn } from "@/utils/ClassNames";
 import { cva, VariantProps } from "class-variance-authority";
 import { ComponentType } from "react";
-import React from "react";
-
-const withBadgeVariant = cva("absolute p-1.5", {
-  variants: {
-    position: {
-      topLeft: "absolute top-0 left-0 rounded-full",
-      topRight: "absolute top-0 right-0 rounded-full",
-      bottomLeft: "absolute bottom-0 left-0 rounded-full",
-      bottomRight: "absolute bottom-0 right-0 rounded-full",
+const withBadgeVariant = cva(
+  "absolute min-w-3 h-3 md:min-w-3.5 md::h-3.5 lg:min-w-4 lg:h-4 px-1 flex items-center justify-center text-[8px] md:text-[9px] lg:text-[10px] text-gray-200 font-thin rounded-full bg-red-600",
+  {
+    variants: {
+      position: {
+        topLeft: "top-0 left-0 -translate-x-1/3 -translate-y-1/3 rounded-full",
+        topRight: "top-0 right-0 translate-x-1/3 -translate-y-1/3 rounded-full",
+        bottomLeft:
+          "bottom-0 left-0 -translate-x-1/3 translate-y-1/3 rounded-full",
+        bottomRight:
+          "bottom-0 right-0 translate-x-1/3 translate-y-1/3 rounded-full",
+      },
     },
-    variant: {
-      primary: "bg-primary text-white",
-      secondary: "bg-gray-200 text-gray-800",
-      success: "bg-green-500 text-white",
-      danger: "bg-red-500 text-white",
-      warning: "bg-amber-500 text-white",
-      info: "bg-blue-500 text-white",
-      light: "bg-gray-100 text-gray-800",
-      dark: "bg-gray-800 text-white",
-    },
+    defaultVariants: { position: "topRight" },
   },
-  defaultVariants: {
-    position: "topRight",
-    variant: "primary",
-  },
-});
-
+);
 interface WithBadgeOptions extends VariantProps<typeof withBadgeVariant> {
-  badgeContent?: React.ReactNode;
+  className?: string;
   badgeClassName?: string;
 }
-
+interface WithBadgeProps {
+  badgeContent?: React.ReactNode;
+}
 function withBadge<P extends object>(
   WrappedComponent: ComponentType<P>,
-  options: WithBadgeOptions
+  options?: WithBadgeOptions,
 ) {
-  return function WithBadgeComponent(props: P) {
-    const { position, variant, badgeContent, badgeClassName } = options;
-
+  return function WithBadgeComponent(props: P & WithBadgeProps) {
+    const { badgeContent, ...wrappedProps } = props;
     return (
       <div className="relative inline-block">
-        <WrappedComponent {...props} />
-        <div
-          className={cn(
-            withBadgeVariant({ position, variant }),
-            badgeClassName
-          )}
-        >
-          {badgeContent}
-        </div>
+        <WrappedComponent {...(wrappedProps as P)} />
+        {badgeContent !== undefined && (
+          <div
+            className={cn(
+              withBadgeVariant({ position: options?.position }),
+              options?.badgeClassName,
+            )}
+          >
+            {badgeContent}
+          </div>
+        )}
       </div>
     );
   };
 }
-
 export default withBadge;

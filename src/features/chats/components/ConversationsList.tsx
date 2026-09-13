@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/shared/components/form/Button";
 import DeleteConversationModal from "./modals/DeleteConversationModal";
 import { ModalRef } from "@/shared/components/Modal";
+import { useRealtime } from "@/contexts/RealtimeContext";
 
 export default function ConversationsList() {
   const [params] = useState<PaginateParams>({
@@ -28,12 +29,15 @@ export default function ConversationsList() {
   });
   const [selectedChat, setSelectedChat] =
     useState<ChatConversationPreview | null>(null);
+  const { resetConversation } = useRealtime();
   const confirmDeleteRef = useRef<ModalRef>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const { data, isLoading, error } = useGetConversations(params);
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const debounceSearch = useDebounce(searchQuery, 500);
 
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [convos, setConvos] = useState<ChatConversationPreview[]>([]);
+  const debounceSearch = useDebounce(searchQuery, 500);
   const handleOpenMenu = (chat: ChatConversationPreview, rect: DOMRect) => {
     const menuWidth = 180;
     const menuHeight = 100;
@@ -43,7 +47,14 @@ export default function ConversationsList() {
 
     setMenu({ chat, x, y });
     setSelectedChat(chat);
+    resetConversation(chat);
   };
+
+  useEffect(() => {
+    if (!data || !data?.content) return;
+
+    setConvos(data.content);
+  }, [data]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -85,9 +96,9 @@ export default function ConversationsList() {
         <div className="flex flex-col flex-1 min-h-0 overflow-y-auto gap-1">
           {isLoading && <LoadingSkeleton />}
           {!data && error && <ErrorSection />}
-          {data && data.content.length === 0 && <EmptySection />}
-          {data &&
-            data.content.map((chat) => (
+          {convos && convos.length === 0 && <EmptySection />}
+          {convos &&
+            convos.map((chat) => (
               <div
                 key={chat.conversationId}
                 className="min-w-44 w-full shrink-0"

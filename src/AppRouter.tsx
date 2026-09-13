@@ -20,9 +20,10 @@ import UserManagementPage from "./features/admin/pages/UserManagementPage.tsx";
 import AdminLayout from "./layouts/AdminLayout.tsx";
 import AuthorDashboard from "./features/users/pages/AuthorDashboard.tsx";
 import BookDashboard from "./features/users/pages/BookDashboard.tsx";
-import CreateBook from "./features/users/pages/CreateBook.tsx";
 import GenreManagementPage from "./features/admin/pages/GenreManagementPage.tsx";
 import TagManagementPage from "./features/admin/pages/TagManagementPage.tsx";
+import CreateBook from "./features/books/pages/CreateBookPage.tsx";
+import VerifyAccountPage from "./features/authentication/pages/VerifyAccountPage.tsx";
 
 /**
  *
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
       {
         path: "/auth/verify-email",
         element: <VerifyEmailPage />,
+      },
+      {
+        path: "/auth/verify-account",
+        element: <VerifyAccountPage />,
+      },
+      {
+        path: "/auth/forgot-password",
+        element: <div></div>,
       },
       // Default Page or Landing Page
       {

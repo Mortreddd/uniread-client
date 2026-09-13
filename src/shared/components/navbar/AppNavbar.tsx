@@ -8,7 +8,6 @@ import {
   BuildingLibraryIcon,
   ChatBubbleBottomCenterIcon,
   Cog6ToothIcon,
-  EnvelopeIcon,
   GlobeAltIcon,
   PencilIcon,
   UserIcon,
@@ -18,12 +17,13 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import UserAvatar from "../UserAvatar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { useSidebar } from "@/contexts/SidebarContext";
 import { useLayout } from "@/contexts/LayoutContext";
 import { useAuth } from "@/contexts/AuthContext";
 import gojoProfile from "@/assets/profiles/gojo.jpg";
+import MessageInboxButton from "../buttons/MessageInboxButton";
 
 export default function AppNavbar() {
   const { user, logout } = useAuth();
@@ -116,7 +116,7 @@ export default function AppNavbar() {
             <Button
               onClick={() => openSidebar()}
               variant={"transparent"}
-              className={"md:hidden"}
+              className={"lg:hidden"}
             >
               <Bars3Icon
                 className={"size-3 text-gray-800 dark:text-gray-100"}
@@ -170,14 +170,7 @@ export default function AppNavbar() {
             <ThemeToggle />
           </li>
           <li>
-            <Button
-              variant="transparent"
-              className="rounded-full border border-gray-300 dark:border-gray-600 p-1 md:p-2 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <Link to="/chats">
-                <EnvelopeIcon className="size-4 md:size-5" />
-              </Link>
-            </Button>
+            <MessageInboxButton />
           </li>
           <li>
             <Button

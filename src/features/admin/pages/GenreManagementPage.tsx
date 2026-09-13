@@ -1,12 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 import { Input } from "@/shared/components/form/Input";
-import { GenreDetail, GenreTableFilter } from "../types/Genre";
+import { GenreDetail, GenreTableFilter } from "../../../shared/types/Genre";
 import GenreDetailTable from "../components/GenreDetailTable";
 import { Button } from "@/shared/components/form/Button";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import AddGenreModal from "../components/modals/AddGenreModal";
 import { ModalRef } from "@/shared/components/Modal";
-import { useGetGenreDetails } from "../hooks/useGenre";
+import { useGetGenreDetails } from "../../../shared/hooks/useGenre";
 
 export default function GenreManagementPage() {
   return (

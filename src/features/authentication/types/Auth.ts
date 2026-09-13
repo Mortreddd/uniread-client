@@ -9,3 +9,11 @@ export interface RegisterFormProps {
   password: string;
   confirmPassword: string;
 }
+
+export interface VerifyEmailForm {
+  email: string;
+}
+
+export interface ForgotPasswordFormProps {
+  usernameOrEmail: string;
+}
