@@ -12,39 +12,94 @@ import { useAlert } from "@/contexts/AlertContext";
 import { useNavigate } from "react-router-dom";
 import { useRegister } from "../hooks/useRegister";
 import { RegisterFormProps } from "../types/Auth";
+import { AnimatePresence, motion } from "motion/react";
 
 export default function RegisterPage() {
   return (
     <AppLayout>
-      <section className="flex flex-1 min-h-0 relative dark:bg-slate-800 bg-slate-100">
-        {/* Automatic expandable sidebar and responsive */}
-        <div className="hidden lg:flex flex-1 relative">
-          <img
-            src={teamMeeting}
-            alt="Team Meeting"
-            className="object-cover w-full h-full"
-          />
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center"></div>
-        </div>
-        <div className="flex-1 relative p-5 md:p-10">
-          <h6 className="font-sans font-semibold text-primary dark:text-primary-dark text-tiny md:text-xs lg:text-sm tracking-wide">
-            NEW ACCOUNT
-          </h6>
-          <h1 className="font-newsreader text-gray-900 dark:text-gray-100 text-xl md:text-2xl lg:text-3xl tracking-wide mb-1 md:mb-2">
-            Join the Collective
-          </h1>
-          <p
-            className={
-              "text-gray-700 dark:text-gray-300 font-sans text-tiny md:text-xs lg:text-sm mb-3 md:mb-4"
-            }
-          >
-            Create your editorial identity and start shaping the narrative
-            today.
-          </p>
-          <RegisterForm />
-        </div>
-      </section>
-      <Footer />
+      <AnimatePresence>
+        <section className="flex flex-1 min-h-0 relative dark:bg-slate-800 bg-slate-100">
+          {/* Automatic expandable sidebar and responsive */}
+          <motion.div className="hidden lg:flex flex-1 relative">
+            <motion.img
+              initial={{
+                opacity: 0,
+                translateX: -0.3,
+              }}
+              animate={{
+                opacity: 1,
+                translateX: 0,
+              }}
+              transition={{
+                duration: 0.3,
+                ease: "easeIn",
+              }}
+              src={teamMeeting}
+              alt="Team Meeting"
+              className="object-cover w-full h-full"
+            />
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center"></div>
+          </motion.div>
+          <div className="flex-1 relative p-5 md:p-10">
+            <motion.h6
+              initial={{
+                opacity: 0,
+                translateX: 0.3,
+              }}
+              animate={{
+                opacity: 1,
+                translateX: 0,
+              }}
+              transition={{
+                duration: 0.4,
+                ease: "easeIn",
+              }}
+              className="font-sans font-semibold text-primary dark:text-primary-dark text-tiny md:text-xs lg:text-sm tracking-wide"
+            >
+              NEW ACCOUNT
+            </motion.h6>
+            <motion.h1
+              initial={{
+                opacity: 0,
+                translateX: 0.2,
+              }}
+              animate={{
+                opacity: 1,
+                translateX: 0,
+              }}
+              transition={{
+                duration: 0.4,
+                ease: "easeIn",
+              }}
+              className="font-newsreader text-gray-900 dark:text-gray-100 text-xl md:text-2xl lg:text-3xl tracking-wide mb-1 md:mb-2"
+            >
+              Join the Collective
+            </motion.h1>
+            <motion.p
+              initial={{
+                opacity: 0,
+                translateX: 0.1,
+              }}
+              animate={{
+                opacity: 1,
+                translateX: 0,
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeIn",
+              }}
+              className={
+                "text-gray-700 dark:text-gray-300 font-sans text-tiny md:text-xs lg:text-sm mb-3 md:mb-4"
+              }
+            >
+              Create your editorial identity and start shaping the narrative
+              today.
+            </motion.p>
+            <RegisterForm />
+          </div>
+        </section>
+        <Footer />
+      </AnimatePresence>
     </AppLayout>
   );
 }
@@ -109,7 +164,21 @@ function RegisterForm() {
     { value: Gender.OTHER, label: "Other" },
   ];
   return (
-    <div className="space-y-1 md:space-y-2 relative">
+    <motion.form
+      initial={{
+        opacity: 0,
+        translateY: -0.3,
+      }}
+      animate={{
+        opacity: 1,
+        translateY: 0,
+      }}
+      transition={{
+        duration: 0.8,
+        ease: "easeIn",
+      }}
+      className="space-y-1 md:space-y-2 relative"
+    >
       <div className="flex items-end gap-3 md:gap-5">
         <div className="space-y-0.5 grow">
           <Label>First Name</Label>
@@ -210,10 +279,10 @@ function RegisterForm() {
         loading={registerMutation.isPending}
         disabled={registerMutation.isPending}
       >
-        <span className="text-xs md:text-sm lg:text-base font-sans tracking-wide">
+        <span className="text-xs md:text-sm lg:text-base font-sans text-gray-200 tracking-wide">
           Register
         </span>
       </Button>
-    </div>
+    </motion.form>
   );
 }

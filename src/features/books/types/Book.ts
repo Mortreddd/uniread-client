@@ -45,36 +45,6 @@ export interface Genre {
   description: string;
 }
 
-export interface BookComment {
-  id: string;
-  book: BookDetail;
-  user: User;
-  parentBookComment: BookComment;
-  rating: number;
-  content: string;
-  reactions: BookCommentReactor[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface UserCommentor extends Omit<
-  UserProfile,
-  "id" | "gender" | "fullName"
-> {}
-export interface BookCommentPreview {
-  id: string;
-  bookId: string;
-  user: UserCommentor;
-  parentBookComment: BookComment | null;
-  content: string;
-  totalReaction: number;
-  authUserReaction: Reaction | null;
-  replies: BookCommentPreview[];
-  replyCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface BookCommentReactor {
   id: string;
   bookCommentId: string;

@@ -16,14 +16,3 @@ export interface AuthorRecentWorkBookDetails {
   createdAt: string;
   lastModifiedAt: string;
 }
-
-export interface CreateBookRequest {
-  title: string;
-  description: string;
-  coverPhoto: File | null;
-  matured: boolean;
-  genres: Genre[];
-  tags: string[];
-
-  collaboratorIds: string[];
-}

@@ -16,9 +16,6 @@ import { useNavigate } from "react-router-dom";
 interface AuthContextProps {
   logout: () => Promise<void>;
   isLoggedIn: () => boolean;
-  isUser: boolean;
-  isSuperAdmin: boolean;
-  isAdmin: boolean;
   user?: AuthUser | null;
   handleProfileUpdate: () => void;
   refetchUser: () => Promise<void>;
@@ -101,15 +98,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
     queryClient.invalidateQueries({ queryKey: authKeys.me() });
   }, [queryClient]);
 
-  const roleChecks = useMemo(
-    () => ({
-      isUser: user?.role === Role.USER,
-      isAdmin: user?.role === Role.ADMIN,
-      isSuperAdmin: user?.role === Role.SUPER_ADMIN,
-    }),
-    [user],
-  );
-
   const refetchUser = useCallback(async () => {
     await refetch();
   }, [refetch]);
@@ -117,13 +105,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const value = useMemo(
     () => ({
       user,
-      ...roleChecks,
       logout,
       isLoggedIn,
       refetchUser,
       handleProfileUpdate,
     }),
-    [user, roleChecks, logout, isLoggedIn, refetchUser, handleProfileUpdate],
+    [user, logout, isLoggedIn, refetchUser, handleProfileUpdate],
   );
 
   if (isLoading) {

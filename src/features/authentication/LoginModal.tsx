@@ -1,5 +1,4 @@
-import api from "@/core/api/ApiService.ts";
-import { LoginForm, LoginResponse } from "@/types/Auth.ts";
+import { LoginForm } from "@/types/Auth.ts";
 import { ErrorResponse } from "@/types/Error.ts";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { AxiosError } from "axios";
@@ -12,11 +11,13 @@ import GoogleAuthButton from "@/shared/components/form/GoogleAuthButton.tsx";
 import { Input } from "@/shared/components/form/Input.tsx";
 import Modal, { ModalRef } from "../../shared/components/Modal.tsx";
 import { useLogin } from "./hooks/useLogin.ts";
+import { useNavigate } from "react-router-dom";
 
 interface LoginModalProps {}
 
 // eslint-disable-next-line no-empty-pattern
 function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -37,16 +38,20 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
       window.location.reload();
     } catch (error) {
       const err = error as AxiosError<ErrorResponse>;
-      const data = err.response?.data;
 
+      if (err.response?.status === 403) {
+        navigate("/auth/verify-account", { state: { email: data.email } });
+        return;
+      }
+      const responseData = err.response?.data;
       let message = "Unable to Login";
 
-      if (data?.message) {
-        message = data.message;
-      } else if (data?.fieldErrors?.length) {
-        message = Object.values(data.fieldErrors[0])[0];
-      } else if (data?.errors?.length) {
-        message = Object.values(data.errors[0])[0];
+      if (responseData?.message) {
+        message = responseData.message;
+      } else if (responseData?.fieldErrors?.length) {
+        message = Object.values(responseData.fieldErrors[0])[0];
+      } else if (responseData?.errors?.length) {
+        message = Object.values(responseData.errors[0])[0];
       }
 
       setError("root", { message });
@@ -85,7 +90,7 @@ function LoginModal({}: LoginModalProps, ref: Ref<ModalRef>) {
             </AnimatePresence>
             <div className="w-full">
               <Input
-                type="email"
+                type="text"
                 {...register("email", {
                   required: "Email is required",
                 })}

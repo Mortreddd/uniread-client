@@ -26,8 +26,8 @@ export default function VerifyEmailPage() {
       }
 
       try {
-        await api.get("/auth/verify-email", {
-          params: { token }, // ✅ FIXED
+        await api.post("/auth/verify-email", {
+          token,
         });
         setStatus("success");
       } catch (error) {
@@ -77,7 +77,7 @@ function SuccessVerification() {
         first story.
       </p>
 
-      <Link to="/dashboard">
+      <Link to="/dashboard" reloadDocument>
         <Button className="flex items-center justify-center gap-2 w-full rounded">
           <span className="text-sm md:text-base text-gray-100">
             Go to Dashboard

@@ -2,11 +2,11 @@ import { Button } from "@/shared/components/form/Button";
 import Modal, { ModalRef } from "@/shared/components/Modal";
 import { forwardRef, Ref, useImperativeHandle, useRef } from "react";
 import { useAlert } from "@/contexts/AlertContext";
-import { GenreDetail } from "../../types/Genre";
+import { GenreDetail } from "../../../../shared/types/Genre";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Label from "@/shared/components/form/Label";
 import { Input } from "@/shared/components/form/Input";
-import { useUpdateGenreMutation } from "../../hooks/useGenre";
+import { useUpdateGenreMutation } from "../../../../shared/hooks/useGenre";
 
 interface UpdateGenreModalProps {
   genre: GenreDetail;

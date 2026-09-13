@@ -3,21 +3,22 @@ import { cva, VariantProps } from "class-variance-authority";
 import { InputHTMLAttributes } from "react";
 
 const toggleVariant = cva(
-  "flex items-center shrink-0 ml-4 p-0.5 bg-gray-300 rounded-full after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-6 ease-in-out",
+  "flex items-center shrink-0 p-0.5 bg-gray-300 dark:bg-slate-600 rounded-full after:rounded-full after:shadow-md after:duration-200 ease-in-out",
   {
     variants: {
       variant: {
-        primary: "after:bg-white peer-checked:bg-primary",
+        primary:
+          "after:bg-gray-100 peer-checked:bg-primary dark:peer-checked:bg-primary-dark",
       },
       toggleSize: {
-        md: "w-12 h-6 after:w-5 after:h-5",
+        md: "w-8 h-4 after:w-3 after:h-3 peer-checked:after:translate-x-4 md:w-12 md:h-6 md:after:w-5 md:after:h-5 md:peer-checked:after:translate-x-6",
       },
     },
     defaultVariants: {
       variant: "primary",
       toggleSize: "md",
     },
-  }
+  },
 );
 
 /**
@@ -31,14 +32,22 @@ const toggleVariant = cva(
  */
 
 interface ToggleProps
-  extends InputHTMLAttributes<HTMLInputElement>,
+  extends
+    InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof toggleVariant> {}
 
-export default function Toggle({ className, ...props }: ToggleProps) {
+export default function Toggle({
+  className,
+  variant,
+  toggleSize,
+  ...props
+}: ToggleProps) {
   return (
-    <label className={"relative flex items-center cursor-pointer"}>
+    <label className={"relative inline-flex items-center cursor-pointer"}>
       <input type="checkbox" className="appearance-none peer" {...props} />
-      <span className={cn(toggleVariant({ className }))}></span>
+      <span
+        className={cn(toggleVariant({ variant, toggleSize }), className)}
+      ></span>
     </label>
   );
 }

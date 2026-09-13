@@ -1,7 +1,7 @@
 import { TableColumn } from "@/shared/components/types/Table";
 import Table from "@/shared/components/table/Table";
 import { PencilIcon } from "@heroicons/react/24/outline";
-import { TagDetail } from "../types/Tag";
+import { TagDetail } from "../../../shared/types/Tag";
 import { Formatters } from "@/utils/formatters";
 import { useEffect, useRef, useState } from "react";
 import { ModalRef } from "@/shared/components/Modal";

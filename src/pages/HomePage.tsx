@@ -89,7 +89,7 @@ export default function HomePage() {
           </div>
         </article>
         <article className="relative w-full md:w-1/2">
-          <div className="aspect-4/4 rounded-xl overflow-hidden bg-surface-container-highest shadow-2xl relative z-10">
+          <div className="aspect-4/4 rounded-xl overflow-hidden bg-surface-container-highest shadow-2xl relative">
             <img
               src={heroBook}
               className="object-center object-cover size-full"

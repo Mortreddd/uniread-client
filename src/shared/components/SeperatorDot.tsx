@@ -4,11 +4,11 @@ import { HTMLAttributes } from "react";
 interface SeperatorDotProps extends HTMLAttributes<HTMLSpanElement> {}
 
 export default function SeperatorDot({
-  className,
+  className = "text-gray-400",
   ...props
 }: SeperatorDotProps) {
   return (
-    <span className={cn(className, "text-gray-400 flex-shrink-0")} {...props}>
+    <span className={cn(className, "flex-shrink-0")} {...props}>
       &middot;
     </span>
   );
