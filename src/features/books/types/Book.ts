@@ -1,5 +1,5 @@
 import { User, UserProfile } from "@/types/User.ts";
-import { PaginateParams } from "@/types/Pagination.ts";
+import { PaginateParams } from "@/shared/types/Pagination";
 import { Reaction } from "@/types/Enums";
 import { Gender } from "@/features/users/types/User";
 

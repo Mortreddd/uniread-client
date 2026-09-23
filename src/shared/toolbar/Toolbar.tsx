@@ -1,6 +1,6 @@
 import { useSlate } from "slate-react";
 import { Editor, Element, Transforms } from "slate";
-import { MarkAlign, MarkElement, MarkKey } from "@/types/Slate";
+import { MarkAlign, MarkElement, MarkKey } from "@/shared/types/Slate.js";
 import Bold from "./Bold.tsx";
 import Italic from "./Italic.tsx";
 import Underline from "./Underline.tsx";

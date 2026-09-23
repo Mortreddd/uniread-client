@@ -1,4 +1,4 @@
-import { Paginate } from "@/types/Pagination";
+import { Paginate } from "@/shared/types/Pagination";
 import { GenreDetail, GenreTableFilter } from "../types/Genre";
 import api from "@/core/api/ApiService";
 

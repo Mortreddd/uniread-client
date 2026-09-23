@@ -1,5 +1,5 @@
 import { useIsVisible } from "@/shared/hooks/useIsVisible";
-import { PaginateParams } from "@/types/Pagination";
+import { PaginateParams } from "@/shared/types/Pagination";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetConversationMessages } from "../hooks/useGetConversationMessages";
@@ -9,7 +9,7 @@ import { Message } from "../types/Chat";
 import TimeIndicator from "./TimeIndicator";
 import ConvoMessage from "./ConvoMessage";
 import ShowTyping from "./ShowTyping";
-import { WebSocketEvent } from "@/types/WebSocketEvent";
+import { WebSocketEvent } from "@/shared/types/WebSocketEvent";
 
 export default function ChatMessages() {
   const bottomRef = useRef<HTMLDivElement>(null);

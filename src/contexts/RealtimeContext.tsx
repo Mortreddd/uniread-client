@@ -9,7 +9,7 @@ import {
 import { useAuth } from "./AuthContext";
 import { useWebSocket } from "@/hooks/useWebsocket";
 import { ChatConversationPreview } from "@/features/chats/types/Chat";
-import { WebSocketEvent } from "@/types/WebSocketEvent";
+import { WebSocketEvent } from "@/shared/types/WebSocketEvent";
 import { useUnreadMessageCount } from "@/shared/hooks/useCount";
 
 interface RealtimeContextProps {

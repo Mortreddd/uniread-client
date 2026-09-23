@@ -1,10 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
-import { ErrorResponse } from "@/types/Error.ts";
+import { ErrorResponse } from "@/shared/types/Error";
 import { useCallback, useEffect, useState } from "react";
 import api from "@/core/api/ApiService.ts";
 import { Chapter } from "@/types/Chapter.ts";
 import useGetBookChapters from "@/api/chapters/useGetBookChapters.ts";
-import { PaginateParams } from "@/types/Pagination.ts";
+import { PaginateParams } from "@/shared/types/Pagination";
 import { SuccessResponse } from "@/types/Success.ts";
 import { ChapterStatus } from "@/types/Enums.ts";
 
@@ -40,7 +40,7 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
       (chapterId: string) => {
         return chapters.find((c) => c.id === chapterId);
       },
-      [chapters]
+      [chapters],
     );
 
   /**
@@ -59,18 +59,18 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
       {
         onUpdate,
         onError,
-      }: Omit<ResultHandlerProps, "onDelete" | "onForceDelete">
+      }: Omit<ResultHandlerProps, "onDelete" | "onForceDelete">,
     ): Promise<void> => {
       try {
         const response = await api.put<Chapter>(
           `/books/${bookId}/chapters/${chapterId}`,
-          payload
+          payload,
         );
 
         setChapters((prev) =>
           prev.map((chapter) =>
-            chapter.id === chapterId ? response.data : chapter
-          )
+            chapter.id === chapterId ? response.data : chapter,
+          ),
         );
 
         onUpdate?.(response.data);
@@ -81,7 +81,7 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
         onError?.(errorMessage);
       }
     },
-    [bookId]
+    [bookId],
   );
 
   /**
@@ -93,7 +93,7 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
     {
       onDelete,
       onError,
-    }: Omit<ResultHandlerProps, "onForceDelete" | "onUpdate">
+    }: Omit<ResultHandlerProps, "onForceDelete" | "onUpdate">,
   ) => Promise<void> = useCallback(
     async (chapterId, { onDelete, onError }) => {
       await api
@@ -106,11 +106,11 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
         })
         .catch((error: AxiosError<ErrorResponse>) => {
           onError(
-            error.response?.data.message ?? "An unexpected error occurred"
+            error.response?.data.message ?? "An unexpected error occurred",
           );
         });
     },
-    [bookId]
+    [bookId],
   );
 
   /**
@@ -122,7 +122,7 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
     {
       onForceDelete,
       onError,
-    }: Omit<ResultHandlerProps, "onDelete" | "onUpdate">
+    }: Omit<ResultHandlerProps, "onDelete" | "onUpdate">,
   ) => Promise<void> = useCallback(
     async (chapterId, { onForceDelete, onError }) => {
       await api
@@ -135,11 +135,11 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
         })
         .catch((error: AxiosError<ErrorResponse>) => {
           onError(
-            error.response?.data.message ?? "An unexpected error occurred"
+            error.response?.data.message ?? "An unexpected error occurred",
           );
         });
     },
-    [bookId]
+    [bookId],
   );
 
   const onPublish: (
@@ -148,7 +148,7 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
     {
       onUpdate,
       onError,
-    }: Omit<ResultHandlerProps, "onForceDelete" | "onDelete">
+    }: Omit<ResultHandlerProps, "onForceDelete" | "onDelete">,
   ) => Promise<void> = useCallback(
     async (chapterId, status, { onUpdate, onError }) => {
       await api
@@ -156,18 +156,18 @@ export default function useChapter({ bookId, pageNo, pageSize }: ChapterProps) {
         .then((response: AxiosResponse<Chapter>) => {
           setChapters((prev) => {
             return prev.map((chapter) =>
-              chapter.id === response.data.id ? response.data : chapter
+              chapter.id === response.data.id ? response.data : chapter,
             );
           });
           onUpdate(response.data);
         })
         .catch((error: AxiosError<ErrorResponse>) => {
           onError(
-            error.response?.data.message ?? "An unexpected error occurred"
+            error.response?.data.message ?? "An unexpected error occurred",
           );
         });
     },
-    [bookId]
+    [bookId],
   );
   /**
    * Initializes the chapters of the book

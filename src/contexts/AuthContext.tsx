@@ -1,7 +1,7 @@
 // AuthProvider.tsx
 import api from "@/core/api/ApiService";
 import LoadingScreen from "@/shared/components/LoadingScreen.";
-import { AuthUser, Role } from "@/types/Auth";
+import { AuthUser } from "@/shared/types/AuthUser";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createContext,

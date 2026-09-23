@@ -5,7 +5,7 @@ import {
   ConversationDetail,
   Message,
 } from "../types/Chat";
-import { Paginate, PaginateParams } from "@/types/Pagination";
+import { Paginate, PaginateParams } from "@/shared/types/Pagination";
 
 export const getConversations: (
   params: PaginateParams,

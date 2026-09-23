@@ -1,4 +1,4 @@
-import { Paginate } from "@/types/Pagination";
+import { Paginate } from "@/shared/types/Pagination";
 import api from "@/core/api/ApiService";
 import { TagDetail, TagTableFilter } from "@/shared/types/Tag";
 

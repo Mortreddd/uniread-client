@@ -1,4 +1,4 @@
-import { Paginate } from "@/types/Pagination";
+import { Paginate } from "@/shared/types/Pagination";
 import { UserMonitoringFilter, UserTableDetail } from "../types/UserTable";
 import api from "@/core/api/ApiService";
 

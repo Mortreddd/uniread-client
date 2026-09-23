@@ -22,8 +22,9 @@ import AuthorDashboard from "./features/users/pages/AuthorDashboard.tsx";
 import BookDashboard from "./features/users/pages/BookDashboard.tsx";
 import GenreManagementPage from "./features/admin/pages/GenreManagementPage.tsx";
 import TagManagementPage from "./features/admin/pages/TagManagementPage.tsx";
-import CreateBook from "./features/books/pages/CreateBookPage.tsx";
+import CreateBook from "./features/users/pages/UserCreateBookPage.tsx";
 import VerifyAccountPage from "./features/authentication/pages/VerifyAccountPage.tsx";
+import UserBookEditor from "./features/users/pages/UserBookEditor.tsx";
 
 /**
  *
@@ -101,6 +102,10 @@ export const router = createBrowserRouter([
           {
             path: "books",
             element: <BookDashboard />,
+          },
+          {
+            path: "books/:bookId/edit",
+            element: <UserBookEditor />,
           },
           {
             path: "books/new",

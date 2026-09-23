@@ -1,5 +1,5 @@
 import { LoginForm } from "@/types/Auth.ts";
-import { ErrorResponse } from "@/types/Error.ts";
+import { ErrorResponse } from "@/shared/types/Error.ts";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { AxiosError } from "axios";
 import { AnimatePresence, motion } from "motion/react";
