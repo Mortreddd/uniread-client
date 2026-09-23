@@ -1,4 +1,4 @@
-import { PaginateParams } from "@/types/Pagination";
+import { PaginateParams } from "@/shared/types/Pagination";
 
 export interface TagTableFilter extends PaginateParams {}
 export interface TagDetail {

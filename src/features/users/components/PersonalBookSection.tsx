@@ -8,6 +8,7 @@ import { Formatters } from "@/utils/formatters";
 import { Button } from "@/shared/components/form/Button";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { BookStatus } from "@/features/books/types/Book";
+import { Link } from "react-router-dom";
 export default function PersonalBookSection() {
   const [params, setParams] = useState<UserBookFilter>({
     pageNo: 0,
@@ -76,10 +77,16 @@ function PersonalBook({ book }: { book: UserBook }) {
           {Formatters.Date.formatRelativeDateTime(new Date(book.updatedAt))}
         </span>
         {isDraft && (
-          <Button className={"rounded inline-flex items-center"}>
-            <PencilIcon className={"text-gray-200 size-2 lg:size-3"} />
-            <span className={"text-gray-200 text-xs md:text-xs"}>Edit</span>
-          </Button>
+          <Link
+            to={`/dashboard/books/${book.id}/edit`}
+            reloadDocument={true}
+            className={"w-full"}
+          >
+            <Button className={"w-full rounded inline-flex items-center"}>
+              <PencilIcon className={"text-gray-200 size-2 lg:size-3"} />
+              <span className={"text-gray-200 text-xs md:text-xs"}>Edit</span>
+            </Button>
+          </Link>
         )}
       </figcaption>
     </figure>

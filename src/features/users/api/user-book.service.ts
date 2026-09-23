@@ -1,6 +1,6 @@
 import api from "@/core/api/ApiService";
 import { UserBook, UserBookFilter } from "../types/UserBook";
-import { Paginate } from "@/types/Pagination";
+import { Paginate } from "@/shared/types/Pagination";
 
 export const getUserBooks: (
   filter: UserBookFilter,
@@ -10,4 +10,10 @@ export const getUserBooks: (
   });
 
   return response.data;
+};
+
+export const createBook: (formData: FormData) => Promise<void> = async (
+  formData: FormData,
+) => {
+  return api.post("/books", formData);
 };

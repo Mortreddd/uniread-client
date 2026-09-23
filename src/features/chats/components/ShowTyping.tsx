@@ -1,7 +1,7 @@
 import defaultProfile from "@/assets/profiles/default-profile.jpg";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWebSocket } from "@/hooks/useWebsocket";
-import { WebSocketEvent } from "@/types/WebSocketEvent";
+import { WebSocketEvent } from "@/shared/types/WebSocketEvent";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";

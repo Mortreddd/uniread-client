@@ -1,6 +1,6 @@
 import { ChatConversationPreview } from "@/features/chats/types/Chat";
 import { useWebSocket } from "@/hooks/useWebsocket";
-import { WebSocketEvent } from "@/types/WebSocketEvent";
+import { WebSocketEvent } from "@/shared/types/WebSocketEvent";
 import { useEffect, useState } from "react";
 
 interface WebSocketListenerProps {

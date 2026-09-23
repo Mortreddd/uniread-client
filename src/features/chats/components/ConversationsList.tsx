@@ -3,7 +3,7 @@ import { Input } from "@/shared/components/form/Input";
 import { useEffect, useRef, useState } from "react";
 import SearchUserResult from "./SearchUserResult";
 import useDebounce from "@/hooks/useDebounce";
-import { PaginateParams } from "@/types/Pagination";
+import { PaginateParams } from "@/shared/types/Pagination";
 import { useGetConversations } from "../hooks/useGetConversations";
 import { ChatConversationPreview } from "../types/Chat";
 import { BellIcon, TrashIcon } from "@heroicons/react/24/outline";

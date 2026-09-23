@@ -4,7 +4,7 @@ import { SocialIcon } from "react-social-icons";
 import api from "@/core/api/ApiService.ts";
 import { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
-import { ErrorResponse } from "@/types/Error.ts";
+import { ErrorResponse } from "@/shared/types/Error.ts";
 import GoogleAuthProvider from "@/provider/google/GoogleAuthProvider.tsx";
 import { SimpleUserInfo } from "@/types/User.ts";
 
@@ -24,7 +24,7 @@ export default function GoogleAuthButton() {
         .then((result: AxiosResponse<SimpleUserInfo>) => {
           const { username } = result.data;
 
-          if(username === null) {
+          if (username === null) {
             window.location.replace("/auth/setup-username");
             return;
           }

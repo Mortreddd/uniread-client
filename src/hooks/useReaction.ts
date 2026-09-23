@@ -1,6 +1,6 @@
 import api from "@/core/api/ApiService.ts";
 import { Reaction } from "@/types/Enums";
-import { ErrorResponse } from "@/types/Error";
+import { ErrorResponse } from "@/shared/types/Error";
 import { SuccessResponse } from "@/types/Success";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRef } from "react";
@@ -30,7 +30,7 @@ export default function useReaction() {
               "Content-Type": "application/json",
             },
             signal,
-          }
+          },
         )
         .then((result) => console.log(result))
         .catch((error: AxiosError<ErrorResponse>) => console.error(error));

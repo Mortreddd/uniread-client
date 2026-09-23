@@ -1,4 +1,4 @@
-import { PaginateParams } from "@/types/Pagination";
+import { PaginateParams } from "@/shared/types/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import { getConversations } from "../api/chat.service";
 

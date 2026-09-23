@@ -1,5 +1,5 @@
 import { Gender } from "@/features/users/types/User";
-import { PaginateParams } from "@/types/Pagination";
+import { PaginateParams } from "@/shared/types/Pagination";
 
 export interface UserTableDetail {
   id: string;

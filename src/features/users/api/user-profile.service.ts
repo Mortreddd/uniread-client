@@ -1,6 +1,6 @@
 import api from "@/core/api/ApiService";
 import { UserProfileDetails } from "../types/UserProfile";
-import { Paginate, PaginateParams } from "@/types/Pagination";
+import { Paginate, PaginateParams } from "@/shared/types/Pagination";
 import { UserSearchPreview } from "../types/User";
 
 export const getMyProfile: () => Promise<UserProfileDetails> = async () => {
