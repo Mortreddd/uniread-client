@@ -5,6 +5,7 @@ import {
   TotalUnreadNotification,
 } from "../types/Notification";
 import { Paginate } from "../types/Pagination";
+import { AxiosResponse } from "axios";
 
 export const getUserNotifications: (
   params: NotificationFilter,
@@ -24,3 +25,22 @@ export const getTotalUnreadNotification: () => Promise<TotalUnreadNotification> 
 
     return response.data;
   };
+
+export const markReadNotification: () => Promise<AxiosResponse> = async () => {
+  const response = await api.post("/notifications/read");
+  return response.data;
+};
+
+export const clickedNotification: ({
+  notificationId,
+}: {
+  notificationId: string;
+}) => Promise<AxiosResponse> = async ({
+  notificationId,
+}: {
+  notificationId: string;
+}) => {
+  const response = await api.put(`/notifications/${notificationId}/clicked`);
+
+  return response.data;
+};

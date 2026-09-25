@@ -1,29 +1,21 @@
 import AppLayout from "@/layouts/AppLayout";
 
-import {
-  BookAuthor,
-  BookCommentPreview,
-  BookDetail,
-  BookStatus,
-} from "../types/Book";
+import { BookAuthor, BookDetail, BookStatus } from "../types/Book";
 import { Gender } from "@/features/users/types/User";
 
 import author4 from "@/assets/author-4.png";
 import sampleBookCover from "@/assets/books/book1.png";
 import { Button } from "@/shared/components/form/Button";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { ChapterPreview } from "@/types/Chapter";
 import FollowButton from "@/shared/components/buttons/FollowButton";
 import BookCover from "../components/BookCover";
 import BookDetailSkeleton from "@/features/books/components/BookDetailSkeleton.tsx";
 import BookHeader from "../components/BookHeader";
 import TableOfContents from "../components/TableOfContents";
-import { Reaction } from "@/types/Enums";
 import BookCommentSection from "../components/BookCommentSection";
 
 export default function BookDetailsPage() {
-  const book = dummyBook;
-  const { author } = book;
+  const book = null;
 
   if (!book) return <BookDetailSkeleton />;
 
@@ -47,19 +39,19 @@ export default function BookDetailsPage() {
 
           {/* Mobile Collaborator Section */}
           <div className="grid gap-3 md:hidden">
-            <CollaboratorsSection author={author} />
+            {/* <CollaboratorsSection author={} /> */}
           </div>
 
           {/* Main Content */}
           <div className="md:col-span-7 lg:col-span-8 space-y-5">
             <SypnosisSection description={""} />
-            <TableOfContents chapters={dummyChapters} />
-            <BookCommentSection comments={DUMMY_BOOK_COMMENTS} />
+            <TableOfContents chapters={[]} />
+            <BookCommentSection comments={[]} />
           </div>
 
           {/* Desktop Collaborator Section */}
           <div className="hidden md:block md:col-span-5 lg:col-span-4">
-            <CollaboratorsSection author={author} />
+            {/* <CollaboratorsSection author={author} /> */}
           </div>
         </div>
       </section>
@@ -134,161 +126,3 @@ function CollaboratorsSection({ author }: { author: BookAuthor }) {
     </div>
   );
 }
-
-const dummyBook: BookDetail = {
-  id: "b1-882-xa",
-  title: "The Clockwork Courtesan",
-  description:
-    "In a Victorian era powered by steam and secrets, a mechanical doll discovers she has a soul—and a target on her back.",
-  author: {
-    id: "auth-001",
-    username: "steampunk_queen",
-    firstName: "Eleanor",
-    lastName: "Vane",
-    gender: Gender.FEMALE,
-    avatarUrl: author4,
-  },
-  averageRating: 4.8,
-  totalRating: 1240,
-  readCount: 45000,
-  coverPhoto: sampleBookCover,
-  totalLikes: 8900,
-  totalChapters: 42,
-  isFollowingAuthor: false,
-  status: BookStatus.PUBLISHED,
-  completed: false,
-  matured: true,
-  genres: [
-    {
-      id: 4,
-      name: "Victorian Gothic",
-      description: "Mystery and atmosphere.",
-    },
-    { id: 1, name: "Cyberpunk", description: "High-tech low-life." },
-  ],
-  isAddedToLibrary: true,
-  createdAt: "2025-11-12T08:30:00Z",
-};
-
-const dummyChapters: ChapterPreview[] = [
-  {
-    id: "ch-101",
-    bookId: "book-001",
-    title: "Chapter 1: The Cursed Child",
-    averageRating: 4.8,
-    totalRating: 1250,
-    readCount: 45000,
-    totalLikes: 8900,
-    likesCount: 120,
-    createdAt: "2024-01-15T08:30:00Z",
-    updatedAt: "2024-01-20T10:15:00Z",
-  },
-  {
-    id: "ch-102",
-    bookId: "book-001",
-    title: "Chapter 2: Domains and Shadows",
-    averageRating: 4.9,
-    totalRating: 980,
-    readCount: 38000,
-    totalLikes: 7200,
-    likesCount: 95,
-    createdAt: "2024-01-22T09:00:00Z",
-    updatedAt: "2024-01-22T09:00:00Z",
-  },
-  {
-    id: "ch-103",
-    bookId: "book-001",
-    title: "Chapter 3: Unlimited Void",
-    averageRating: 5.0,
-    totalRating: 2100,
-    readCount: 52000,
-    totalLikes: 15000,
-    likesCount: 340,
-    createdAt: "2024-02-01T14:20:00Z",
-    updatedAt: "2024-02-05T16:45:00Z",
-  },
-];
-
-export const DUMMY_BOOK_COMMENTS: BookCommentPreview[] = [
-  {
-    id: "comm-001",
-    bookId: "book-123",
-    user: {
-      userId: "user-alpha",
-      firstName: "Megumi",
-      lastName: "Fushiguro",
-      username: "megumifushiguro",
-      photoUrl: "https://i.pravatar.cc/150?u=megumi",
-    },
-    parentBookComment: null,
-    content:
-      "The world-building in this chapter is incredible. I didn't expect the power system to be explained this way!",
-    totalReaction: 42,
-    authUserReaction: Reaction.LIKE,
-    createdAt: "2024-03-10T12:00:00Z",
-    updatedAt: "2024-03-10T12:00:00Z",
-    replyCount: 1,
-    replies: [
-      {
-        id: "comm-001-reply-1",
-        bookId: "book-123",
-        user: {
-          userId: "user-beta",
-          firstName: "Nobara",
-          lastName: "Kugisaki",
-          username: "kugisakinobara",
-          photoUrl: "https://i.pravatar.cc/150?u=nobara",
-        },
-        parentBookComment: null, // Simplified for preview
-        content:
-          "Totally agree! But I'm still worried about what happens to the protagonist next.",
-        totalReaction: 12,
-        authUserReaction: null,
-        replies: [],
-        replyCount: 0,
-        createdAt: "2024-03-10T12:30:00Z",
-        updatedAt: "2024-03-10T12:30:00Z",
-      },
-    ],
-  },
-  {
-    id: "comm-002",
-    bookId: "book-123",
-    user: {
-      userId: "user-gamma",
-      firstName: "Yuji",
-      lastName: "Itadori",
-      username: "yujiitadori",
-      photoUrl: "https://i.pravatar.cc/150?u=yuji",
-    },
-    parentBookComment: null,
-    content:
-      "Wait, so is Gojo actually back or is this a flashback? I'm so confused but hyped!",
-    totalReaction: 156,
-    authUserReaction: Reaction.LOVE,
-    createdAt: "2024-03-11T09:15:00Z",
-    updatedAt: "2024-03-11T09:15:00Z",
-    replyCount: 0,
-    replies: [],
-  },
-  {
-    id: "comm-003",
-    bookId: "book-123",
-    user: {
-      userId: "user-delta",
-      firstName: "Kento",
-      lastName: "Nanami",
-      username: "kentonanami",
-      photoUrl: "https://i.pravatar.cc/150?u=nanami",
-    },
-    parentBookComment: null,
-    content:
-      "Writing is a job. And this author is doing their job excellently. 10/10.",
-    totalReaction: 89,
-    authUserReaction: null,
-    createdAt: "2024-03-12T17:45:00Z",
-    updatedAt: "2024-03-12T17:45:00Z",
-    replyCount: 0,
-    replies: [],
-  },
-];

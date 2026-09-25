@@ -5,6 +5,7 @@ import { AlertProvider } from "./contexts/AlertContext.tsx";
 import { SidebarProvider } from "./contexts/SidebarContext.tsx";
 import { LayoutProvider } from "./contexts/LayoutContext.tsx";
 import App from "./App.tsx";
+import NotificationStreamProvider from "./contexts/NotificationStreamContext.tsx";
 
 export default function RootLayout() {
   return (
@@ -12,11 +13,13 @@ export default function RootLayout() {
       <ToastProvider>
         <AlertProvider>
           <AuthProvider>
-            <LayoutProvider>
-              <SidebarProvider>
-                <App />
-              </SidebarProvider>
-            </LayoutProvider>
+            <NotificationStreamProvider>
+              <LayoutProvider>
+                <SidebarProvider>
+                  <App />
+                </SidebarProvider>
+              </LayoutProvider>
+            </NotificationStreamProvider>
           </AuthProvider>
         </AlertProvider>
       </ToastProvider>

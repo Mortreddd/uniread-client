@@ -24,6 +24,7 @@ import { useLayout } from "@/contexts/LayoutContext";
 import { useAuth } from "@/contexts/AuthContext";
 import gojoProfile from "@/assets/profiles/gojo.jpg";
 import MessageInboxButton from "../buttons/MessageInboxButton";
+import NotificationButton from "../buttons/NotificationButton";
 
 export default function AppNavbar() {
   const { user, logout } = useAuth();
@@ -173,12 +174,7 @@ export default function AppNavbar() {
             <MessageInboxButton />
           </li>
           <li>
-            <Button
-              variant="transparent"
-              className="rounded-full border border-gray-300 dark:border-gray-600 p-1 md:p-2 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <BellIcon className="size-4 md:size-5" />
-            </Button>
+            <NotificationButton />
           </li>
 
           {/* Profile Dropdown with custom styling */}

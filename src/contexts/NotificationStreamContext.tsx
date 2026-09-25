@@ -1,7 +1,4 @@
-import {
-  useGetTotalUnreadNotifications,
-  useGetUserNotifications,
-} from "@/shared/hooks/useNotification";
+import { useGetTotalUnreadNotifications } from "@/shared/hooks/useNotification";
 import { Notification } from "@/shared/types/Notification";
 import {
   createContext,
@@ -11,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useAlert } from "./AlertContext";
 
 interface NotificationStreamContextProps {
   notificationCount: number;
@@ -38,6 +36,7 @@ export default function NotificationStreamProvider({
   const apiUrl = import.meta.env.VITE_API_URL as string;
   const [notificationCount, setNotificationCount] = useState(0);
   const { data } = useGetTotalUnreadNotifications();
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     if (data) {
@@ -46,11 +45,14 @@ export default function NotificationStreamProvider({
   }, [data]);
 
   useEffect(() => {
-    const source = new EventSource(`${apiUrl}/notifications/stream`);
+    const source = new EventSource(`${apiUrl}/notifications/stream`, {
+      withCredentials: true,
+    });
 
     source.addEventListener("notification", (event) => {
-      const notification = JSON.parse(event.data) as Notification;
+      const notification = event.data as any;
 
+      showAlert(notification, "info");
       console.log(notification);
       setNotificationCount(notificationCount + 1);
     });
